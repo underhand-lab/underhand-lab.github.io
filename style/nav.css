@@ -12,8 +12,9 @@
 .nav h1 {
     font-weight: normal;
     font-size: 15px;
-    margin: 15px 0 2px;
+    margin: 15px 0 7px;
 }
+
 
 .nav ul {
     margin: 15px 0 2px;
@@ -23,10 +24,6 @@
     display: inline-block;
     margin: 0 20px;
     min-width: 40px;
-    padding: 0;
-}
-
-.nav li:not(:first-child) {
     padding: 0;
 }
 

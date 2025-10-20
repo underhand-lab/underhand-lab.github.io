@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Underhand Lab | Pose</title>
+
     <link rel="stylesheet" href="/style/style.css">
+    <link rel="stylesheet" href="/style/nav.css">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
     <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.1/dist/ffmpeg.min.js"></script>
@@ -26,16 +28,15 @@
 </head>
 
 <body>
-    <div class="container" style="display:flex; flex-wrap: wrap; gap:10px;">
+    <div class="nav" style="display:flex; flex-wrap: wrap; gap:10px;">
         <div style="flex-grow: 1">
-            <a href="..">언더핸드 연구소</a>
+            <h1><a href="..">언더핸드 연구소</a></h1>
         </div>
         <div style="flex-grow: 1">
-            <ul class="nav">
-                <li style="font-weight: 700">
-                    <a href="../pose">자세 분석</a>
+            <ul>
+                <li select="true">
+                    <a select="true" href="../pose">자세 분석</a>
                 </li>
-                |
                 <li>
                     <a href="../track">추적</a>
                 </li>
@@ -43,63 +44,64 @@
         </div>
     </div>
 
-    <div class="container">
-        <details>
-            <summary>
-                <h1>새로운 동영상 처리</h1>
-            </summary>
-            <div>
-                <div class="input-section">
-                    <input type="file" id="video-files" multiple accept="video/*">
-                </div>
+    <div id="wrapper">
+        <div class="container">
+            <details>
+                <summary>
+                    <h1>새로운 동영상 처리</h1>
+                </summary>
+                <div>
+                    <div class="input-section">
+                        <input type="file" id="video-files" multiple accept="video/*">
+                    </div>
 
-                <button id="process-button" disabled>처리 시작</button>
+                    <button id="process-button" disabled>처리 시작</button>
 
-                <div id="status-section">
-                    <p id="status-message">처리전</p>
-                    <div id="progress-bar-container">
-                        <div id="progress-bar"></div>
+                    <div id="status-section">
+                        <p id="status-message">처리전</p>
+                        <div id="progress-bar-container">
+                            <div id="progress-bar"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </details>
-    </div>
-    <div class="container">
-        <h2>결과</h2>
-        <div class="viewer_container">
-            <canvas id="outputImage"></canvas>
-            <canvas id="outputChart"></canvas>
-            <input type="range" id="frameSlider" min="0" value="0">
+            </details>
         </div>
-        <div id="download-section" style="display: none;">
-            <a id="download-link" href="#" download="processed_data.json">처리된 데이터 다운로드</a>
-        </div>
-        <hr>
-        <details>
-            <summary>
-                <h1>분석 설정</h1>
-            </summary>
-            <div>
-                <label for="analysis">분석 도구 선택: </label>
-                <select name="languages" id="analysis">
-                    <option value="joint">관절 각도</option>
-                    <option value="velocity">관절 속도</option>
-                    <option value="height">관절 높이</option>
-                </select>
+        <div class="container">
+            <h2>결과</h2>
+            <div class="viewer_container">
+                <canvas id="outputImage"></canvas>
+                <canvas id="outputChart"></canvas>
+                <input type="range" id="frameSlider" min="0" value="0">
             </div>
-        </details>
-    </div>
-    
-    <div class="container">
-        <details>
-            <summary><h1>참고</h1></summary>
+            <div id="download-section" style="display: none;">
+                <a id="download-link" href="#" download="processed_data.json">처리된 데이터 다운로드</a>
+            </div>
             <hr>
-            <div class="markdown-container"
-                data-markdown-file="./guide.md">
-            </div>
-        </details>
+            <details>
+                <summary>
+                    <h1>분석 설정</h1>
+                </summary>
+                <div>
+                    <label for="analysis">분석 도구 선택: </label>
+                    <select name="languages" id="analysis">
+                        <option value="joint">관절 각도</option>
+                        <option value="velocity">관절 속도</option>
+                        <option value="height">관절 높이</option>
+                    </select>
+                </div>
+            </details>
+        </div>
+        
+        <div class="container">
+            <details>
+                <summary><h1>참고</h1></summary>
+                <hr>
+                <div class="markdown-container"
+                    data-markdown-file="./guide.md">
+                </div>
+            </details>
+        </div>
     </div>
-
 </body>
 
 </html>

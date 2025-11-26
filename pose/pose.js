@@ -1,11 +1,10 @@
-import * as PoseDetector from '/src/pose/pose_detector/index.js';
-import * as PoseFrameMaker from '/src/pose/frame_maker/index.js';
-import * as PoseAnalysis from "/src/pose/analysis_tool/index.js";
-import { PoseProcessor } from '/src/pose/pose_processor.js';
+import * as PoseDetector from '/src/pose/pose-detector/index.js';
+import * as PoseAnalysis from "/src/pose/analysis-tool/index.js";
+import * as PoseFrameMaker from '/src/pose/frame-maker/index.js';
+import { PoseProcessor } from '/src/pose/processor.js';
+import * as Box from "/src/box/box.js"
 
 // DOM 요소 가져오기
-const canvasImage = document.getElementById('outputImage');
-const canvasChart = document.getElementById('outputChart');
 const slider = document.getElementById('frameSlider');
 const currentFrameIdxSpan = document.getElementById('currentFrameIdx');
 const totalFramesSpan = document.getElementById('totalFrames');
@@ -15,10 +14,118 @@ const statusMessage = document.getElementById('status-message');
 const progressBar = document.getElementById('progress-bar');
 const analysisSelect = document.getElementById('analysis');
 
-// PoseFrameMaker 인스턴스
-const poseFrameMaker = new PoseFrameMaker.PoseBoneFrameMaker(canvasImage);
 //const poseFrameMaker = new PoseFrameMaker.Pose3DFrameMaker(canvasImage);
-const graphFrameMaker = new PoseFrameMaker.GraphFrameMaker(canvasChart);
+const boxList = new Box.BoxList(document.getElementById("boxes"));
+
+let frameMakers = [];
+
+const addBoxButton = document.getElementById('add-box-button');
+const cancelAddBoxBtn = document.getElementById('cancel-add-box-button');
+const addVideoBoxBtn = document.getElementById('add-video-box-button');
+const add3dVideoBoxBtn = document.getElementById('add-3d-video-box-button');
+const addGraphBoxBtn = document.getElementById('add-graph-box-button');
+const addTableBoxBtn = document.getElementById('add-table-box-button');
+
+addBoxButton.addEventListener('click', () => {
+    analysisSelect.style.display = "block";
+});
+
+cancelAddBoxBtn.addEventListener('click', () => {
+    closeBoxSelect();
+});
+
+addVideoBoxBtn.addEventListener('click', () => {
+    addBox("/_template/video.html", (box) => {
+
+        const newCanvas = box.querySelectorAll("canvas")[0];
+        const newPoseFrameMaker = new PoseFrameMaker.PoseBoneFrameMaker(newCanvas);
+
+        newPoseFrameMaker.setData(processedData);
+
+        frameMakers.push(newPoseFrameMaker);
+        updateImage();
+    });
+
+});
+
+add3dVideoBoxBtn.addEventListener('click', () => {
+    addBox("/_template/3d-video.html", (box) => {
+
+        const newCanvas = box.querySelectorAll("canvas")[0];
+        const newPoseFrameMaker = new PoseFrameMaker.Pose3DFrameMaker(newCanvas)
+
+        newPoseFrameMaker.setData(processedData);
+
+        frameMakers.push(newPoseFrameMaker);
+        updateImage();
+    });
+
+});
+
+addGraphBoxBtn.addEventListener('click', () => {
+    addBox("/_template/graph.html", (box) => {
+
+        const newCanvas = box.querySelectorAll("canvas")[0];
+        const newGraphFrameMaker = new PoseFrameMaker.CustomGraphFrameMaker(newCanvas);
+        const options = box.querySelectorAll("select")[0];
+
+        newGraphFrameMaker.changeAnalysisTool(analysisTool[options.value]);
+        newGraphFrameMaker.setData(processedData);
+
+        options.addEventListener("change", () => {
+            newGraphFrameMaker.changeAnalysisTool(analysisTool[options.value]);
+            updateImage();
+        });
+
+        frameMakers.push(newGraphFrameMaker);
+        updateImage();
+    });
+
+});
+
+addTableBoxBtn.addEventListener('click', () => {
+    addBox("/_template/table-pose.html", (box) => {
+
+        const newDiv = box.getElementsByClassName("table")[0];
+        const newTableFrameMaker = new PoseFrameMaker.CustomTableFrameMaker(newDiv);
+        const options = box.querySelectorAll("select")[0];
+
+        newTableFrameMaker.changeAnalysisTool(analysisTool[options.value]);
+        newTableFrameMaker.setData(processedData);
+
+        options.addEventListener("change", () => {
+            newTableFrameMaker.changeAnalysisTool(analysisTool[options.value]);
+            updateImage();
+        });
+
+        frameMakers.push(newTableFrameMaker);
+        updateImage();
+    });
+
+});
+
+function closeBoxSelect() {
+    analysisSelect.style.display = "none";
+}
+
+function addBox(opt, func) {
+    fetch(opt)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`파일을 불러오는 데 실패했습니다: ${response.statusText}`);
+            }
+            return response.text();
+        })
+        .then((text) => {
+            const box = boxList.addBox(text);
+            func(box);
+            closeBoxSelect();
+        })
+        .catch(error => {
+            console.error(`분석 도구 생성 중 오류가 발생했습니다.: ${error}`);
+        });
+
+}
 
 const analysisTool = {
     "joint": new PoseAnalysis.AngleAnalysisTool(),
@@ -31,31 +138,46 @@ slider.max = 0;
 // 로드된 비디오 데이터를 저장할 변수
 let processedData = null;
 
+addBox("/_template/video.html", (box) => {
+
+    const newCanvas = box.querySelectorAll("canvas")[0];
+    const newPoseFrameMaker = new PoseFrameMaker.PoseBoneFrameMaker(newCanvas);
+
+    newPoseFrameMaker.setData(processedData);
+
+    frameMakers.push(newPoseFrameMaker);
+    updateImage();
+
+});
+
 // 슬라이더를 움직일 때마다 이미지를 업데이트하는 함수
 function updateImage() {
+
     if (!processedData) return;
 
     const frameIdx = parseInt(slider.value, 10);
     //currentFrameIdxSpan.textContent = frameIdx;
-
-    poseFrameMaker.draw_img_at(frameIdx, canvasImage);
-    graphFrameMaker.draw_img_at(frameIdx, canvasChart);
+    
+    for (let i = 0; i < frameMakers.length; i++) {
+        frameMakers[i].drawImageAt(frameIdx);
+    }
 
 }
 
-graphFrameMaker.set_default(canvasChart);
-
-function set_data(data) {
+function setData(data) {
 
     if (data == null) return;
 
     processedData = data;
 
-    graphFrameMaker.set_data(
-        analysisTool[analysisSelect.value].calc(processedData));
-    poseFrameMaker.set_data(processedData);
+    //graphFrameMaker.set_data(analysisTool[analysisSelect.value].calc(processedData));
+    //poseFrameMaker.set_data(processedData);
 
-    const frameCount = processedData.get_frame_cnt();
+    for (let i = 0; i < frameMakers.length; i++) {
+        frameMakers[i].setData(processedData);
+    }
+
+    const frameCount = processedData.getFrameCnt();
     slider.max = frameCount > 0 ? frameCount - 1 : 0;
 
     updateImage();
@@ -86,8 +208,8 @@ processButton.addEventListener('click', async () => {
 
         // data 변수에 모든 처리된 데이터를 저장
         const ret = await processor.processVideo(fileInput.files);
-        
-        set_data(ret);
+
+        setData(ret);
         console.log('비디오 처리가 완료되었습니다.');
 
     } catch (error) {
@@ -104,10 +226,6 @@ processButton.addEventListener('click', async () => {
 
 fileInput.addEventListener('change', () => {
     processButton.disabled = fileInput.files.length < 1;
-});
-
-analysisSelect.addEventListener('change', () => {
-    set_data(processedData);
 });
 
 slider.addEventListener('input', updateImage);

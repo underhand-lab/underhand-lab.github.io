@@ -8,6 +8,9 @@
 
     <link rel="stylesheet" href="/style/style.css">
     <link rel="stylesheet" href="/style/nav.css">
+    <link rel="stylesheet" href="/style/slider.css">
+    <link rel="stylesheet" href="/style/box.css">
+    <link rel="stylesheet" href="/style/panel.css">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
     <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.1/dist/ffmpeg.min.js"></script>
@@ -22,6 +25,7 @@
         }
     }
     </script>
+
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="/src/markdown.js"></script>
 
@@ -41,6 +45,11 @@
                     <a href="../track">추적</a>
                 </li>
             </ul>
+        </div>
+    </div>
+    <div class="slider">
+        <div class="container">
+            <input type="range" id="frameSlider" min="0" value="0">
         </div>
     </div>
 
@@ -66,40 +75,48 @@
                 </div>
             </details>
         </div>
+
+        <div id="download-section" style="display: none;">
+            <a id="download-link" href="#" download="processed_data.json">처리된 데이터 다운로드</a>
+        </div>
+        <div>
+            <div id="boxes"></div>
+            <div class="container">
+                <button id="add-box-button" class="add-box-button">+</button>
+            </div>
+        </div>
+
         <div class="container">
-            <h2>결과</h2>
-            <div class="viewer_container">
-                <canvas id="outputImage"></canvas>
-                <canvas id="outputChart"></canvas>
-                <input type="range" id="frameSlider" min="0" value="0">
-            </div>
-            <div id="download-section" style="display: none;">
-                <a id="download-link" href="#" download="processed_data.json">처리된 데이터 다운로드</a>
-            </div>
-            <hr>
             <details>
                 <summary>
-                    <h1>분석 설정</h1>
+                    <h1>참고</h1>
                 </summary>
-                <div>
-                    <label for="analysis">분석 도구 선택: </label>
-                    <select name="languages" id="analysis">
-                        <option value="joint">관절 각도</option>
-                        <option value="velocity">관절 속도</option>
-                        <option value="height">관절 높이</option>
-                    </select>
+                <hr>
+                <div class="markdown-container" data-markdown-file="./guide.md">
                 </div>
             </details>
         </div>
-        
-        <div class="container">
-            <details>
-                <summary><h1>참고</h1></summary>
-                <hr>
-                <div class="markdown-container"
-                    data-markdown-file="./guide.md">
-                </div>
-            </details>
+    </div>
+    <div id="analysis" class="panel" style="display:none;">
+        <div class="container" style="
+                position: absolute;
+                left: 50%;
+                top: 40%;
+                width: 100%;
+                max-width: 300px;
+                transform: translate(-50%, -50%);
+            ">
+            <h1>도구 추가</h1>
+            <hr>
+            <button id="add-video-box-button">동영상</button>
+            <br>
+            <button id="add-3d-video-box-button">3D 동영상</button>
+            <br>
+            <button id="add-graph-box-button">그래프</button>
+            <br>
+            <button id="add-table-box-button">표</button>
+            <hr>
+            <button id="cancel-add-box-button">취소</button>
         </div>
     </div>
 </body>

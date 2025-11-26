@@ -7,6 +7,7 @@
     color: #aaaaaa;
     font-size: 15px;
     margin: 0;
+    z-index: 1;
 }
 
 .nav h1 {
@@ -14,7 +15,6 @@
     font-size: 15px;
     margin: 15px 0 7px;
 }
-
 
 .nav ul {
     margin: 15px 0 2px;

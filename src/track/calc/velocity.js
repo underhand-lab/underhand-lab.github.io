@@ -1,6 +1,6 @@
 const REAL_BALL_DIAMETER_M = 0.074;
 
-export function calcVelocity(ballData1, ballData2, fps, conf) {
+function calcVelocity(ballData1, ballData2, fps, conf) {
 
     if (ballData1 == null) return null;
     if (ballData1["confidence"] < conf) return null;
@@ -26,7 +26,7 @@ export function calcVelocity(ballData1, ballData2, fps, conf) {
     
 }
 
-export function calcAngle(ballData1, ballData2, conf) {
+function calcAngle(ballData1, ballData2, conf) {
 
     if (ballData1 == null) return null;
     if (ballData1["confidence"] < conf) return null;
@@ -48,3 +48,5 @@ export function calcAngle(ballData1, ballData2, conf) {
     return -angle;
 
 }
+
+export { calcVelocity, calcAngle }

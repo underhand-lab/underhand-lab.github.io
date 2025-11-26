@@ -8,6 +8,9 @@
 
     <link rel="stylesheet" href="/style/style.css">
     <link rel="stylesheet" href="/style/nav.css">
+    <link rel="stylesheet" href="/style/slider.css">
+    <link rel="stylesheet" href="/style/box.css">
+    <link rel="stylesheet" href="/style/panel.css">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
     <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.1/dist/ffmpeg.min.js"></script>
@@ -35,6 +38,13 @@
             </ul>
         </div>
     </div>
+
+    <div class="slider">
+        <div class="container">
+            <input type="range" id="frameSlider" min="0" value="0">
+        </div>
+    </div>
+
     <div id="wrapper">
         <div class="container">
             <details>
@@ -58,18 +68,28 @@
             </details>
         </div>
         <div class="container">
+            <details>
+                <summary>
+                    <h1>출력 설정</h1>
+                </summary>
+                <div>
+                    <label for="confInput">CONF: </label>
+                    <input type="number" id="confInput" value="0.01" min="0" max="1" step="0.01">
+                </div>
+            </details>
+
+        </div>
+        <div class="container" style="display:none;">
             <h2>결과</h2>
             <div class="viewer_container">
-                <canvas id="outputImage"></canvas>
+                <canvas id="outputImage" class="outputImage" style="background-color: black;"></canvas>
                 <div id="dataText">
                     <table>
-                        <thead>
+                        <tbody>
                             <tr>
                                 <th>속도</th>
                                 <th>각도</th>
                             </tr>
-                        </thead>
-                        <tbody>
                             <tr>
                                 <td>? km/h</td>
                                 <td>? 도</td>
@@ -77,28 +97,45 @@
                         </tbody>
                     </table>
                 </div>
-                <input type="range" id="frameSlider" min="0" value="0">
-                <details>
-                    <summary><h1>출력 설정</h1></summary>
-                    <div>
-                    <label for="confInput">CONF: </label>
-                    <input type="number" id="confInput" value="0.01" min="0" max="1" step="0.01">
-                    </div>
-                </details>
-            </div>
-            <div id="download-section" style="display: none;">
-                <a id="download-link" href="#" download="processed_data.json">처리된 데이터 다운로드</a>
             </div>
         </div>
-        
+        <div>
+            <div id="boxes"></div>
+            <div class="container">
+                <button id="add-box-button" class="add-box-button">+</button>
+            </div>
+        </div>
+        <div id="download-section" style="display: none;">
+            <a id="download-link" href="#" download="processed_data.json">처리된 데이터 다운로드</a>
+        </div>
+
         <div class="container">
             <details>
-                <summary><h1>참고</h1></summary>
+                <summary>
+                    <h1>참고</h1>
+                </summary>
                 <hr>
-                <div class="markdown-container"
-                    data-markdown-file="./guide.md">
+                <div class="markdown-container" data-markdown-file="./guide.md">
                 </div>
             </details>
+        </div>
+    </div>
+    <div id="analysis" class="panel" style="display:none;">
+        <div class="container" style="
+                position: absolute;
+                left: 50%;
+                top: 40%;
+                width: 100%;
+                max-width: 300px;
+                transform: translate(-50%, -50%);
+            ">
+            <h1>분석 도구</h1>
+            <hr>
+            <button id="add-video-box-button">동영상</button>
+            <br>
+            <button id="add-table-box-button">표</button>
+            <hr>
+            <button id="cancel-add-box-button">취소</button>
         </div>
     </div>
 

@@ -1,7 +1,8 @@
-import { TrackProcessor } from '/src/track/track_processor.js';
-import * as BallDetector from '/src/track/ball_detector/index.js';
-import * as TrackFrameMaker from '/src/track/frame_maker/track_frame_maker.js';
-import * as Calc from '/src/track/calc/velocity.js';
+import { TrackProcessor } from '/src/track/processor.js';
+import * as BallDetector from '/src/track/ball-detector/index.js';
+import * as FrameMaker from '/src/track/frame-maker/index.js';
+import * as Box from "/src/box/box.js"
+import * as Analysis from "/src/track/calc/analysis.js"
 
 // DOM 요소 가져오기
 const canvasImage = document.getElementById('outputImage');
@@ -14,70 +15,42 @@ const statusMessage = document.getElementById('status-message');
 const progressBar = document.getElementById('progress-bar');
 const confInput = document.getElementById('confInput');
 
+let frameMakers = [];
+
 slider.max = 0;
 
 // 로드된 비디오 데이터를 저장할 변수
 let processedData = null;
 const detector = new BallDetector.YOLO11BallDetector();
-const frame_maker = new TrackFrameMaker.TrackFrameMaker();
+
+frameMakers.push(new FrameMaker.TrackFrameMaker(canvasImage));
 
 // 슬라이더를 움직일 때마다 이미지를 업데이트하는 함수
 function updateImage() {
+
     if (!processedData) return;
 
-    frame_maker.setConf(confInput.value);
-
     const frameIdx = parseInt(slider.value, 10);
-    //currentFrameIdxSpan.textContent = frameIdx;
 
-    frame_maker.draw_img_at(frameIdx, canvasImage);
-
-    let velocity = null;
-    let angle = null;
-
-    if (frameIdx > 0) {
-
-        velocity = Calc.calcVelocity(
-            processedData["ballData"][frameIdx - 1],
-            processedData["ballData"][frameIdx],
-            processedData["metaData"]["fps"], confInput.value);
-
-        angle = Calc.calcAngle(
-            processedData["ballData"][frameIdx - 1],
-            processedData["ballData"][frameIdx], confInput.value);
-
+    for (let i = 0; i < frameMakers.length; i++) {
+        frameMakers[i].setConf(confInput.value);
+        frameMakers[i].drawImageAt(frameIdx);
     }
-    let htmlContent = `
-    <table>
-        <thead>
-        <tr>
-            <th>속도</th>
-            <th>각도</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>${velocity != null ? velocity.toFixed(2) : "?"} km/h</td>
-            <td>${angle != null ? angle.toFixed(2) : "?"} 도</td>
-        </tr>
-        </tbody>
-    </table>
-    `;
-    
-    dataText.innerHTML = htmlContent;
 
 }
 
-function set_data(data) {
+function setData(data) {
 
     if (data == null) return;
 
+    const frameCount = data["rawImage"].length;
+    slider.max = frameCount > 0 ? frameCount - 1 : 0;
+
     processedData = data;
 
-    frame_maker.set_data(data);
-
-    const frameCount = processedData["rawImage"].length;
-    slider.max = frameCount > 0 ? frameCount - 1 : 0;
+    for (let i = 0; i < frameMakers.length; i++) {
+        frameMakers[i].setData(data);
+    }
 
     updateImage();
 
@@ -110,8 +83,8 @@ processButton.addEventListener('click', async () => {
 
         // data 변수에 모든 처리된 데이터를 저장
         const ret = await processor.processVideo(fileInput.files);
-        
-        set_data(ret);
+
+        setData(ret);
         console.log('비디오 처리가 완료되었습니다.');
 
     } catch (error) {
@@ -131,3 +104,98 @@ fileInput.addEventListener('change', () => {
 });
 
 slider.addEventListener('input', updateImage);
+
+const analysisSelect = document.getElementById('analysis');
+const addBoxButton = document.getElementById('add-box-button');
+const cancelAddBoxBtn = document.getElementById('cancel-add-box-button');
+const addVideoBoxBtn = document.getElementById('add-video-box-button');
+const addTableBoxBtn = document.getElementById('add-table-box-button');
+
+const boxList = new Box.BoxList(document.getElementById("boxes"));
+
+function addBox(opt, func) {
+    fetch(opt)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`파일을 불러오는 데 실패했습니다: ${response.statusText}`);
+            }
+            return response.text();
+        })
+        .then((text) => {
+            const box = boxList.addBox(text);
+            func(box);
+            closeBoxSelect();
+        })
+        .catch(error => {
+            console.error(`분석 도구 생성 중 오류가 발생했습니다.: ${error}`);
+        });
+
+}
+
+addBoxButton.addEventListener('click', () => {
+    analysisSelect.style.display = "block";
+});
+
+cancelAddBoxBtn.addEventListener('click', () => {
+    closeBoxSelect();
+});
+
+addVideoBoxBtn.addEventListener('click', () => {
+    addBox("/_template/video.html", (box) => {
+
+        const newCanvas = box.querySelectorAll("canvas")[0];
+        const newPoseFrameMaker = new FrameMaker.TrackFrameMaker(newCanvas)
+
+        newPoseFrameMaker.setData(processedData);
+
+        frameMakers.push(newPoseFrameMaker);
+        updateImage();
+    });
+
+});
+
+addTableBoxBtn.addEventListener('click', () => {
+    addBox("/_template/table-track.html", (box) => {
+
+        const newDiv = box.getElementsByClassName("table")[0];
+        const newTableFrameMaker = new FrameMaker.CustomTableFrameMaker(newDiv);
+
+
+        newTableFrameMaker.changeAnalysisTool(new Analysis.BallAnalysisTool());
+
+        newTableFrameMaker.setData(processedData);
+
+        frameMakers.push(newTableFrameMaker);
+        updateImage();
+    });
+
+});
+
+function closeBoxSelect() {
+    analysisSelect.style.display = "none";
+}
+
+addBox("/_template/video.html", (box) => {
+
+    const newCanvas = box.querySelectorAll("canvas")[0];
+    const newPoseFrameMaker = new FrameMaker.TrackFrameMaker(newCanvas)
+
+    newPoseFrameMaker.setData(processedData);
+
+    frameMakers.push(newPoseFrameMaker);
+    updateImage();
+});
+
+addBox("/_template/table-track.html", (box) => {
+
+    const newDiv = box.getElementsByClassName("table")[0];
+    const newTableFrameMaker = new FrameMaker.CustomTableFrameMaker(newDiv);
+
+    newTableFrameMaker.changeAnalysisTool(new Analysis.BallAnalysisTool());
+
+    newTableFrameMaker.setData(processedData);
+
+    frameMakers.push(newTableFrameMaker);
+    updateImage();
+
+});

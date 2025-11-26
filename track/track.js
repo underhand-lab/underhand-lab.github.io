@@ -141,7 +141,7 @@ cancelAddBoxBtn.addEventListener('click', () => {
 });
 
 addVideoBoxBtn.addEventListener('click', () => {
-    addBox("/_template/video.html", (box) => {
+    addBox("/template/video.html", (box) => {
 
         const newCanvas = box.querySelectorAll("canvas")[0];
         const newPoseFrameMaker = new FrameMaker.TrackFrameMaker(newCanvas)
@@ -155,7 +155,7 @@ addVideoBoxBtn.addEventListener('click', () => {
 });
 
 addTableBoxBtn.addEventListener('click', () => {
-    addBox("/_template/table-track.html", (box) => {
+    addBox("/template/table-track.html", (box) => {
 
         const newDiv = box.getElementsByClassName("table")[0];
         const newTableFrameMaker = new FrameMaker.CustomTableFrameMaker(newDiv);
@@ -175,7 +175,7 @@ function closeBoxSelect() {
     analysisSelect.style.display = "none";
 }
 
-addBox("/_template/video.html", (box) => {
+addBox("/template/video.html", (box) => {
 
     const newCanvas = box.querySelectorAll("canvas")[0];
     const newPoseFrameMaker = new FrameMaker.TrackFrameMaker(newCanvas)
@@ -186,7 +186,7 @@ addBox("/_template/video.html", (box) => {
     updateImage();
 });
 
-addBox("/_template/table-track.html", (box) => {
+addBox("/template/table-track.html", (box) => {
 
     const newDiv = box.getElementsByClassName("table")[0];
     const newTableFrameMaker = new FrameMaker.CustomTableFrameMaker(newDiv);

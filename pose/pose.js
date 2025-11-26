@@ -35,7 +35,7 @@ cancelAddBoxBtn.addEventListener('click', () => {
 });
 
 addVideoBoxBtn.addEventListener('click', () => {
-    addBox("/_template/video.html", (box) => {
+    addBox("/template/video.html", (box) => {
 
         const newCanvas = box.querySelectorAll("canvas")[0];
         const newPoseFrameMaker = new PoseFrameMaker.PoseBoneFrameMaker(newCanvas);
@@ -49,7 +49,7 @@ addVideoBoxBtn.addEventListener('click', () => {
 });
 
 add3dVideoBoxBtn.addEventListener('click', () => {
-    addBox("/_template/3d-video.html", (box) => {
+    addBox("/template/3d-video.html", (box) => {
 
         const newCanvas = box.querySelectorAll("canvas")[0];
         const newPoseFrameMaker = new PoseFrameMaker.Pose3DFrameMaker(newCanvas)
@@ -63,7 +63,7 @@ add3dVideoBoxBtn.addEventListener('click', () => {
 });
 
 addGraphBoxBtn.addEventListener('click', () => {
-    addBox("/_template/graph.html", (box) => {
+    addBox("/template/graph.html", (box) => {
 
         const newCanvas = box.querySelectorAll("canvas")[0];
         const newGraphFrameMaker = new PoseFrameMaker.CustomGraphFrameMaker(newCanvas);
@@ -84,7 +84,7 @@ addGraphBoxBtn.addEventListener('click', () => {
 });
 
 addTableBoxBtn.addEventListener('click', () => {
-    addBox("/_template/table-pose.html", (box) => {
+    addBox("/template/table-pose.html", (box) => {
 
         const newDiv = box.getElementsByClassName("table")[0];
         const newTableFrameMaker = new PoseFrameMaker.CustomTableFrameMaker(newDiv);
@@ -138,7 +138,7 @@ slider.max = 0;
 // 로드된 비디오 데이터를 저장할 변수
 let processedData = null;
 
-addBox("/_template/video.html", (box) => {
+addBox("/template/video.html", (box) => {
 
     const newCanvas = box.querySelectorAll("canvas")[0];
     const newPoseFrameMaker = new PoseFrameMaker.PoseBoneFrameMaker(newCanvas);

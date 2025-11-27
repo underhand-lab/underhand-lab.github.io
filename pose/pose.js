@@ -132,7 +132,7 @@ const analysisTool = {
     "height": new PoseAnalysis.HeightAnalysisTool(),
 }
 
-function addBox(opt, func) {
+function addBox(opt, func, toBottom = true) {
     fetch(opt)
         .then(response => {
             if (!response.ok) {
@@ -144,6 +144,10 @@ function addBox(opt, func) {
             const box = boxList.addBox(text);
             box.className = 'container neumorphism';
             func(box);
+            if (toBottom) {
+                let bottom = document.body.scrollHeight;
+                window.scrollTo({ top: bottom, left: 0, behavior: 'smooth' })
+            }
             closeBoxSelect();
         })
         .catch(error => {
@@ -244,4 +248,4 @@ addBox("/template/video.html", (box) => {
     frameMakers.push(newPoseFrameMaker);
     updateImage();
 
-});
+}, false);

@@ -1,11 +1,9 @@
 const REAL_BALL_DIAMETER_M = 0.074;
 
-function calcVelocity(ballData1, ballData2, fps, conf) {
+function calcVelocity(ballData1, ballData2, fps) {
 
     if (ballData1 == null) return null;
-    if (ballData1["confidence"] < conf) return null;
     if (ballData2 == null) return null;
-    if (ballData2["confidence"] < conf) return null;
 
     const [x1, y1, width1, height1] = ballData1["bbox"];
     const [x2, y2, width2, height2] = ballData2["bbox"];
@@ -26,12 +24,10 @@ function calcVelocity(ballData1, ballData2, fps, conf) {
     
 }
 
-function calcAngle(ballData1, ballData2, conf) {
+function calcAngle(ballData1, ballData2) {
 
     if (ballData1 == null) return null;
-    if (ballData1["confidence"] < conf) return null;
     if (ballData2 == null) return null;
-    if (ballData2["confidence"] < conf) return null;
 
     const [x1, y1, width1, height1] = ballData1["bbox"];
     const [x2, y2, width2, height2] = ballData2["bbox"];

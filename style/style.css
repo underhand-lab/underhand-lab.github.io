@@ -75,6 +75,7 @@ input[type=file]::file-selector-button{
 
 button {
     font-family: 'KBO-Dia-Gothic_medium', Arial, sans-serif;
+    font-size: 15px;
     background-color: var(--primary-color);
     color: white;
     border: none;

@@ -1,11 +1,11 @@
-import { TableVisualizer } from "/src/visualizer/table.js"
+import * as Table from "/src/visualizer/lib/table.js"
 
 class CustomTableFrameMaker {
     
     constructor(instance) {
-        this.tableVisualizer = new TableVisualizer(instance);
-        this.tableVisualizer.setDefault();
+        this.table = new Table.Table(instance);
         this.analysisTool = null;
+        this.conf = 1;
     }
 
     changeAnalysisTool(analysisTool) {
@@ -14,25 +14,33 @@ class CustomTableFrameMaker {
     }
 
     setConf(conf) {
-        
+        this.conf = conf;
     }
 
     setData(data) {
         
         if (data == null) return;
-        
-        this.data = data;
-        let tableData = null;
 
-        if (this.analysisTool == null) tableData = data;
-        else tableData = this.analysisTool.calc(data);
-
-        this.tableVisualizer.setData(tableData);
+        if (this.analysisTool == null) this.data = data;
+        else this.data = this.analysisTool.calc(data);
 
     }
 
     drawImageAt(idx) {
-        this.tableVisualizer.drawImageAt(idx);
+        if (this.data == null) return;
+        
+        let d = {}
+
+        for (let key of Object.keys(this.data)) {
+            if (key == "confidence") continue;
+            if (this.data["confidence"][idx] < this.conf) {
+                d[key] = null;
+                continue;
+            }
+            d[key] = this.data[key][idx]
+        }
+
+        this.table.setData(d);
     }
 
 }

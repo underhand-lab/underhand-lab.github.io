@@ -5,8 +5,6 @@ import * as Box from "/src/box/box.js"
 import * as Analysis from "/src/track/calc/analysis.js"
 
 // DOM 요소 가져오기
-const canvasImage = document.getElementById('outputImage');
-const dataText = document.getElementById('dataText');
 const slider = document.getElementById('frameSlider');
 
 const fileInput = document.getElementById('video-files');
@@ -22,8 +20,6 @@ slider.max = 0;
 // 로드된 비디오 데이터를 저장할 변수
 let processedData = null;
 const detector = new BallDetector.YOLO11BallDetector();
-
-frameMakers.push(new FrameMaker.TrackFrameMaker(canvasImage));
 
 // 슬라이더를 움직일 때마다 이미지를 업데이트하는 함수
 function updateImage() {
@@ -125,7 +121,7 @@ const addTableBoxBtn = document.getElementById('add-table-box-button');
 
 const boxList = new Box.BoxList(document.getElementById("boxes"));
 
-function addBox(opt, func) {
+function addBox(opt, func, toBottom = true) {
     fetch(opt)
         .then(response => {
             if (!response.ok) {
@@ -137,6 +133,10 @@ function addBox(opt, func) {
             const box = boxList.addBox(text);
             box.className = 'container neumorphism';
             func(box);
+            if (toBottom) {
+                let bottom = document.body.scrollHeight;
+                window.scrollTo({ top: bottom, left: 0, behavior: 'smooth' })
+            }
             closeBoxSelect();
         })
         .catch(error => {
@@ -197,7 +197,7 @@ addBox("/template/video.html", (box) => {
 
     frameMakers.push(newPoseFrameMaker);
     updateImage();
-});
+}, false);
 
 addBox("/template/table-track.html", (box) => {
 
@@ -211,4 +211,4 @@ addBox("/template/table-track.html", (box) => {
     frameMakers.push(newTableFrameMaker);
     updateImage();
 
-});
+}, false);

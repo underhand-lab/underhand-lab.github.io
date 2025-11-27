@@ -105,6 +105,18 @@ fileInput.addEventListener('change', () => {
 
 slider.addEventListener('input', updateImage);
 
+const guide = document.getElementById('guide');
+const openGuideButton = document.getElementById('open-guide-button');
+const closeGuideButton = document.getElementById('close-guide-button');
+
+openGuideButton.addEventListener('click', () => {
+    guide.style.display = "block";
+});
+
+closeGuideButton.addEventListener('click', () => {
+    guide.style.display = "none";
+});
+
 const analysisSelect = document.getElementById('analysis');
 const addBoxButton = document.getElementById('add-box-button');
 const cancelAddBoxBtn = document.getElementById('cancel-add-box-button');
@@ -123,6 +135,7 @@ function addBox(opt, func) {
         })
         .then((text) => {
             const box = boxList.addBox(text);
+            box.className = 'container neumorphism';
             func(box);
             closeBoxSelect();
         })

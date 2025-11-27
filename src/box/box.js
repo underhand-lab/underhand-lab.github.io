@@ -7,7 +7,6 @@ class BoxList {
 
         // 1. 메인 컨테이너 DIV 생성
         const instanceDiv = document.createElement('div');
-        instanceDiv.className = 'container';
 
         const closeBtn = document.createElement('button');
 

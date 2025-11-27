@@ -27,7 +27,11 @@ class TableVisualizer extends IVisualizer {
         let d = {}
 
         for (let key of Object.keys(this.data)) {
-            d[key] = this.data[key][idx]
+            if (this.data[key][idx] == null) {
+                d[key] = null;
+                continue;
+            }
+            d[key] = this.data[key][idx].toFixed(2);
         }
 
         this.table.setData(d);

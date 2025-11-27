@@ -37,7 +37,7 @@ class CustomTableFrameMaker {
                 d[key] = null;
                 continue;
             }
-            d[key] = this.data[key][idx]
+            d[key] = this.data[key][idx].toFixed(2);
         }
 
         this.table.setData(d);

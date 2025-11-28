@@ -138,14 +138,14 @@ th {
     float: right;
 }
 
-@media screen and (max-width: 309px) {
+@media screen and (max-width: 312px) {
     
     #wrapper {
         padding: 120px 20px 120px;
     }
 }
 
-@media screen and (min-width: 309px) {
+@media screen and (min-width: 312px) {
 
     #wrapper {
         padding: 60px 20px 120px;

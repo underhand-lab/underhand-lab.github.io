@@ -10,7 +10,7 @@ fileInput.addEventListener('change', () => {
 
 const detectorSelect = document.getElementById("model");
 const detectors = {
-    "mediapipe": PoseDetector.MediaPipePoseDetector(),
+    "mediapipe": new PoseDetector.MediaPipePoseDetector(),
 }
 
 const processButton = document.getElementById('process-button');

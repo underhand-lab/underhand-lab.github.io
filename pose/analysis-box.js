@@ -21,7 +21,7 @@ function updateImage() {
     if (!processedData) return;
 
     const frameIdx = nowIdx();
-    
+
     for (let i = 0; i < frameMakers.length; i++) {
         frameMakers[i].drawImageAt(frameIdx);
     }
@@ -61,7 +61,8 @@ const addTableBoxBtn = document.getElementById('add-table-box-button');
 const boxList = new Box.BoxList(document.getElementById("boxes"));
 
 const analysisTool = {
-    "joint": new PoseAnalysis.AngleAnalysisTool(),
+    "angle": new PoseAnalysis.AngleAnalysisTool(),
+    "angle-velocity": new PoseAnalysis.AngleVelocityAnalysisTool(),
     "velocity": new PoseAnalysis.VelocityAnalysisTool(),
     "height": new PoseAnalysis.HeightAnalysisTool(),
 }
@@ -170,6 +171,24 @@ addBox("/template/video.html", (box) => {
     frameMakers.push(newPoseFrameMaker);
     newPoseFrameMaker.drawImageAt(nowIdx());
 
+}, false);
+
+addBox("/template/graph.html", (box) => {
+
+    const newCanvas = box.querySelectorAll("canvas")[0];
+    const newGraphFrameMaker = new PoseFrameMaker.CustomGraphFrameMaker(newCanvas);
+    const options = box.querySelectorAll("select")[0];
+
+    newGraphFrameMaker.changeAnalysisTool(analysisTool[options.value]);
+    newGraphFrameMaker.setData(processedData);
+
+    options.addEventListener("change", () => {
+        newGraphFrameMaker.changeAnalysisTool(analysisTool[options.value]);
+        newGraphFrameMaker.drawImageAt(nowIdx());
+    });
+
+    frameMakers.push(newGraphFrameMaker);
+    newGraphFrameMaker.drawImageAt(nowIdx());
 }, false);
 
 export { setData }

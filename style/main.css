@@ -126,7 +126,7 @@ th {
     max-width: 750px;
     text-align: center;
     position: relative;
-    padding: 10px 30px;
+    padding: 10px 15px;
     margin: 20px auto;
 }
 
@@ -138,17 +138,17 @@ th {
     float: right;
 }
 
-@media screen and (max-width: 312px) {
+@media screen and (max-width: 328px) {
     
     #wrapper {
-        padding: 120px 20px 120px;
+        padding: 105px 20px 120px;
     }
 }
 
-@media screen and (min-width: 312px) {
+@media screen and (min-width: 329px) {
 
     #wrapper {
-        padding: 60px 20px 120px;
+        padding: 50px 20px 120px;
     }
 
 }
@@ -156,7 +156,7 @@ th {
 @media screen and (max-width: 198px) {
 
     #wrapper {
-        padding: 150px 20px 120px;
+        padding: 140px 20px 120px;
     }
 
 }

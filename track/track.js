@@ -12,6 +12,12 @@ const detectorSelect = document.getElementById("model");
 const detectors = {
     "yolo11x": new BallDetector.YOLOBallDetector(
         "/external/yolo11x_web_model/model.json"),
+    "yolo11l": new BallDetector.YOLOBallDetector(
+        "/external/yolo11l_web_model/model.json"),
+    "yolo11m": new BallDetector.YOLOBallDetector(
+        "/external/yolo11m_web_model/model.json"),
+    "yolo11s": new BallDetector.YOLOBallDetector(
+        "/external/yolo11s_web_model/model.json"),
     "yolo11n": new BallDetector.YOLOBallDetector(
         "/external/yolo11n_web_model/model.json")
 }

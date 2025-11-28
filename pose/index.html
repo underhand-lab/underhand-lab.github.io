@@ -7,12 +7,6 @@
     <title>Underhand Lab | Pose</title>
 
     <link rel="stylesheet" href="/style/style.css">
-    <link rel="stylesheet" href="/style/nav.css">
-    <link rel="stylesheet" href="/style/slider.css">
-    <link rel="stylesheet" href="/style/box.css">
-    <link rel="stylesheet" href="/style/panel.css">
-    <link rel="stylesheet" href="/style/neumorphism.css">
-    <link rel="stylesheet" href="/style/frostedglassmorphism.css">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
     <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.1/dist/ffmpeg.min.js"></script>
@@ -66,8 +60,16 @@
                     <h1>새로운 동영상 처리</h1>
                 </summary>
                 <div>
-                    <div class="input-section">
-                        <input type="file" id="video-files" multiple accept="video/*">
+                    <div class="input-section" style="display:flex; flex-wrap: wrap;">
+                        <div style="flex-grow: 1;">
+                            <input type="file" id="video-files" multiple accept="video/*">
+                        </div>
+                        <div style="flex-grow: 1; text-align: right;">
+                            <label for="model">모델: </label>
+                            <select id="model" name="model">
+                                <option value="mediapipe">mediapipe</option>
+                            </select>
+                        </div>
                     </div>
 
                     <button id="process-button" disabled>처리 시작</button>

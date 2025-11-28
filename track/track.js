@@ -1,70 +1,36 @@
 import { TrackProcessor } from '/src/track/processor.js';
 import * as BallDetector from '/src/track/ball-detector/index.js';
-import * as FrameMaker from '/src/track/frame-maker/index.js';
-import * as Box from "/src/box/box.js"
-import * as Analysis from "/src/track/calc/analysis.js"
-
-// DOM 요소 가져오기
-const slider = document.getElementById('frameSlider');
+import { PopUp } from "/src/pop-up.js"
+import * as AnalysisBox from "./analysis-box.js"
 
 const fileInput = document.getElementById('video-files');
+fileInput.addEventListener('change', () => {
+    processButton.disabled = fileInput.files.length < 1;
+});
+
+const detectorSelect = document.getElementById("model");
+const detectors = {
+    "yolo11x": new BallDetector.YOLOBallDetector(
+        "/external/yolo11x_web_model/model.json"),
+    "yolo11n": new BallDetector.YOLOBallDetector(
+        "/external/yolo11n_web_model/model.json")
+}
+
 const processButton = document.getElementById('process-button');
 const statusMessage = document.getElementById('status-message');
 const progressBar = document.getElementById('progress-bar');
-const confInput = document.getElementById('confInput');
-
-let frameMakers = [];
-
-slider.max = 0;
-
-// 로드된 비디오 데이터를 저장할 변수
-let processedData = null;
-const detector = new BallDetector.YOLO11BallDetector();
-
-// 슬라이더를 움직일 때마다 이미지를 업데이트하는 함수
-function updateImage() {
-
-    if (!processedData) return;
-
-    const frameIdx = parseInt(slider.value, 10);
-
-    for (let i = 0; i < frameMakers.length; i++) {
-        frameMakers[i].setConf(confInput.value);
-        frameMakers[i].drawImageAt(frameIdx);
-    }
-
-}
-
-function setData(data) {
-
-    if (data == null) return;
-
-    const frameCount = data["rawImage"].length;
-    slider.max = frameCount > 0 ? frameCount - 1 : 0;
-
-    processedData = data;
-
-    for (let i = 0; i < frameMakers.length; i++) {
-        frameMakers[i].setData(data);
-    }
-
-    updateImage();
-
-}
-
-confInput.addEventListener('change', () => {
-    updateImage();
-});
 
 // 초기화 및 비디오 처리
 processButton.addEventListener('click', async () => {
 
     // 버튼을 비활성화하여 중복 클릭 방지
     processButton.disabled = true;
+    progressBar.style.width = `0%`;
 
     // 프로세서 및 탐지기 초기화
     const processor = new TrackProcessor();
-
+    const detector = detectors[detectorSelect.value];
+    
     // 프로세서 설정 및 비디오 처리
     try {
         processor.setting(detector, {
@@ -80,7 +46,7 @@ processButton.addEventListener('click', async () => {
         // data 변수에 모든 처리된 데이터를 저장
         const ret = await processor.processVideo(fileInput.files);
 
-        setData(ret);
+        AnalysisBox.setData(ret);
         console.log('비디오 처리가 완료되었습니다.');
 
     } catch (error) {
@@ -95,120 +61,6 @@ processButton.addEventListener('click', async () => {
 
 });
 
-fileInput.addEventListener('change', () => {
-    processButton.disabled = fileInput.files.length < 1;
-});
-
-slider.addEventListener('input', updateImage);
-
-const guide = document.getElementById('guide');
-const openGuideButton = document.getElementById('open-guide-button');
-const closeGuideButton = document.getElementById('close-guide-button');
-
-openGuideButton.addEventListener('click', () => {
-    guide.style.display = "block";
-});
-
-closeGuideButton.addEventListener('click', () => {
-    guide.style.display = "none";
-});
-
-const analysisSelect = document.getElementById('analysis');
-const addBoxButton = document.getElementById('add-box-button');
-const cancelAddBoxBtn = document.getElementById('cancel-add-box-button');
-const addVideoBoxBtn = document.getElementById('add-video-box-button');
-const addTableBoxBtn = document.getElementById('add-table-box-button');
-
-const boxList = new Box.BoxList(document.getElementById("boxes"));
-
-function addBox(opt, func, toBottom = true) {
-    fetch(opt)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`파일을 불러오는 데 실패했습니다: ${response.statusText}`);
-            }
-            return response.text();
-        })
-        .then((text) => {
-            const box = boxList.addBox(text);
-            box.className = 'container neumorphism';
-            func(box);
-            if (toBottom) {
-                let bottom = document.body.scrollHeight;
-                window.scrollTo({ top: bottom, left: 0, behavior: 'smooth' })
-            }
-            closeBoxSelect();
-        })
-        .catch(error => {
-            console.error(`분석 도구 생성 중 오류가 발생했습니다.: ${error}`);
-        });
-
-}
-
-addBoxButton.addEventListener('click', () => {
-    analysisSelect.style.display = "block";
-});
-
-cancelAddBoxBtn.addEventListener('click', () => {
-    closeBoxSelect();
-});
-
-addVideoBoxBtn.addEventListener('click', () => {
-    addBox("/template/video.html", (box) => {
-
-        const newCanvas = box.querySelectorAll("canvas")[0];
-        const newPoseFrameMaker = new FrameMaker.TrackFrameMaker(newCanvas)
-
-        newPoseFrameMaker.setData(processedData);
-
-        frameMakers.push(newPoseFrameMaker);
-        updateImage();
-    });
-
-});
-
-addTableBoxBtn.addEventListener('click', () => {
-    addBox("/template/table-track.html", (box) => {
-
-        const newDiv = box.getElementsByClassName("table")[0];
-        const newTableFrameMaker = new FrameMaker.CustomTableFrameMaker(newDiv);
-
-
-        newTableFrameMaker.changeAnalysisTool(new Analysis.BallAnalysisTool());
-
-        newTableFrameMaker.setData(processedData);
-
-        frameMakers.push(newTableFrameMaker);
-        updateImage();
-    });
-
-});
-
-function closeBoxSelect() {
-    analysisSelect.style.display = "none";
-}
-
-addBox("/template/video.html", (box) => {
-
-    const newCanvas = box.querySelectorAll("canvas")[0];
-    const newPoseFrameMaker = new FrameMaker.TrackFrameMaker(newCanvas)
-
-    newPoseFrameMaker.setData(processedData);
-
-    frameMakers.push(newPoseFrameMaker);
-    updateImage();
-}, false);
-
-addBox("/template/table-track.html", (box) => {
-
-    const newDiv = box.getElementsByClassName("table")[0];
-    const newTableFrameMaker = new FrameMaker.CustomTableFrameMaker(newDiv);
-
-    newTableFrameMaker.changeAnalysisTool(new Analysis.BallAnalysisTool());
-
-    newTableFrameMaker.setData(processedData);
-
-    frameMakers.push(newTableFrameMaker);
-    updateImage();
-
-}, false);
+new PopUp(document.getElementById('guide'),
+    document.getElementById('open-guide-button'),
+    document.getElementById('close-guide-button'));

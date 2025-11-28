@@ -5,8 +5,8 @@ export class TrackFrameMaker {
         this.conf = 0.01;
     }
 
-    setData(track_data) {
-        this.track_data = track_data;
+    setData(trackData) {
+        this.trackData = trackData;
     }
 
     setConf(conf) {
@@ -15,20 +15,22 @@ export class TrackFrameMaker {
 
     getBall(idx) {
         if (idx < 0) return null;
-        if (this.track_data["ballData"] == null ||
-            this.track_data["ballData"][idx] == null ||
-            this.track_data["ballData"][idx]["confidence"] < this.conf)
+        if (this.trackData["ballData"] == null ||
+            this.trackData["ballData"][idx] == null ||
+            this.trackData["ballData"][idx]["confidence"] < this.conf)
             return null;
 
-        return this.track_data["ballData"][idx];
+        return this.trackData["ballData"][idx];
     }
 
     drawImageAt(idx) {
 
+        if (this.trackData == null) return;
+
         if (idx < 0) return;
         
         const ctx = this.canvas.getContext('2d');
-        const image = this.track_data['rawImage'][idx];
+        const image = this.trackData['rawImage'][idx];
 
         this.canvas.width = this.canvas.clientWidth;
         this.canvas.height = this.canvas.clientWidth * 0.5;

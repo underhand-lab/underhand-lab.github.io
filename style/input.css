@@ -1,0 +1,15 @@
+#video-files {
+    display: block;
+    margin-top: 5px;
+}
+
+#file-list-info {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 10px;
+}
+
+.input-section {
+    margin-bottom: 20px;
+    text-align: left;
+}

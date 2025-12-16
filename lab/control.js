@@ -1,48 +1,103 @@
 import { calculate_run_expectancy } from "./run.js"
 
-const type = document.getElementById("type");
-const input_form_1 = document.getElementById("input-form-1");
-const input_form_2 = document.getElementById("input-form-2");
-
-const batter_ability_input = {
+const batter_ability_input_ratio = {
     'ba': document.getElementById('input_ratio_ba'),
     'out': document.getElementById('input_ratio_out'),
-    'bb': document.getElementById('input_ratio_bb'),
 
-    'so': document.getElementById('input_ratio_so'),
     'gb': document.getElementById('input_ratio_gb'),
     'fb': document.getElementById('input_ratio_fb'),
 
     'dh': document.getElementById('input_ratio_dh'),
     'th': document.getElementById('input_ratio_th'),
     'hr': document.getElementById('input_ratio_hr'),
-    'sh': document.getElementById('input_ratio_sh'),
+}
+
+const batter_ability_input_cumulative = {
+    'bb': document.getElementById('input_cumulative_bb'),
+
+    'so': document.getElementById('input_cumulative_so'),
+    'gb': document.getElementById('input_cumulative_gb'),
+    'fb': document.getElementById('input_cumulative_fb'),
+
+    'dh': document.getElementById('input_cumulative_dh'),
+    'th': document.getElementById('input_cumulative_th'),
+    'hr': document.getElementById('input_cumulative_hr'),
+    'sh': document.getElementById('input_cumulative_sh'),
 }
 
 const runner_ability_input = {
     'twohome': document.getElementById('input_ratio_twohome'),
-    'twohomeout': document.getElementById('input_ratio_twohomeout'),
     'twothree': document.getElementById('input_ratio_twothree'),
 
     'onethree': document.getElementById('input_ratio_onethree'),
 
     'sf': document.getElementById('input_ratio_sf'),
     'sfx_out': document.getElementById('input_ratio_sfx_out'),
-    'sfx_stay': document.getElementById('input_ratio_sfx_stay'),
 
     'dp2x': document.getElementById('input_ratio_dp2x'),
     'dp1x': document.getElementById('input_ratio_dp1x'),
 
 }
 
-function read_inputs() {
+function read_batter_ability_ratio() {
     // 타자 능력치 읽기
     const batter_ability = {};
 
-    for (let key in batter_ability_input) {
-        batter_ability[key] = parseFloat(batter_ability_input[key].value);
+    for (let key in batter_ability_input_ratio) {
+        batter_ability[key] = parseFloat(
+            batter_ability_input_ratio[key].value);
     }
 
+    batter_ability['bb']
+        = 1 - (batter_ability['ba'] + batter_ability['out']);
+
+    batter_ability['sh']
+        = batter_ability['ba'] - (batter_ability['dh']
+            + batter_ability['th'] + batter_ability['hr']);
+
+    batter_ability['so'] = batter_ability['out'] - 
+        (batter_ability['gb'] + batter_ability['fb'])
+
+    // 3. HTML에 반영
+    document.getElementById('input_ratio_bb').value = batter_ability['bb'];
+    document.getElementById('input_ratio_sh').value = batter_ability['sh'];
+    document.getElementById('input_ratio_so').value = batter_ability['so'];
+    
+    return batter_ability;
+}
+
+function read_batter_ability_cumulative() {
+
+    const batter_ability_raw = {};
+    let pa = 0;
+
+    for (let key in batter_ability_input_cumulative) {
+        batter_ability_raw[key] = parseInt(
+            batter_ability_input_cumulative[key].value);
+        pa += batter_ability_raw[key];
+    }
+
+    const batter_ability = {
+        'pa': pa,
+        'bb': parseFloat(batter_ability_raw["bb"]) / pa,
+
+        'so': parseFloat(batter_ability_raw["so"]) / pa,
+        'gb': parseFloat(batter_ability_raw["gb"]) / pa,
+        'fb': parseFloat(batter_ability_raw["fb"]) / pa,
+
+        'sh': parseFloat(batter_ability_raw["sh"]) / pa,
+        'dh': parseFloat(batter_ability_raw["dh"]) / pa,
+        'th': parseFloat(batter_ability_raw["th"]) / pa,
+        'hr': parseFloat(batter_ability_raw["hr"]) / pa,
+    }
+
+    document.getElementById('input_cumulative_pa').value
+        = batter_ability["pa"];
+
+    return batter_ability;
+}
+
+function read_runner_ability() {
     // 주자 능력치 읽기
     const runner_ability = {};
 
@@ -50,7 +105,19 @@ function read_inputs() {
         runner_ability[key] = parseFloat(runner_ability_input[key].value);
     }
 
-    return { batter_ability, runner_ability };
+    runner_ability['sfx_stay'] = 1 -
+        (runner_ability['sf'] + runner_ability['sfx_out']);
+        
+    runner_ability['twohomeout'] = 1 -
+        (runner_ability['twothree'] + runner_ability['twohome'])
+
+    document.getElementById('input_ratio_sfx_stay').value
+        = runner_ability['sfx_stay'];
+    document.getElementById('input_ratio_twohomeout').value
+        = runner_ability['twohomeout'];
+
+    return runner_ability;
+
 }
 
 /**
@@ -100,88 +167,95 @@ function re_visualize(RE_results) {
     html += `
             </tbody>
         </table>
-        <p style="font-size: 0.9em; color: #666;">※ 기대 득점(RE): 해당 상황에서 이닝이 끝날 때까지 추가로 얻을 것으로 예상되는 평균 득점입니다.</p>
     `;
+
+    html += `
+        <p>9이닝당 기대 득점: ${(RE_results[0][0] * 9).toFixed(3)}</p>
+        <p style="font-size: 0.9em; color: #666;">※ 기대 득점(RE): 해당 상황에서 이닝이 끝날 때까지 추가로 얻을 것으로 예상되는 평균 득점입니다.</p>
+    `
 
     return html;
 }
 
 // HTML 버튼 클릭 시 호출되는 함수
-function read_inputs_and_calculate() {
-    // 계산 전에 최종적으로 파생 확률을 업데이트하여 최신 값을 반영합니다.
+function read_inputs_and_calculate(
+    batter_ability, runner_ability) {
 
-    const { batter_ability, runner_ability } = read_inputs();
     const re_results = calculate_run_expectancy(batter_ability, runner_ability);
 
     document.getElementById('result').innerHTML = re_visualize(re_results);
 }
 
 function execute_1() {
-    // 입력값 읽기 (유효한 숫자만)
-    const ba = parseFloat(document.getElementById('input_ratio_ba').value) || 0;
-    const out_pa = parseFloat(document.getElementById('input_ratio_out').value) || 0;
-    const gb_out = parseFloat(document.getElementById('input_ratio_gb').value) || 0;
-    const fb_out = parseFloat(document.getElementById('input_ratio_fb').value) || 0;
-    const dh = parseFloat(document.getElementById('input_ratio_dh').value) || 0;
-    const th = parseFloat(document.getElementById('input_ratio_th').value) || 0;
-    const hr = parseFloat(document.getElementById('input_ratio_hr').value) || 0;
 
-    let sh_bb = 1 - (ba + out_pa);
+    const batter_ability = read_batter_ability_ratio();
+    const runner_ability = read_runner_ability();
 
-    // 1. 단타 확률 (SH/PA) 계산
-    let sh_pa = ba - (dh + th + hr);
-    if (sh_pa < 0) sh_pa = 0; // 최소 0
-
-    // 2. 삼진 비율 (SO/OUT) 계산
-    let so_out = out_pa - (gb_out + fb_out);
-    if (so_out < 0) so_out = 0; // 최소 0
-
-    // 3. HTML에 반영
-    document.getElementById('input_ratio_bb').value = sh_bb;
-    document.getElementById('input_ratio_sh').value = sh_pa;
-    document.getElementById('input_ratio_so').value = so_out;
-
-    const twothree = parseFloat(document.getElementById('input_ratio_twothree').value) || 0;    
-    const twohome = parseFloat(document.getElementById('input_ratio_twohome').value) || 0;
-
-    const sf = parseFloat(document.getElementById('input_ratio_sf').value) || 0;
-    const sfx_out = parseFloat(document.getElementById('input_ratio_sfx_out').value) || 0;
-
-
-    document.getElementById('input_ratio_sfx_stay').value = 1 - sf - sfx_out;
-    document.getElementById('input_ratio_twohomeout').value = 1 - twothree - twohome;
-
-    read_inputs_and_calculate();
+    read_inputs_and_calculate(batter_ability, runner_ability);
 
 }
 
 
 function execute_2() {
 
+    const batter_ability = read_batter_ability_cumulative();
+    const runner_ability = read_runner_ability();
+
+    read_inputs_and_calculate(batter_ability, runner_ability);
 
 }
 
-for (let key in batter_ability_input) {
+let execute;
+
+const type = document.getElementById("type");
+const input_form_1 = document.getElementById("input-form-1");
+const input_form_2 = document.getElementById("input-form-2");
+
+
+function execute_setting() {
+
+    if (type && type.value == "1") {
+        execute = execute_2;
+        input_form_1.style.display = "none";
+        input_form_2.style.display = "block";
+        return;
+    }
+
+    execute = execute_1;
+    input_form_1.style.display = "block";
+    input_form_2.style.display = "none";
+
+}
+
+type.addEventListener('change', () => {
+    execute_setting();
+});
+
+for (let key in batter_ability_input_ratio) {
     if (key == 'bb' || key == 'sh' || key == 'so')
         continue;
-    
-    batter_ability_input[key].addEventListener('change', () => {
-        if (type && type.value == "2") {
-            execute_2();
-            return;
-        }
+
+    batter_ability_input_ratio[key].addEventListener('change', () => {
         execute_1();
     });
+}
+
+for (let key in batter_ability_input_cumulative) {
+
+    batter_ability_input_cumulative[key].addEventListener('change', () => {
+        execute_2();
+    });
+
 }
 
 for (let key in runner_ability_input) {
     if (key == 'sfx_stay' || key == 'twohomeout')
         continue;
-    console.log(key);
 
     runner_ability_input[key].addEventListener('change', () => {
-        execute_1();
+        execute();
     });
 }
 
-execute_1();
+execute_setting();
+execute();

@@ -1,4 +1,5 @@
 import { calculate_run_expectancy } from "./run.js"
+import { PopUp } from "/src/pop-up.js"
 
 const batter_ability_input_ratio = {
     'ba': document.getElementById('input_ratio_ba'),
@@ -78,7 +79,6 @@ function read_batter_ability_cumulative() {
     }
 
     const batter_ability = {
-        'pa': pa,
         'bb': parseFloat(batter_ability_raw["bb"]) / pa,
 
         'so': parseFloat(batter_ability_raw["so"]) / pa,
@@ -91,8 +91,39 @@ function read_batter_ability_cumulative() {
         'hr': parseFloat(batter_ability_raw["hr"]) / pa,
     }
 
-    document.getElementById('input_cumulative_pa').value
-        = batter_ability["pa"];
+    const ab = pa - batter_ability_raw["bb"];
+    const hit = batter_ability_raw["sh"] + batter_ability_raw["dh"]
+        + batter_ability_raw["th"] + batter_ability_raw["hr"];
+    const ob = hit + batter_ability_raw["bb"];
+    const tb = batter_ability_raw["sh"] + batter_ability_raw["dh"] * 2
+        + batter_ability_raw["th"] * 3 + batter_ability_raw["hr"] * 4;
+
+    document.getElementById('input_cumulative_pa').innerHTML
+        = pa;
+
+    document.getElementById('input_cumulative_ab').innerHTML
+        = ab;
+
+    document.getElementById('input_cumulative_hit').innerHTML
+        = hit;
+
+    document.getElementById('input_cumulative_ob').innerHTML
+        = ob;
+
+    document.getElementById('input_cumulative_tb').innerHTML
+        = tb;
+
+    document.getElementById('input_cumulative_ba').innerHTML
+        = (hit / ab).toFixed(3);
+
+    document.getElementById('input_cumulative_oba').innerHTML
+        = (ob / pa).toFixed(3);
+
+    document.getElementById('input_cumulative_slg').innerHTML
+        = (tb / ab).toFixed(3);
+
+    document.getElementById('input_cumulative_ops').innerHTML
+        = ((ob / pa) + (tb / ab)).toFixed(3);
 
     return batter_ability;
 }
@@ -171,7 +202,6 @@ function re_visualize(RE_results) {
 
     html += `
         <p>9이닝당 기대 득점: ${(RE_results[0][0] * 9).toFixed(3)}</p>
-        <p style="font-size: 0.9em; color: #666;">※ 기대 득점(RE): 해당 상황에서 이닝이 끝날 때까지 추가로 얻을 것으로 예상되는 평균 득점입니다.</p>
     `
 
     return html;
@@ -259,3 +289,20 @@ for (let key in runner_ability_input) {
 
 execute_setting();
 execute();
+
+
+new PopUp(document.getElementById('guide'),
+    document.getElementById('open-guide-button'),
+    document.getElementById('close-guide-button'));
+
+new PopUp(document.getElementById('model-state'),
+    document.getElementById('open-model-state-button'),
+    document.getElementById('close-model-state-button'));
+
+new PopUp(document.getElementById('model-run'),
+    document.getElementById('open-model-run-button'),
+    document.getElementById('close-model-run-button'));
+
+new PopUp(document.getElementById('model-not'),
+    document.getElementById('open-model-not-button'),
+    document.getElementById('close-model-not-button'));

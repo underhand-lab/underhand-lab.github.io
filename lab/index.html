@@ -89,16 +89,42 @@
                     </summary>
                     <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; padding:20px;">
                         <div class="input-group">
-                            <label for="input_cumulative_pa">타석</label>
-                            <input type="number" id="input_cumulative_pa"
-                                value="400" step="1" min="0" max="1000" readonly>
+                            타석: 
+                            <b id="input_cumulative_pa"></b>
                         </div>
                         <div class="input-group">
-                            <label for="input_cumulative_bb">
-                                볼넷
-                            </label>
-                            <input type="number" id="input_cumulative_bb"
-                                value="50" step="1" min="0" max="1000">
+                            타수: 
+                            <b id="input_cumulative_ab"></b>
+                        </div>
+                        <div class="input-group">
+                            안타: 
+                            <b id="input_cumulative_hit"></b>
+                        </div>
+                        <div class="input-group">
+                            출루: 
+                            <b id="input_cumulative_ob"></b>
+                        </div>
+                        <div class="input-group">
+                            장타수: 
+                            <b id="input_cumulative_tb"></b>
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; padding:20px;">
+                        <div class="input-group">
+                            타율: 
+                            <b id="input_cumulative_ba"></b>
+                        </div>
+                        <div class="input-group">
+                            출루율: 
+                            <b id="input_cumulative_oba"></b>
+                        </div>
+                        <div class="input-group">
+                            장타율: 
+                            <b id="input_cumulative_slg"></b>
+                        </div>
+                        <div class="input-group">
+                            OPS: 
+                            <b id="input_cumulative_ops"></b>
                         </div>
                     </div>
                     <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
@@ -128,6 +154,13 @@
                     <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
 
                     <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; padding:20px;">
+                        <div class="input-group">
+                            <label for="input_cumulative_bb">
+                                볼넷
+                            </label>
+                            <input type="number" id="input_cumulative_bb"
+                                value="50" step="1" min="0" max="1000">
+                        </div>
                         <div class="input-group">
                             <label for="input_cumulative_sh">
                                 단타(SH)
@@ -219,14 +252,59 @@
                         <div class="input-group"><label for="input_ratio_dp1x">타자만 아웃(땅볼) 확률</label><input type="number"
                                 id="input_ratio_dp1x" value="0.03" step="0.01" min="0" max="1"></div>
                     </div>
-                    <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
-                    <p style="font-size: 0.8em; color: #666;">※ 나머지 확률은 주자가 머무르거나 일반 아웃으로 처리됩니다.</p>
-                    <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
+                    <!--p style="font-size: 0.8em; color: #666;">※ 나머지 확률은 주자가 머무르거나 일반 아웃으로 처리됩니다.</p>
+                    <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;"-->
                 </details>
             </div>
 
         </div>
+        <div class="container neumorphism">
+            <button id="open-guide-button">도움말</button>
+            <button id="open-model-state-button">주자 모델 시나리오</button>
+            <button id="open-model-run-button">득점 모델 시나리오</button>
+            <button id="open-model-not-button">미반영 시나리오</button>
+        </div>
 
+    </div>
+    <div id="guide" class="panel frostedglassmorphism" style="display:none;">
+            <div class="container neumorphism" style="height:90%;">
+                <h1>도움말</h1>
+                <hr>
+                <div class="markdown-container" data-markdown-file="./guide.md" style="overflow-y:scroll;margin:auto;height: calc(100% - 150px);">
+                    </div>
+                <hr>
+                <button id="close-guide-button">닫기</button>
+        </div>
+    </div>
+    <div id="model-state" class="panel frostedglassmorphism" style="display:none;">
+            <div class="container neumorphism" style="height:90%;">
+                <h1>주자, 아웃카운트 전이 모델 시나리오</h1>
+                <hr>
+                <div class="markdown-container" data-markdown-file="./model-state.md" style="overflow-y:scroll;margin:auto;height: calc(100% - 150px);">
+                    </div>
+                <hr>
+                <button id="close-model-state-button">닫기</button>
+        </div>
+    </div>
+    <div id="model-run" class="panel frostedglassmorphism" style="display:none;">
+            <div class="container neumorphism" style="height:90%;">
+                <h1>득점 전이 모델 시나리오</h1>
+                <hr>
+                <div class="markdown-container" data-markdown-file="./model-run.md" style="overflow-y:scroll;margin:auto;height: calc(100% - 150px);">
+                    </div>
+                <hr>
+                <button id="close-model-run-button">닫기</button>
+        </div>
+    </div>
+    <div id="model-not" class="panel frostedglassmorphism" style="display:none;">
+            <div class="container neumorphism" style="height:90%;">
+                <h1>미반영 시나리오</h1>
+                <hr>
+                <div class="markdown-container" data-markdown-file="./model-not.md" style="overflow-y:scroll;margin:auto;height: calc(100% - 150px);">
+                    </div>
+                <hr>
+                <button id="close-model-not-button">닫기</button>
+        </div>
     </div>
 </body>
 

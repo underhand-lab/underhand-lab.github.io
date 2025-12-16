@@ -11,7 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/14.8.1/math.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="/src/markdown.js"></script>
-    <script src="./run.js"></script>
+    <script src="./control.js" type="module"></script>
 
 </head>
 
@@ -38,59 +38,101 @@
             <div id="result">
             </div>
 
-            <div id="input-form">
+            <div id="input-form-1">
                 <details>
                     <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
-                    <summary><h1>타격 결과 확률 (P(타석 결과))</h1></summary>
+                    <summary>
+                        <h1>타석 결과 확률</h1>
+                    </summary>
                     <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; padding:20px;">
-                        <div class="input-group"><label for="input_ba">타율 (BA)</label><input type="number" id="input_ba"
-                                value="0.23" step="0.001" min="0" max="1"></div>
-                        <div class="input-group"><label for="input_out">아웃 확률 (OUT)</label><input type="number"
-                                id="input_out" value="0.68" step="0.001" min="0" max="1"></div>
-                        <div class="input-group"><label for="input_bb">볼넷 확률 (BB)</label><input type="number"
-                                id="input_bb" value="0.09" step="0.001" min="0" max="1"></div>
+                        <div class="input-group"><label for="input_ratio_ba">타석당 안타 비율(HIT/PA)</label><input type="number"
+                                id="input_ratio_ba" value="0.23" step="0.001" min="0" max="1"></div>
+                        <div class="input-group"><label for="input_ratio_out">타석당 아웃 비율(OUT/PA)</label><input type="number"
+                                id="input_ratio_out" value="0.68" step="0.001" min="0" max="1"></div>
+                        <div class="input-group"><label for="input_ratio_bb">타석당 볼넷 비율(BB/PA)</label><input type="number"
+                                id="input_ratio_bb" value="0.09" step="0.001" min="0" max="1" readonly></div>
                     </div>
                     <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
                     <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; padding:20px;">
-                        <div class="input-group"><label for="input_gb">땅볼 아웃 (GB) 비율</label><input type="number"
-                                id="input_gb" value="0.23" step="0.001" min="0" max="1"></div>
-                        <div class="input-group"><label for="input_fb">뜬공 아웃 (FB) 비율</label><input type="number"
-                                id="input_fb" value="0.23" step="0.001" min="0" max="1"></div>
-                        <div class="input-group"><label for="input_dh">2루타 (DH) 비율</label><input type="number"
-                                id="input_dh" value="0.05" step="0.001" min="0" max="1"></div>
-                        <div class="input-group"><label for="input_th">3루타 (TH) 비율</label><input type="number"
-                                id="input_th" value="0.005" step="0.001" min="0" max="1"></div>
-                        <div class="input-group"><label for="input_hr">홈런 (HR) 비율</label><input type="number"
-                                id="input_hr" value="0.035" step="0.001" min="0" max="1"></div>
+                        <div class="input-group"><label for="input_ratio_gb">타석당 땅볼 아웃 비율(GB/PA)</label><input type="number"
+                                id="input_ratio_gb" value="0.23" step="0.001" min="0" max="1"></div>
+                        <div class="input-group"><label for="input_ratio_fb">타석당 뜬공 아웃 비율(FB/PA)</label><input type="number"
+                                id="input_ratio_fb" value="0.23" step="0.001" min="0" max="1"></div>
+                        <div class="input-group"><label for="input_ratio_so">타석당 삼진 비율(SO/PA)</label><input type="number"
+                                id="input_ratio_so" value="0.54" step="0.001" min="0" max="1" readonly></div>
                     </div>
                     <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
-                    <p style="font-size: 0.8em; color: #666;">※ 단타(SH)와 삼진(SO)은 나머지 확률로 자동 계산됩니다.</p>
+
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; padding:20px;">
+                        <div class="input-group"><label for="input_ratio_sh">타석당 단타 비율(SH/PA)</label><input type="number"
+                                id="input_ratio_sh" value="0.14" step="0.001" min="0" max="1" readonly></div>
+                        <div class="input-group"><label for="input_ratio_dh">타석당 2루타 비율(DH/PA)</label><input type="number"
+                                id="input_ratio_dh" value="0.05" step="0.001" min="0" max="1"></div>
+                        <div class="input-group"><label for="input_ratio_th">타석당 3루타 비율(TH/PA)</label><input type="number"
+                                id="input_ratio_th" value="0.005" step="0.001" min="0" max="1"></div>
+                        <div class="input-group"><label for="input_ratio_hr">타석당 홈런 비율(HR/PA)</label><input type="number"
+                                id="input_ratio_hr" value="0.035" step="0.001" min="0" max="1"></div>
+                    </div>
                     <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
                 </details>
                 <details>
                     <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
-                    <summary><h1>주루 및 수비 가정 확률 (조건부 확률)</h1></summary>
+                    <summary>
+                        <h1>주루 및 수비 가정 확률 (조건부 확률)</h1>
+                    </summary>
                     <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; padding:20px;">
-                        <div class="input-group"><label for="input_twohome">2루→홈 득점 성공률(단타)</label><input type="number"
-                                id="input_twohome" value="0.40" step="0.01" min="0" max="1"></div>
-                        <div class="input-group"><label for="input_twothree">2루→3루 진루율(단타)</label><input type="number"
-                                id="input_twothree" value="0.55" step="0.01" min="0" max="1"></div>
-                        <div class="input-group"><label for="input_onethree">1루→3루 진루율(단타)</label><input type="number"
-                                id="input_onethree" value="0.30" step="0.01" min="0" max="1"></div>
+                        <div class="input-group">
+                            <label for="input_ratio_twohome">
+                                2루→홈 득점 성공률(단타)
+                            </label>
+                            <input type="number" id="input_ratio_twohome" value="0.40" step="0.01" min="0" max="1">
+                        </div>
+                        <div class="input-group">
+                            <label for="input_ratio_twohomeout">
+                                2루→홈 득점 시도 아웃 비율(단타)
+                            </label>
+                            <input type="number" id="input_ratio_twohomeout" value="0.55" step="0.01" min="0" max="1"
+                                readonly>
+                        </div>
+                        <div class="input-group">
+                            <label for="input_ratio_twothree">
+                                2루→3루 진루율(단타)
+                            </label>
+                            <input type="number" id="input_ratio_twothree" value="0.55" step="0.01" min="0" max="1">
+                        </div>
 
                         <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
 
-                        <div class="input-group"><label for="input_sf">3루주자 희생 플라이 성공률</label><input type="number"
-                                id="input_sf" value="0.70" step="0.01" min="0" max="1"></div>
-                        <div class="input-group"><label for="input_sfx_out">3루주자 홈 아웃 확률 (SF)</label><input
-                                type="number" id="input_sfx_out" value="0.05" step="0.01" min="0" max="1"></div>
+                        <div class="input-group"><label for="input_ratio_onethree">1루→3루 진루율(단타)</label><input type="number"
+                                id="input_ratio_onethree" value="0.30" step="0.01" min="0" max="1"></div>
 
                         <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
 
-                        <div class="input-group"><label for="input_dp2x">1루주자만 아웃(땅볼) 확률</label><input type="number"
-                                id="input_dp2x" value="0.03" step="0.01" min="0" max="1"></div>
-                        <div class="input-group"><label for="input_dp1x">타자만 아웃(땅볼) 확률</label><input type="number"
-                                id="input_dp1x" value="0.03" step="0.01" min="0" max="1"></div>
+                        <div class="input-group">
+                            <label for="input_ratio_sf">
+                                3루주자 희생 플라이 성공률
+                            </label>
+                            <input type="number" id="input_ratio_sf" value="0.70" step="0.01" min="0" max="1">
+                        </div>
+                        <div class="input-group">
+                            <label for="input_ratio_sfx_out">
+                                3루주자 홈 아웃 확률 (SF)
+                            </label>
+                            <input type="number" id="input_ratio_sfx_out" value="0.05" step="0.01" min="0" max="1">
+                        </div>
+                        <div class="input-group">
+                            <label for="input_ratio_sfx_stay">
+                                3루주자 태그업 시도 x 확률
+                            </label>
+                            <input type="number" id="input_ratio_sfx_stay" value="0.05" step="0.01" min="0" max="1" readonly>
+                        </div>
+
+                        <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
+
+                        <div class="input-group"><label for="input_ratio_dp2x">1루주자만 아웃(땅볼) 확률</label><input type="number"
+                                id="input_ratio_dp2x" value="0.03" step="0.01" min="0" max="1"></div>
+                        <div class="input-group"><label for="input_ratio_dp1x">타자만 아웃(땅볼) 확률</label><input type="number"
+                                id="input_ratio_dp1x" value="0.03" step="0.01" min="0" max="1"></div>
                     </div>
                     <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
                     <p style="font-size: 0.8em; color: #666;">※ 나머지 확률은 주자가 머무르거나 일반 아웃으로 처리됩니다.</p>
@@ -98,7 +140,6 @@
                 </details>
             </div>
 
-            <button id="run-btn">기대 득점 계산</button>
         </div>
 
     </div>

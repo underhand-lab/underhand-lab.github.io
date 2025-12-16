@@ -1,18 +1,3 @@
-/**
- * =================================================================
- * ⚾ 야구 기대 득점 예측 (흡수 마르코프 연쇄) JavaScript 구현
- * - Math.js를 사용하여 행렬 연산 수행 (inv/multiply 사용)
- * =================================================================
- * * [필수 전제 조건]
- * 이 코드를 실행하기 전에 반드시 Math.js 라이브러리 (전체 버전)를 로드해야 합니다.
- * 예: <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/14.8.1/math.js"></script>
- */
-
-/**
- * ----------------------------------------------------
- * 1. 흡수 마르코프 연쇄 해법 (Math.js - Inv/Multiply 사용)
- * ----------------------------------------------------
- */
 function solve_absorbing_chain_equation(P_matrix_25x25, R_immediate_24x1) {
     const N = 24;
 
@@ -52,14 +37,11 @@ function solve_absorbing_chain_equation(P_matrix_25x25, R_immediate_24x1) {
 }
 
 
-/**
- * ----------------------------------------------------
- * 2. 상태 정의
- * ----------------------------------------------------
- */
 const STATE_MAP = {};
 const REVERSE_STATE_MAP = {};
+
 let count = 0;
+
 // 3 아웃까지의 모든 (out, b3, b2, b1) 조합을 인덱싱
 for (let out = 0; out < 3; out++) {
     for (let b3 = 0; b3 < 2; b3++) {
@@ -81,7 +63,6 @@ function get_state_index(out, b3, b2, b1) {
     const state_key = [out, b3, b2, b1].join(',');
     return STATE_MAP[state_key] !== undefined ? STATE_MAP[state_key] : 24;
 }
-
 
 /**
  * ----------------------------------------------------
@@ -225,161 +206,15 @@ function create_immediate_runs_R(vars, runner_ability) {
 
 /**
  * ----------------------------------------------------
- * 5. 데이터 마이그레이션 (입력값을 기반으로 나머지 확률 계산)
- * ----------------------------------------------------
- */
-function value_sum(dic, list) {
-    return list.reduce((sum, key) => sum + (dic[key] || 0), 0);
-}
-
-function batter_ability_migration(batter_ability) {
-    const vars = { ...batter_ability };
-
-    // 단타 (SH) 확률 계산: BA - (DH + TH + HR)
-    vars['sh'] = vars['ba'] - value_sum(vars, ['dh', 'th', 'hr']);
-
-    // 삼진 (SO) 확률 계산: OUT - (GB + FB)
-    vars['so'] = vars['out'] - value_sum(vars, ['gb', 'fb']);
-
-    return vars;
-}
-
-function runner_ability_migration(runner_ability) {
-    const vars = { ...runner_ability };
-
-    // 2루 주자 아웃 확률: 1 - P(2B->3B) - P(2B->Home)
-    vars['twohomeout'] = 1 - vars['twothree'] - vars['twohome'];
-
-    // 3루 주자 희생플라이 잔류 확률: 1 - P(득점 성공) - P(홈 아웃)
-    vars['sfx_stay'] = 1 - vars['sf'] - vars['sfx_out'];
-
-    return vars;
-}
-
-
-/**
- * ----------------------------------------------------
  * 6. 메인 계산 함수
  * ----------------------------------------------------
  */
-function calculate_run_expectancy(batter_ability, runner_ability) {
-    const vars = batter_ability_migration(batter_ability);
-    const r_vars = runner_ability_migration(runner_ability);
+export function calculate_run_expectancy(batter_ability, runner_ability) {
 
-    const P_matrix = create_transition_matrix_P(vars, r_vars);
-    const R_immediate = create_immediate_runs_R(vars, r_vars);
+    const P_matrix = create_transition_matrix_P(
+        batter_ability, runner_ability);
+    const R_immediate = create_immediate_runs_R(
+        batter_ability, runner_ability);
 
     return solve_absorbing_chain_equation(P_matrix, R_immediate);
-}
-
-
-/**
- * ----------------------------------------------------
- * 7. HTML 입력값 읽기 및 계산 실행
- * ----------------------------------------------------
- */
-function getInputValue(id, defaultValue) {
-    const element = document.getElementById(id);
-    if (!element || element.value === "") {
-        return defaultValue;
-    }
-    const value = parseFloat(element.value);
-    return isNaN(value) ? defaultValue : value;
-}
-
-function read_inputs() {
-    // 타자 능력치 읽기
-    const batter_ability = {
-        'ba': getInputValue('input_ba', 0.23),
-        'out': getInputValue('input_out', 0.68),
-        'bb': getInputValue('input_bb', 0.09),
-        'gb': getInputValue('input_gb', 0.23),
-        'fb': getInputValue('input_fb', 0.23),
-        'dh': getInputValue('input_dh', 0.05),
-        'th': getInputValue('input_th', 0.005),
-        'hr': getInputValue('input_hr', 0.035),
-    };
-
-    // 주자 능력치 읽기
-    const runner_ability = {
-        'twohome': getInputValue('input_twohome', 0.40),
-        'twothree': getInputValue('input_twothree', 0.55),
-        'onethree': getInputValue('input_onethree', 0.30),
-        'sf': getInputValue('input_sf', 0.70),
-        'sfx_out': getInputValue('input_sfx_out', 0.05),
-        'dp2x': getInputValue('input_dp2x', 0.03),
-        'dp1x': getInputValue('input_dp1x', 0.03),
-    };
-
-    return { batter_ability, runner_ability };
-}
-
-/**
- * ----------------------------------------------------
- * 8. 시각화 (HTML 테이블 생성)
- * ----------------------------------------------------
- */
-function re_visualize(RE_results) {
-    if (!RE_results) {
-        // 오류 메시지는 solve_absorbing_chain_equation에서 이미 처리됨
-        return "";
-    }
-
-    const runner_states = [
-        "주자 없음", "1루", "2루", "3루",
-        "1, 2루", "1, 3루", "2, 3루", "만루"
-    ];
-
-    let html = `
-        <table class="re-table">
-            <thead>
-                <tr>
-                    <th>주자 상황</th>
-                    <th>0 아웃</th>
-                    <th>1 아웃</th>
-                    <th>2 아웃</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
-
-    for (let j = 0; j < 8; j++) {
-        const re_0_out = RE_results[j][0].toFixed(3);
-        const re_1_out = RE_results[j + 8][0].toFixed(3);
-        const re_2_out = RE_results[j + 16][0].toFixed(3);
-
-        html += `
-            <tr>
-                <td class="runner-state">${runner_states[j]}</td>
-                <td>${re_0_out}</td>
-                <td>${re_1_out}</td>
-                <td>${re_2_out}</td>
-            </tr>
-        `;
-    }
-
-    html += `
-            </tbody>
-        </table>
-        <p style="font-size: 0.9em; color: #666;">※ 기대 득점(RE): 해당 상황에서 이닝이 끝날 때까지 추가로 얻을 것으로 예상되는 평균 득점입니다.</p>
-    `;
-
-    return html;
-}
-
-// HTML 버튼 클릭 시 호출되는 함수
-function read_inputs_and_calculate() {
-    const { batter_ability, runner_ability } = read_inputs();
-    const re_results = calculate_run_expectancy(batter_ability, runner_ability);
-
-    document.getElementById('result').innerHTML = re_visualize(re_results);
-}
-
-window.onload = () => {
-    const run_btn = document.getElementById("run-btn");
-    run_btn.addEventListener('click', () => {
-        read_inputs_and_calculate();
-    });
-
-    read_inputs_and_calculate();
 }

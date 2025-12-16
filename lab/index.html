@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Underhand Lab</title>
+
+    <link rel="stylesheet" href="/style/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/14.8.1/math.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="/src/markdown.js"></script>
+    <script src="./run.js"></script>
+
+</head>
+
+<body>
+    <div class="nav">
+        <div style="flex-grow: 1">
+            <h1><a href=".." select="true">언더핸드 연구소</a></h1>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="flex-grow: 1">
+            <ul>
+                <li>
+                    <a href="/pose">자세 분석</a>
+                </li>
+                <li>
+                    <a href="/track">추적</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    </div>
+    <div id="wrapper" style="padding-bottom: 10px;">
+        <div class="container neumorphism">
+            <h1>⚾ 야구 기대 득점 (RE) 계산기</h1>
+            <div id="result">
+            </div>
+
+            <div id="input-form">
+                <details>
+                    <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
+                    <summary><h1>타격 결과 확률 (P(타석 결과))</h1></summary>
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; padding:20px;">
+                        <div class="input-group"><label for="input_ba">타율 (BA)</label><input type="number" id="input_ba"
+                                value="0.23" step="0.001" min="0" max="1"></div>
+                        <div class="input-group"><label for="input_out">아웃 확률 (OUT)</label><input type="number"
+                                id="input_out" value="0.68" step="0.001" min="0" max="1"></div>
+                        <div class="input-group"><label for="input_bb">볼넷 확률 (BB)</label><input type="number"
+                                id="input_bb" value="0.09" step="0.001" min="0" max="1"></div>
+                    </div>
+                    <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; padding:20px;">
+                        <div class="input-group"><label for="input_gb">땅볼 아웃 (GB) 비율</label><input type="number"
+                                id="input_gb" value="0.23" step="0.001" min="0" max="1"></div>
+                        <div class="input-group"><label for="input_fb">뜬공 아웃 (FB) 비율</label><input type="number"
+                                id="input_fb" value="0.23" step="0.001" min="0" max="1"></div>
+                        <div class="input-group"><label for="input_dh">2루타 (DH) 비율</label><input type="number"
+                                id="input_dh" value="0.05" step="0.001" min="0" max="1"></div>
+                        <div class="input-group"><label for="input_th">3루타 (TH) 비율</label><input type="number"
+                                id="input_th" value="0.005" step="0.001" min="0" max="1"></div>
+                        <div class="input-group"><label for="input_hr">홈런 (HR) 비율</label><input type="number"
+                                id="input_hr" value="0.035" step="0.001" min="0" max="1"></div>
+                    </div>
+                    <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
+                    <p style="font-size: 0.8em; color: #666;">※ 단타(SH)와 삼진(SO)은 나머지 확률로 자동 계산됩니다.</p>
+                    <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
+                </details>
+                <details>
+                    <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
+                    <summary><h1>주루 및 수비 가정 확률 (조건부 확률)</h1></summary>
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; padding:20px;">
+                        <div class="input-group"><label for="input_twohome">2루→홈 득점 성공률(단타)</label><input type="number"
+                                id="input_twohome" value="0.40" step="0.01" min="0" max="1"></div>
+                        <div class="input-group"><label for="input_twothree">2루→3루 진루율(단타)</label><input type="number"
+                                id="input_twothree" value="0.55" step="0.01" min="0" max="1"></div>
+                        <div class="input-group"><label for="input_onethree">1루→3루 진루율(단타)</label><input type="number"
+                                id="input_onethree" value="0.30" step="0.01" min="0" max="1"></div>
+
+                        <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
+
+                        <div class="input-group"><label for="input_sf">3루주자 희생 플라이 성공률</label><input type="number"
+                                id="input_sf" value="0.70" step="0.01" min="0" max="1"></div>
+                        <div class="input-group"><label for="input_sfx_out">3루주자 홈 아웃 확률 (SF)</label><input
+                                type="number" id="input_sfx_out" value="0.05" step="0.01" min="0" max="1"></div>
+
+                        <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
+
+                        <div class="input-group"><label for="input_dp2x">1루주자만 아웃(땅볼) 확률</label><input type="number"
+                                id="input_dp2x" value="0.03" step="0.01" min="0" max="1"></div>
+                        <div class="input-group"><label for="input_dp1x">타자만 아웃(땅볼) 확률</label><input type="number"
+                                id="input_dp1x" value="0.03" step="0.01" min="0" max="1"></div>
+                    </div>
+                    <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
+                    <p style="font-size: 0.8em; color: #666;">※ 나머지 확률은 주자가 머무르거나 일반 아웃으로 처리됩니다.</p>
+                    <hr style="width: 100%; border-top: 1px dashed #ccc; margin: 5px 0;">
+                </details>
+            </div>
+
+            <button id="run-btn">기대 득점 계산</button>
+        </div>
+
+    </div>
+</body>
+
+</html>

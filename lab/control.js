@@ -91,13 +91,18 @@ function read_batter_ability_cumulative() {
         'hr': parseFloat(batter_ability_raw["hr"]) / pa,
     }
 
-    const ab = pa - batter_ability_raw["bb"] - parseInt(
-        document.getElementById('input_cumulative_sacrifice').value);
+    const sac = document.getElementById('input_cumulative_sacrifice');
+
     const hit = batter_ability_raw["sh"] + batter_ability_raw["dh"]
         + batter_ability_raw["th"] + batter_ability_raw["hr"];
     const ob = hit + batter_ability_raw["bb"];
     const tb = batter_ability_raw["sh"] + batter_ability_raw["dh"] * 2
         + batter_ability_raw["th"] * 3 + batter_ability_raw["hr"] * 4;
+
+    sac.max = Math.min(pa - ob, batter_ability_raw["fb"] + batter_ability_raw["gb"]);
+    sac.value = Math.min(sac.max, sac.value);
+
+    const ab = pa - batter_ability_raw["bb"] - parseInt(sac.value);
 
     document.getElementById('input_cumulative_pa').innerHTML
         = pa;

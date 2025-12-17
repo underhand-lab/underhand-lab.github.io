@@ -91,7 +91,8 @@ function read_batter_ability_cumulative() {
         'hr': parseFloat(batter_ability_raw["hr"]) / pa,
     }
 
-    const ab = pa - batter_ability_raw["bb"];
+    const ab = pa - batter_ability_raw["bb"] - parseInt(
+        document.getElementById('input_cumulative_sacrifice').value);
     const hit = batter_ability_raw["sh"] + batter_ability_raw["dh"]
         + batter_ability_raw["th"] + batter_ability_raw["hr"];
     const ob = hit + batter_ability_raw["bb"];
@@ -141,37 +142,34 @@ function read_runner_ability() {
 
     runner_ability['sfx_stay'] = new Decimal(1).minus(
         runner_ability['sf']).minus(runner_ability['sfx_out']);
+    
 
-    runner_ability_input['sf'].max = new Decimal(1).minus(
-        runner_ability['sfx_out']);
-    runner_ability_input['sfx_out'].max = new Decimal(1).minus(
-        runner_ability['sf']);
+    function func(input, value, target, list) {
+        let ret = new Decimal(1);
 
-    runner_ability['twothree'] = new Decimal(1).minus(
-        runner_ability['twohomeout']).minus(runner_ability['twohome']);
+        for (let v in list) {
+            ret = ret.minus(value[list[v]]);
+        }
+
+        document.getElementById('input_ratio_' + target).innerHTML = ret;
+        value[target] = ret;
+
+        for (let x in list) {
+            let t = new Decimal(1);
+            for (let y in list) {
+                if (x == y) continue;
+                t = t.minus(value[list[y]]);
+            }
+            input[list[x]].max = t;
+        }
         
-    runner_ability_input['twohomeout'].max = new Decimal(1).minus(
-        runner_ability['twohome']);
-    runner_ability_input['twohome'].max = new Decimal(1).minus(
-        runner_ability['twohomeout']);
+    }
 
-    document.getElementById('input_ratio_sfx_stay').innerHTML
-        = runner_ability['sfx_stay'];
-    document.getElementById('input_ratio_twothree').innerHTML
-        = runner_ability['twothree'];
-
-    document.getElementById('input_ratio_onetwo').innerHTML
-        = new Decimal(1).minus(runner_ability['onethree']);
-        
-    document.getElementById('input_ratio_dp').innerHTML
-        = new Decimal(1).minus(runner_ability['dp1x']).minus(
-            runner_ability['dp2x']);
-
-    runner_ability_input['dp1x'].max = new Decimal(1).minus(
-        runner_ability['dp2x']);
-    runner_ability_input['dp2x'].max = new Decimal(1).minus(
-        runner_ability['dp1x']);
-
+    func(runner_ability_input, runner_ability, 'sfx_stay', ['sfx_out', 'sf']);
+    func(runner_ability_input, runner_ability, 'twothree', ['twohomeout', 'twohome']);
+    func(runner_ability_input, runner_ability, 'onetwo', ['onethree']);
+    func(runner_ability_input, runner_ability, 'dp', ['dp2x', 'dp1x']);
+    
     return runner_ability;
 
 }
@@ -300,6 +298,10 @@ for (let key in batter_ability_input_cumulative) {
     });
 
 }
+
+document.getElementById('input_cumulative_sacrifice').addEventListener('change', () => {
+    execute_2();
+})
 
 for (let key in runner_ability_input) {
 

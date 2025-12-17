@@ -52,25 +52,8 @@ a, a:visited {
     color: inherit;
 }
 
-input {
-    font-family: 'KBO-Dia-Gothic_medium', Arial, sans-serif;
-}
-
-input[type=file] {
-    color: #333;
-}
-
 h1 {
     font-size: 20px;
-}
-
-input[type=file]::file-selector-button{
-    background-color: var(--primary-color);;
-    color: white;
-    font-family: 'KBO-Dia-Gothic_medium', Arial, sans-serif;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 5px;
 }
 
 button {

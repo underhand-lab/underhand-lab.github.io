@@ -28,7 +28,7 @@ const batter_ability_input_cumulative = {
 
 const runner_ability_input = {
     'twohome': document.getElementById('input_ratio_twohome'),
-    'twothree': document.getElementById('input_ratio_twothree'),
+    'twohomeout': document.getElementById('input_ratio_twohomeout'),
 
     'onethree': document.getElementById('input_ratio_onethree'),
 
@@ -133,19 +133,44 @@ function read_runner_ability() {
     const runner_ability = {};
 
     for (let key in runner_ability_input) {
-        runner_ability[key] = parseFloat(runner_ability_input[key].value);
+        const value = new Decimal(Math.min(
+            runner_ability_input[key].value, runner_ability_input[key].max));
+        runner_ability[key] = value;
+        runner_ability_input[key].value = value;
     }
 
-    runner_ability['sfx_stay'] = 1 -
-        (runner_ability['sf'] + runner_ability['sfx_out']);
-        
-    runner_ability['twohomeout'] = 1 -
-        (runner_ability['twothree'] + runner_ability['twohome'])
+    runner_ability['sfx_stay'] = new Decimal(1).minus(
+        runner_ability['sf']).minus(runner_ability['sfx_out']);
 
-    document.getElementById('input_ratio_sfx_stay').value
+    runner_ability_input['sf'].max = new Decimal(1).minus(
+        runner_ability['sfx_out']);
+    runner_ability_input['sfx_out'].max = new Decimal(1).minus(
+        runner_ability['sf']);
+
+    runner_ability['twothree'] = new Decimal(1).minus(
+        runner_ability['twohomeout']).minus(runner_ability['twohome']);
+        
+    runner_ability_input['twohomeout'].max = new Decimal(1).minus(
+        runner_ability['twohome']);
+    runner_ability_input['twohome'].max = new Decimal(1).minus(
+        runner_ability['twohomeout']);
+
+    document.getElementById('input_ratio_sfx_stay').innerHTML
         = runner_ability['sfx_stay'];
-    document.getElementById('input_ratio_twohomeout').value
-        = runner_ability['twohomeout'];
+    document.getElementById('input_ratio_twothree').innerHTML
+        = runner_ability['twothree'];
+
+    document.getElementById('input_ratio_onetwo').innerHTML
+        = new Decimal(1).minus(runner_ability['onethree']);
+        
+    document.getElementById('input_ratio_dp').innerHTML
+        = new Decimal(1).minus(runner_ability['dp1x']).minus(
+            runner_ability['dp2x']);
+
+    runner_ability_input['dp1x'].max = new Decimal(1).minus(
+        runner_ability['dp2x']);
+    runner_ability_input['dp2x'].max = new Decimal(1).minus(
+        runner_ability['dp1x']);
 
     return runner_ability;
 
@@ -262,8 +287,6 @@ type.addEventListener('change', () => {
 });
 
 for (let key in batter_ability_input_ratio) {
-    if (key == 'bb' || key == 'sh' || key == 'so')
-        continue;
 
     batter_ability_input_ratio[key].addEventListener('change', () => {
         execute_1();
@@ -279,8 +302,6 @@ for (let key in batter_ability_input_cumulative) {
 }
 
 for (let key in runner_ability_input) {
-    if (key == 'sfx_stay' || key == 'twohomeout')
-        continue;
 
     runner_ability_input[key].addEventListener('change', () => {
         execute();

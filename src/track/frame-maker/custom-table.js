@@ -2,10 +2,14 @@ import * as Table from "/src/visualizer/lib/table.js"
 
 class CustomTableFrameMaker {
     
-    constructor(instance) {
-        this.table = new Table.Table(instance);
+    constructor() {
+        this.table = null;
         this.analysisTool = null;
         this.conf = 1;
+    }
+
+    setInstance(canvas) {
+        this.table = new Table.Table(canvas);
     }
 
     changeAnalysisTool(analysisTool) {

@@ -4,11 +4,15 @@ import { IPoseFrameMaker } from "./pose.interface.js"
 
 export class CustomGraphFrameMaker extends IPoseFrameMaker {
     
-    constructor(canvas) {
+    constructor() {
         super();
+        this.tableVisualizer = null;
+        this.analysisTool = null;
+    }
+
+    setInstance(canvas) {
         this.tableVisualizer = new GraphVisualizer(canvas);
         this.tableVisualizer.setDefault();
-        this.analysisTool = null;
     }
 
     changeAnalysisTool(analysisTool) {

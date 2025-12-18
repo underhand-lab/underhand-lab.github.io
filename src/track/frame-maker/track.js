@@ -1,8 +1,12 @@
 export class TrackFrameMaker {
 
-    constructor(canvas) {
-        this.canvas = canvas;
+    constructor() {
         this.conf = 0.01;
+        this.instance = null;
+    }
+    
+    setInstance(instance) {
+        this.instance = instance;
     }
 
     setData(trackData) {
@@ -28,12 +32,12 @@ export class TrackFrameMaker {
         if (this.trackData == null) return;
 
         if (idx < 0) return;
-        
-        const ctx = this.canvas.getContext('2d');
+
+        const ctx = this.instance.getContext('2d');
         const image = this.trackData['rawImage'][idx];
 
-        this.canvas.width = this.canvas.clientWidth;
-        this.canvas.height = this.canvas.clientWidth * 0.5;
+        this.instance.width = this.instance.clientWidth;
+        this.instance.height = this.instance.clientWidth * 0.5;
 
         if (!image) {
             console.error("Image not found at index", idx);
@@ -42,11 +46,11 @@ export class TrackFrameMaker {
 
         // 1. 캔버스 전체를 검정색으로 채웁니다 (레터박스 배경)
         ctx.fillStyle = 'black';
-        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        ctx.fillRect(0, 0, this.instance.width, this.instance.height);
 
         // 2. 이미지와 캔버스의 종횡비를 계산합니다.
         const imageAspectRatio = image.width / image.height;
-        const canvasAspectRatio = this.canvas.width / this.canvas.height;
+        const canvasAspectRatio = this.instance.width / this.instance.height;
 
         let drawWidth;
         let drawHeight;
@@ -56,16 +60,16 @@ export class TrackFrameMaker {
         // 3. 종횡비에 따라 이미지를 그릴 크기와 위치를 결정합니다.
         if (imageAspectRatio > canvasAspectRatio) {
             // 이미지가 캔버스보다 가로로 긴 경우 (상하 레터박스)
-            drawWidth = this.canvas.width;
-            drawHeight = this.canvas.width / imageAspectRatio;
+            drawWidth = this.instance.width;
+            drawHeight = this.instance.width / imageAspectRatio;
             offsetX = 0;
-            offsetY = (this.canvas.height - drawHeight) / 2;
+            offsetY = (this.instance.height - drawHeight) / 2;
         }
         else {
             // 이미지가 캔버스보다 세로로 긴 경우 (좌우 레터박스)
-            drawHeight = this.canvas.height;
-            drawWidth = this.canvas.height * imageAspectRatio;
-            offsetX = (this.canvas.width - drawWidth) / 2;
+            drawHeight = this.instance.height;
+            drawWidth = this.instance.height * imageAspectRatio;
+            offsetX = (this.instance.width - drawWidth) / 2;
             offsetY = 0;
         }
 

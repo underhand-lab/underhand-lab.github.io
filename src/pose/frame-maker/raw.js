@@ -1,11 +1,16 @@
 import { IPoseFrameMaker } from "./pose.interface.js"
 
 export class RawFrameMaker extends IPoseFrameMaker {
-    constructor(canvas) {
+    constructor() {
         super();
         this.rawImgList = null
         this.targetIdx = 0;
+        this.canvas = null;
+    }
+
+    setInstance(canvas) {
         this.canvas = canvas;
+        
     }
 
     setData(processedData) {

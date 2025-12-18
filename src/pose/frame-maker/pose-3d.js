@@ -43,8 +43,11 @@ const CONNECTIONS_COLORS_RGB = {
 };
 
 export class Pose3DFrameMaker extends IPoseFrameMaker {
-    constructor(canvas3d) {
+    constructor() {
         super();
+        this.canvas3d = null;
+    }
+    setInstance(canvas3d) {
         this.canvas3d = canvas3d;
         this.init3DScene();
     }

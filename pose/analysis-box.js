@@ -67,7 +67,7 @@ const analysisTool = {
     "height": new PoseAnalysis.HeightAnalysisTool(),
 }
 
-function addBox(opt, func, toBottom = true) {
+function addBox(opt, frameMaker, func, toBottom = true) {
     fetch(opt)
         .then(response => {
             if (!response.ok) {
@@ -76,13 +76,20 @@ function addBox(opt, func, toBottom = true) {
             return response.text();
         })
         .then((text) => {
-            const box = boxList.addBox(text);
+            const box = boxList.addBox(text, () => {
+                frameMakers = frameMakers.filter(fm => fm !== frameMaker);
+                console.log(frameMakers);
+            });
             box.className = 'container neumorphism';
             func(box);
             if (toBottom) {
                 let bottom = document.body.scrollHeight;
                 window.scrollTo({ top: bottom, left: 0, behavior: 'smooth' })
             }
+            frameMaker.setData(processedData);
+
+            frameMakers.push(frameMaker);
+            frameMaker.drawImageAt(nowIdx());
             analysisSelect.close();
         })
         .catch(error => {
@@ -92,103 +99,91 @@ function addBox(opt, func, toBottom = true) {
 }
 
 addVideoBoxBtn.addEventListener('click', () => {
-    addBox("/template/video.html", (box) => {
+    const newPoseFrameMaker = new PoseFrameMaker.PoseBoneFrameMaker();
+    addBox("/template/video.html", newPoseFrameMaker, (box) => {
 
         const newCanvas = box.querySelectorAll("canvas")[0];
-        const newPoseFrameMaker = new PoseFrameMaker.PoseBoneFrameMaker(newCanvas);
+        newPoseFrameMaker.setInstance(newCanvas);
 
-        newPoseFrameMaker.setData(processedData);
-
-        frameMakers.push(newPoseFrameMaker);
-        newPoseFrameMaker.drawImageAt(nowIdx());
     });
 
 });
 
 add3dVideoBoxBtn.addEventListener('click', () => {
-    addBox("/template/3d-video.html", (box) => {
+    const newPoseFrameMaker = new PoseFrameMaker.Pose3DFrameMaker();
+
+    addBox("/template/3d-video.html", newPoseFrameMaker, (box) => {
 
         const newCanvas = box.querySelectorAll("canvas")[0];
-        const newPoseFrameMaker = new PoseFrameMaker.Pose3DFrameMaker(newCanvas)
+        newPoseFrameMaker.setInstance(newCanvas);
 
-        newPoseFrameMaker.setData(processedData);
-
-        frameMakers.push(newPoseFrameMaker);
-        newPoseFrameMaker.drawImageAt(nowIdx());
     });
 
 });
 
 addGraphBoxBtn.addEventListener('click', () => {
-    addBox("/template/graph.html", (box) => {
+    const newGraphFrameMaker = new PoseFrameMaker.CustomGraphFrameMaker();
+
+    addBox("/template/graph.html", newGraphFrameMaker, (box) => {
 
         const newCanvas = box.querySelectorAll("canvas")[0];
-        const newGraphFrameMaker = new PoseFrameMaker.CustomGraphFrameMaker(newCanvas);
-        const options = box.querySelectorAll("select")[0];
+        newGraphFrameMaker.setInstance(newCanvas);
 
-        newGraphFrameMaker.changeAnalysisTool(analysisTool[options.value]);
-        newGraphFrameMaker.setData(processedData);
+        const options = box.querySelectorAll("select")[0];
 
         options.addEventListener("change", () => {
             newGraphFrameMaker.changeAnalysisTool(analysisTool[options.value]);
             newGraphFrameMaker.drawImageAt(nowIdx());
         });
 
-        frameMakers.push(newGraphFrameMaker);
-        newGraphFrameMaker.drawImageAt(nowIdx());
+        newGraphFrameMaker.changeAnalysisTool(analysisTool[options.value]);
     });
 
 });
 
 addTableBoxBtn.addEventListener('click', () => {
-    addBox("/template/table-pose.html", (box) => {
+    const newTableFrameMaker = new PoseFrameMaker.CustomTableFrameMaker();
+
+    addBox("/template/table-pose.html", newTableFrameMaker, (box) => {
 
         const newDiv = box.getElementsByClassName("table")[0];
-        const newTableFrameMaker = new PoseFrameMaker.CustomTableFrameMaker(newDiv);
-        const options = box.querySelectorAll("select")[0];
+        newTableFrameMaker.setInstance(newDiv);
 
-        newTableFrameMaker.changeAnalysisTool(analysisTool[options.value]);
-        newTableFrameMaker.setData(processedData);
+        const options = box.querySelectorAll("select")[0];
 
         options.addEventListener("change", () => {
             newTableFrameMaker.changeAnalysisTool(analysisTool[options.value]);
             newTableFrameMaker.drawImageAt(nowIdx());
         });
 
-        frameMakers.push(newTableFrameMaker);
-        newTableFrameMaker.drawImageAt(nowIdx());
+        newTableFrameMaker.changeAnalysisTool(analysisTool[options.value]);
+
     });
 
 });
 
-addBox("/template/video.html", (box) => {
+const newPoseFrameMaker = new PoseFrameMaker.PoseBoneFrameMaker();
+addBox("/template/video.html", newPoseFrameMaker, (box) => {
 
     const newCanvas = box.querySelectorAll("canvas")[0];
-    const newPoseFrameMaker = new PoseFrameMaker.PoseBoneFrameMaker(newCanvas);
-
-    newPoseFrameMaker.setData(processedData);
-
-    frameMakers.push(newPoseFrameMaker);
-    newPoseFrameMaker.drawImageAt(nowIdx());
+    newPoseFrameMaker.setInstance(newCanvas);
 
 }, false);
 
-addBox("/template/graph.html", (box) => {
+const newGraphFrameMaker = new PoseFrameMaker.CustomGraphFrameMaker();
+addBox("/template/graph.html", newGraphFrameMaker, (box) => {
 
     const newCanvas = box.querySelectorAll("canvas")[0];
-    const newGraphFrameMaker = new PoseFrameMaker.CustomGraphFrameMaker(newCanvas);
+    newGraphFrameMaker.setInstance(newCanvas);
     const options = box.querySelectorAll("select")[0];
-
-    newGraphFrameMaker.changeAnalysisTool(analysisTool[options.value]);
-    newGraphFrameMaker.setData(processedData);
 
     options.addEventListener("change", () => {
         newGraphFrameMaker.changeAnalysisTool(analysisTool[options.value]);
         newGraphFrameMaker.drawImageAt(nowIdx());
     });
 
-    frameMakers.push(newGraphFrameMaker);
-    newGraphFrameMaker.drawImageAt(nowIdx());
+    newGraphFrameMaker.changeAnalysisTool(analysisTool[options.value]);
+
 }, false);
 
 export { setData }

@@ -59,10 +59,14 @@ const CONNECTIONS_COLORS = {
 
 // Python의 PoseFrameMaker 클래스를 JavaScript로 변환
 export class PoseBoneFrameMaker extends IPoseFrameMaker {
-    constructor(canvas) {
+    constructor() {
         super();
         this.targetIdx = 0;
+        this.canvas = null;
+    }
+    setInstance(canvas) {
         this.canvas = canvas;
+        
     }
 
     setData(processedData) {

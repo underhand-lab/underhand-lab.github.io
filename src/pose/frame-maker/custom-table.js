@@ -4,11 +4,16 @@ import { IPoseFrameMaker } from "./pose.interface.js"
 
 class CustomTableFrameMaker extends IPoseFrameMaker {
     
-    constructor(instance) {
+    constructor() {
         super();
+        this.tableVisualizer = null;
+        this.analysisTool = null;
+    }
+
+    setInstance(instance) {
         this.tableVisualizer = new TableVisualizer(instance);
         this.tableVisualizer.setDefault();
-        this.analysisTool = null;
+
     }
 
     changeAnalysisTool(analysisTool) {

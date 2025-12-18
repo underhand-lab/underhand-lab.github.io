@@ -42,7 +42,7 @@ class Batter {
         this.sac.addEventListener('change', () => {
             func();
         });
-
+        this.getAbility();
     }
 
     getAbility() {
@@ -56,17 +56,19 @@ class Batter {
             pa += batter_ability_raw[key];
         }
 
+        pa = new Decimal(pa);
+
         const batter_ability = {
-            'bb': parseFloat(batter_ability_raw["bb"]) / pa,
+            'bb': new Decimal(batter_ability_raw["bb"]).div(pa),
 
-            'so': parseFloat(batter_ability_raw["so"]) / pa,
-            'gb': parseFloat(batter_ability_raw["gb"]) / pa,
-            'fb': parseFloat(batter_ability_raw["fb"]) / pa,
+            'so': new Decimal(batter_ability_raw["so"]).div(pa),
+            'gb': new Decimal(batter_ability_raw["gb"]).div(pa),
+            'fb': new Decimal(batter_ability_raw["fb"]).div(pa),
 
-            'sh': parseFloat(batter_ability_raw["sh"]) / pa,
-            'dh': parseFloat(batter_ability_raw["dh"]) / pa,
-            'th': parseFloat(batter_ability_raw["th"]) / pa,
-            'hr': parseFloat(batter_ability_raw["hr"]) / pa,
+            'sh': new Decimal(batter_ability_raw["sh"]).div(pa),
+            'dh': new Decimal(batter_ability_raw["dh"]).div(pa),
+            'th': new Decimal(batter_ability_raw["th"]).div(pa),
+            'hr': new Decimal(batter_ability_raw["hr"]).div(pa),
         }
 
         const hit = batter_ability_raw["sh"]
@@ -101,6 +103,9 @@ class Batter {
         this.derived['ops'].innerHTML =
             ((ob / pa) + (tb / ab)).toFixed(3);
 
+        for (let key in batter_ability) {
+            batter_ability[key] = parseFloat(batter_ability[key]);
+        }
         return batter_ability;
         
     }

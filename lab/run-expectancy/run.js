@@ -3,7 +3,7 @@ function solve_absorbing_chain_equation(P_matrix_25x25, R_immediate_24x1) {
 
     try {
         if (typeof math === 'undefined' || typeof math.inv !== 'function') {
-            document.getElementById('result-container').innerHTML = "<h3>⚠️ 오류: Math.js 라이브러리가 로드되지 않았습니다.</h3>";
+            alert("오류: Math.js 라이브러리가 로드되지 않았습니다.");
             return null;
         }
 

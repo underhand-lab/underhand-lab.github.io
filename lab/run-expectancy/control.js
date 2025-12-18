@@ -1,4 +1,4 @@
-import { calculate_run_expectancy } from "../run.js"
+import { calculate_run_expectancy } from "./run.js"
 import { PopUp } from "/src/pop-up.js"
 import { Batter } from "../batter.js"
 import { Runner } from "../runner.js"
@@ -63,6 +63,8 @@ function re_visualize(RE_results) {
 function read_inputs_and_calculate(batter_ability, runner_ability) {
 
     const re_results = calculate_run_expectancy(batter_ability, runner_ability);
+
+    console.log(re_results);
 
     document.getElementById('result').innerHTML = re_visualize(re_results);
 }

@@ -88,6 +88,10 @@ class Runner {
         this.func(this.input, runner_ability, 'dp',
             ['dp2x', 'dp1x']);
 
+        for (let key in runner_ability) {
+            runner_ability[key] = parseFloat(runner_ability[key]);
+        }
+
         return runner_ability;
         
     }

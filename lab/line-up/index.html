@@ -109,7 +109,10 @@
 
             <details open>
                 <summary><h1>타선</h1></summary>
-                <div id="line-up">
+                <div id="line-up" style="
+                    display: flex;
+                    flex-flow: column;
+                    gap: 5px;">
                 </div>
                 <hr>
             </details>
@@ -121,6 +124,9 @@
                     <div id="boxes">
                     </div>
                     <button id="add-batter-btn">타자 추가</button>
+                    
+                    <input type="file" id="read-batter-csv" accept=".csv">
+                    <label id="input-file" for="read-batter-csv">타자 불러오기</label>
                     <div style="height:20px"></div>
                     <hr>
                 </details>
@@ -205,6 +211,9 @@
                     <hr style="wclassth: 100%; border-top: 1px dashed #ccc; margin: 5px 0;"-->
                 </details>
             </div>
+        </div>
+        <div class="container neumorphism">
+            <a href="../re/">기대 득점 계산기</a>
         </div>
 
     </div>

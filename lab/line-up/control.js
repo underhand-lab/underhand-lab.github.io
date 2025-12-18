@@ -41,13 +41,13 @@ function re_visualize(RE_results, idx) {
             </tr>
         `;
     }
-    
+
     html += `
                 </tbody>
             </table>
     `;
 
-    
+
 
     return html;
 }
@@ -74,7 +74,7 @@ function leadoff_visualize(leadoff_vector, idx) {
         html += `
             <tr ${isSelected}>
                 <td>${i + 1}번 타자</td>
-                <td>${(leadoff_vector[i] / 9).toFixed(2)}%</td>
+                <td>${((leadoff_vector[i] / 9) * 100).toFixed(2)}%</td>
                 <td>${leadoff_vector[i].toFixed(3)}회</td>
             </tr>
         `;
@@ -84,7 +84,7 @@ function leadoff_visualize(leadoff_vector, idx) {
                 </tbody>
             </table>
     `;
-    
+
     return html;
 }
 
@@ -151,6 +151,8 @@ function addBox(opt, batter, func, toBottom = true) {
                     throw new Error(`선수가 1명 이상 필요합니다.`)
                 }
                 players = players.filter(p => p != batter);
+                setLineup();
+                execute();
             });
             box.style.position = 'relative';
             func(box);
@@ -200,7 +202,6 @@ function execute() {
     const retval = calculate_lineup_re(input_lineup, runner_ability);
 
     ret = retval['re'];
-    pa_vector = retval['pa_vector']
     leadoff_vector = retval['leadoff_vector'];
 
     const idx = parseInt(startNumSelector.value);
@@ -215,7 +216,7 @@ function execute() {
 }
 
 startNumSelector.addEventListener('change', () => {
-    
+
     const idx = parseInt(startNumSelector.value);
 
     document.getElementById('result-re').innerHTML =
@@ -301,27 +302,27 @@ readCSVBtn.addEventListener('change', () => {
 
         for (let i = 0; i < playerObj.length; i++) {
             const newBatter = new Batter();
-            
+
             // addBox가 Promise를 반환하므로 이를 배열에 push
             const p = addBox("./template/batter.html", newBatter, (box) => {
                 newBatter.setDiv(box, execute);
                 newBatter.readJson(playerObj[i]);
+                newBatter.setName(playerObj[i]['name']);
 
                 const playerName = box.getElementsByClassName("player-name")[0];
-                playerName.value = playerObj[i]['name'];
                 playerName.addEventListener('change', () => {
                     newBatter.setName(playerName.value);
                     setLineup(); // 이름 변경 시 라인업 UI 갱신 (기존 함수 활용 권장)
                 });
             });
-            
+
             addBatterPromises.push(p);
         }
 
         // 2. 모든 addBox(비동기)가 끝날 때까지 대기
         Promise.all(addBatterPromises).then(() => {
             // 이제 모든 선수가 players 배열에 들어온 상태입니다.
-            
+
             // 라인업 UI 생성 (기존에 작성하신 setLineup() 함수가 있다면 호출로 대체 가능)
             let str = '';
             for (let i = 0; i < 9; i++) {
@@ -346,4 +347,32 @@ readCSVBtn.addEventListener('change', () => {
             console.error("선수 데이터를 불러오는 중 오류 발생:", err);
         });
     });
+});
+
+const readBatterCSVBtn = document.getElementById("read-batter-csv");
+
+readBatterCSVBtn.addEventListener('change', () => {
+
+    readBatterCSVBtn.files[0].text().then((csv) => {
+        const playerObj = readCSV(csv)[0];
+
+        const newBatter = new Batter();
+
+        // addBox가 Promise를 반환하므로 이를 배열에 push
+        addBox("./template/batter.html", newBatter, (box) => {
+            newBatter.setDiv(box, execute);
+            newBatter.readJson(playerObj);
+            newBatter.setName(playerObj['name']);
+
+            const playerName = box.getElementsByClassName("player-name")[0];
+            playerName.value = playerObj['name'];
+            playerName.addEventListener('change', () => {
+                newBatter.setName(playerName.value);
+                setLineup();
+            });
+        }).then(() => {
+            setLineup();
+        });
+    });
+
 });

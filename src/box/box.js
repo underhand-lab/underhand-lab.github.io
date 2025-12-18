@@ -13,12 +13,18 @@ class BoxList {
         closeBtn.className = "remove-box-button";
         closeBtn.innerText = "✕";
         closeBtn.addEventListener('click', () => {
+            try {
+                if (closeFunc != null) {
+                    closeFunc();
+                }
 
-            boxContainer.removeChild(instanceDiv);
-            console.log(`Div가 삭제되었습니다.`);
-            
-            if (closeFunc == null) return;
-            closeFunc();
+                boxContainer.removeChild(instanceDiv);
+                console.log(`Div가 삭제되었습니다.`);
+
+            }
+            catch(error) {
+                alert(error);
+            }
             
         });
 
@@ -30,6 +36,10 @@ class BoxList {
         this.boxContainer.appendChild(instanceDiv);
 
         return instanceDiv;
+    }
+
+    clear() {
+        this.boxContainer.innerHTML = "";
     }
 
 }

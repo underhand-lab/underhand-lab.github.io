@@ -25,6 +25,20 @@
         .input-group input {
             max-width: 70px;
         }
+        input[type=file] {
+            display:none;
+        }
+        #input-file {
+            font-family: 'KBO-Dia-Gothic_medium', Arial, sans-serif;
+            font-size: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin: 5px;
+        }
+
     </style>
 
 </head>
@@ -67,10 +81,15 @@
                 ※ 기대득점 계산기에 비해 정확도가 떨어집니다.(부동 소수점 오차)
             </p>
 
+            <button id="save-csv">라인업 저장</button>
+            <input type="file" id="read-csv" accept=".csv">
+            <label id="input-file" for="read-csv">라인업 불러오기</label>
+
             <details open>
                 <summary><h1>타선</h1></summary>
                 <div id="line-up">
                 </div>
+                <hr>
             </details>
 
             <div>
@@ -80,6 +99,8 @@
                     <div id="boxes">
                     </div>
                     <button id="add-batter-btn">타자 추가</button>
+                    <div style="height:20px"></div>
+                    <hr>
                 </details>
                 <details open>
                     <hr>

@@ -1,6 +1,8 @@
+import { downloadCSV, readCSV } from "./download.js"
+
 class Batter {
     constructor() {
-
+        this.load = false;
     }
 
     setDiv(div, func) {
@@ -35,12 +37,34 @@ class Batter {
         
         for (let key in this.input) {
             (this.input[key]).addEventListener('change', () => {
+                if (this.load) return;
                 func();
             });
         }
         
         this.sac.addEventListener('change', () => {
+            if (this.load) return;
             func();
+        });
+
+        const saveBtn = div.getElementsByClassName('save-csv')[0];
+        const readBtnFile = div.getElementsByClassName('read-csv-file')[0];
+        const readBtn = div.getElementsByClassName('read-csv')[0];
+
+        saveBtn.addEventListener('click', () => {
+            downloadCSV([this.getAbilityRaw()], this.getName());
+        });
+
+        readBtn.addEventListener('click', () => {
+            readBtnFile.click();
+        })
+        readBtnFile.addEventListener('change', () => {
+            this.load = true;
+            readBtnFile.files[0].text().then((csv)=> {
+                this.readJson(readCSV(csv)[0]);
+                this.load = false;
+                func();
+            });
         });
         this.getAbility();
     }
@@ -53,9 +77,11 @@ class Batter {
         return this.name
     }
 
-    getAbility() {
+    getAbilityRaw() {
 
-        const batter_ability_raw = {};
+        let batter_ability_raw = {};
+        batter_ability_raw['name'] = this.getName();
+
         let pa = 0;
 
         for (let key in this.input) {
@@ -64,7 +90,27 @@ class Batter {
             pa += batter_ability_raw[key];
         }
 
-        pa = new Decimal(pa);
+        batter_ability_raw['pa'] = pa;
+
+        return batter_ability_raw;
+        
+    }
+
+    readJson(json) {
+        for (let key in json) {
+            if (key in this.input) {
+                this.input[key].value = json[key];
+            }
+        }
+        this.name = json['name'];
+        this.getAbility();
+    }
+
+    getAbility() {
+
+        const batter_ability_raw = this.getAbilityRaw();
+
+        const pa = new Decimal(batter_ability_raw['pa']);
 
         const batter_ability = {
             'bb': new Decimal(batter_ability_raw["bb"]).div(pa),

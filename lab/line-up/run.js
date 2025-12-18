@@ -121,6 +121,9 @@ function create_matrices(lineup_vars, runner_ability) {
 /**
  * 흡수 마르코프 체인 방정식 풀이
  */
+/**
+ * 흡수 마르코프 체인 및 이닝 전이 로직을 이용한 통합 분석 함수
+ */
 function solve(P_full, R_vec) {
     const N_size = 216;
     const Q_array = P_full.slice(0, N_size).map(row => row.slice(0, N_size));
@@ -129,33 +132,99 @@ function solve(P_full, R_vec) {
     const Q = math.matrix(Q_array);
     const R = math.matrix(R_vec);
 
-    // N = (I - Q)^-1
+    // 1. 기초 행렬 N = (I - Q)^-1 계산 (이닝 내 평균 방문 횟수)
     const fundamental_matrix = math.inv(math.subtract(I, Q));
+    const N_data = fundamental_matrix.toArray();
 
-    // RE = N * R
-    const RE = math.multiply(fundamental_matrix, R).toArray();
-    // --- 사용자님이 원하시는 9개 핵심 결과 추출 ---
-    const ret = [];
+    // 2. 상황별 기대 득점 RE = N * R
+    const RE_matrix = math.multiply(fundamental_matrix, R);
+    const RE_data = RE_matrix.toArray();
+
+    // --- [A] 기존 출력용: 타자별 24개 상황 RE 추출 ---
+    const situational_re = [];
     for (let b = 0; b < 9; b++) {
         const batter_situations = [];
-
-        // 야구의 24가지 상황 (3아웃 * 8개 주자 상황)
         for (let out = 0; out < 3; out++) {
             for (let b3 = 0; b3 < 2; b3++) {
                 for (let b2 = 0; b2 < 2; b2++) {
                     for (let b1 = 0; b1 < 2; b1++) {
-                        // 해당 타자의 특정 상황 인덱스 계산
                         const idx = get_state_index(b, out, b3, b2, b1);
-                        batter_situations.push(RE[idx][0]);
+                        batter_situations.push(RE_data[idx][0]);
                     }
                 }
             }
         }
-        // ret[b]에 x+1번 타자의 24개 상황 배열을 저장
-        ret[b] = batter_situations;
+        situational_re[b] = batter_situations;
     }
+
+    // --- [B] 이닝 전이 행렬 (Inning Transition Matrix) T 생성 ---
+    // T[i][j]: i번 타자가 이닝을 시작했을 때, 다음 이닝을 j번 타자가 시작할 확률
+    const T = Array(9).fill(0).map(() => Array(9).fill(0));
     
-    return ret;
+    for (let b = 0; b < 9; b++) {
+        const start_node_for_b = get_state_index(b, 0, 0, 0, 0);
+        for (let i = 0; i < N_size; i++) {
+            const prob_to_end = P_full[i][216]; // 해당 상태에서 3아웃이 발생할 확률
+            
+            if (prob_to_end > 0) {
+                const [curr_b] = REVERSE_STATE_MAP[i];
+                const next_leadoff_batter = (curr_b + 1) % 9;
+                const visits = N_data[start_node_for_b][i];
+                
+                // b번 타자로 시작한 이닝이 i번 상태에서 끝날 확률을 누적
+                T[b][next_leadoff_batter] += visits * prob_to_end;
+            }
+        }
+    }
+
+    // --- [C] 9이닝 타순 연결성 시뮬레이션 ---
+    let current_start_dist = new Array(9).fill(0);
+    current_start_dist[0] = 1.0; // 1회초는 무조건 1번 타자 시작
+
+    const leadoff_vector = new Array(9).fill(0);
+    const pa_vector = new Array(9).fill(0);
+    let total_9inning_re = 0;
+
+    for (let inning = 1; inning <= 9; inning++) {
+        const next_start_dist = new Array(9).fill(0);
+
+        for (let b = 0; b < 9; b++) {
+            const prob_b_starts = current_start_dist[b];
+            if (prob_b_starts <= 0) continue;
+
+            // 1. 선두타자 기대 횟수 누적 (합계는 정확히 9가 됨)
+            leadoff_vector[b] += prob_b_starts;
+
+            // 2. 해당 타자가 이닝을 시작했을 때의 이닝 기대 득점 합산
+            const start_node = get_state_index(b, 0, 0, 0, 0);
+            total_9inning_re += prob_b_starts * RE_data[start_node][0];
+
+            // 3. 타자별 기대 타석 수(PA) 누적
+            for (let j = 0; j < N_size; j++) {
+                const [target_b_idx] = REVERSE_STATE_MAP[j];
+                const visits = N_data[start_node][j];
+                pa_vector[target_b_idx] += prob_b_starts * visits;
+            }
+
+            // 4. 다음 이닝 선두타자 분포 계산 (T 행렬 활용)
+            if (inning < 9) {
+                for (let next_b = 0; next_b < 9; next_b++) {
+                    next_start_dist[next_b] += prob_b_starts * T[b][next_b];
+                }
+            }
+        }
+        
+        if (inning < 9) {
+            current_start_dist = [...next_start_dist];
+        }
+    }
+
+    // 9이닝당 기대 득점 보너스 계산 (단순 합산 결과 포함)
+    return {
+        re: situational_re,           // 기존 결과 (x번 타자 y상황 RE)
+        pa_vector: pa_vector,         // 9이닝당 기대 타석 수
+        leadoff_vector: leadoff_vector, // 9이닝당 이닝 시작 횟수 (합계 = 9.0)
+    };
 }
 
 /**

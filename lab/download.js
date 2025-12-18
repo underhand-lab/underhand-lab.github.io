@@ -22,27 +22,26 @@ export function downloadCSV(json, filename) {
 }
 
 export function readCSV(csv) {
-
-    var lines = csv.split("\n");
+    // \r\n (Windows), \n (Unix), \r (Old Mac) 모두를 대응하는 정규표현식입니다.
+    var lines = csv.split(/\r?\n|\r/);
 
     var result = [];
-
     var headers = lines[0].split(",");
 
     for (var i = 1; i < lines.length; i++) {
-
-        if (lines[i].length < 1) continue;
+        // 공백만 있는 줄이나 빈 줄은 건너뜁니다.
+        if (!lines[i].trim()) continue;
 
         var obj = {};
         var currentline = lines[i].split(",");
 
         for (var j = 0; j < headers.length; j++) {
-            obj[headers[j]] = currentline[j];
+            var value = currentline[j] ? currentline[j].trim() : "";
+            obj[headers[j].trim()] = value;
         }
 
         result.push(obj);
-
     }
 
-    return result; //JavaScript object
+    return result;
 }

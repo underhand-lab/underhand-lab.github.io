@@ -243,6 +243,7 @@ function addBatter() {
             playerName.value = newBatter.getName();
             playerName.addEventListener('change', () => {
                 newBatter.setName(playerName.value);
+
                 setLineup();
             });
 
@@ -307,7 +308,7 @@ readCSVBtn.addEventListener('change', () => {
                 newBatter.readJson(playerObj[i]);
 
                 const playerName = box.getElementsByClassName("player-name")[0];
-                playerName.value = newBatter.getName();
+                playerName.value = playerObj[i]['name'];
                 playerName.addEventListener('change', () => {
                     newBatter.setName(playerName.value);
                     setLineup(); // 이름 변경 시 라인업 UI 갱신 (기존 함수 활용 권장)

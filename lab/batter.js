@@ -55,14 +55,17 @@ class Batter {
             downloadCSV([this.getAbilityRaw()], this.getName());
         });
 
+        this.nameInput = div.getElementsByClassName('player-name')[0];
+
         readBtn.addEventListener('click', () => {
             readBtnFile.click();
         })
         readBtnFile.addEventListener('change', () => {
-            this.load = true;
             readBtnFile.files[0].text().then((csv)=> {
+                this.load = true;
                 this.readJson(readCSV(csv)[0]);
                 this.load = false;
+                readBtnFile.files = null;
                 func();
             });
         });
@@ -91,6 +94,7 @@ class Batter {
         }
 
         batter_ability_raw['pa'] = pa;
+        batter_ability_raw['sac'] = parseInt(this.sac.value);
 
         return batter_ability_raw;
         
@@ -102,7 +106,14 @@ class Batter {
                 this.input[key].value = json[key];
             }
         }
-        this.name = json['name'];
+        this.sac.value = 'sac' in json ? json['sac'] : 0;
+        if (this.nameInput) {
+            this.nameInput.value = json['name'];
+            this.nameInput.dispatchEvent(new Event('change'));
+        }
+        else {
+            this.name = json['name'];
+        }
         this.getAbility();
     }
 

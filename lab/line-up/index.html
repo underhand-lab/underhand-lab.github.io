@@ -49,21 +49,38 @@
     <div id="wrapper" style="padding-bottom: 10px;">
         <div class="container neumorphism">
             <h1>⚾ 야구 기대 득점 (RE) 계산기</h1>
-
+            <label>현재 타자: </label>
+            <select id="start-num">
+                <option value="0">1번타자</option>
+                <option value="1">2번타자</option>
+                <option value="2">3번타자</option>
+                <option value="3">4번타자</option>
+                <option value="4">5번타자</option>
+                <option value="5">6번타자</option>
+                <option value="6">7번타자</option>
+                <option value="7">8번타자</option>
+                <option value="8">9번타자</option>
+            </select>
             <div id="result">
             </div>
             <p style="font-size: 0.9em; color: #666;">
                 ※ 아래에 직접 입력하신 타격 스탯을 가진 타자들이 연속해서 타석에 들어선다고 가정할 때, 각각의 주자 상황, 아웃 카운트에서 기대되는 득점 값을 계산합니다.
             </p>
-            <select id="type" name="type" style="display:none;">
-                <option value="1">누적 스탯</option>
-                <option value="2">비율 스탯</option>
-            </select>
+
+            <details open>
+                <summary><h1>타선</h1></summary>
+                <div id="line-up">
+                </div>
+            </details>
 
             <div>
-                <div id="boxes">
-
-                </div>
+                <details open>
+                    <summary><h1>타자 능력</h1></summary>
+                    
+                    <div id="boxes">
+                    </div>
+                    <button id="add-batter-btn">타자 추가</button>
+                </details>
                 <details open>
                     <hr>
                     <summary>

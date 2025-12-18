@@ -45,6 +45,14 @@ class Batter {
         this.getAbility();
     }
 
+    setName(name) {
+        this.name = name;
+    }
+
+    getName() {
+        return this.name
+    }
+
     getAbility() {
 
         const batter_ability_raw = {};

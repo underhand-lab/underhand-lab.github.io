@@ -3,8 +3,8 @@ import { calculate_lineup_re } from "./run.js"
 import { Batter } from "../batter.js"
 import { Runner } from "../runner.js"
 
-function re_visualize(RE_results) {
-    if (!RE_results) {
+function re_visualize(RE_results, idx) {
+    if (!RE_results[idx]) {
         return "";
     }
 
@@ -27,9 +27,9 @@ function re_visualize(RE_results) {
     `;
 
     for (let j = 0; j < 8; j++) {
-        const re_0_out = RE_results[j].toFixed(3);
-        const re_1_out = RE_results[j + 8].toFixed(3);
-        const re_2_out = RE_results[j + 16].toFixed(3);
+        const re_0_out = RE_results[idx][j].toFixed(3);
+        const re_1_out = RE_results[idx][j + 8].toFixed(3);
+        const re_2_out = RE_results[idx][j + 16].toFixed(3);
 
         html += `
             <tr>
@@ -46,8 +46,14 @@ function re_visualize(RE_results) {
         </table>
     `;
 
+    let re = 0;
+
+    for (let i = 0; i < 9; i++) {
+        re += RE_results[i][0];
+    }
+    
     html += `
-        <p>9이닝당 기대 득점: ${(RE_results[0] * 9).toFixed(3)}</p>
+        <p>9이닝당 기대 득점: ${(re).toFixed(3)}</p>
     `
 
     return html;
@@ -55,57 +61,129 @@ function re_visualize(RE_results) {
 
 const boxList = new Box.BoxList(document.getElementById("boxes"));
 let players = [];
-let lineup = [ 0 ];
 
-function addBox(opt, batter, func, toBottom = true) {
-    fetch(opt).then(response => {
-        if (!response.ok) {
-            throw new Error(`파일을 불러오는 데 실패했습니다: ${response.statusText}`);
+const lineupBox = document.getElementById("line-up");
+
+function setLineup() {
+    let str = ''
+    const default_batters = lineupBox.getElementsByTagName('select');
+    for (let i = 0; i < 9; i++) {
+        str += `<div><label>${i + 1}번타자</label>: `
+        str += `<select>`;
+        for (let j = 0; j < players.length; j++) {
+            str += `<option value="${j}"`
+            if (default_batters.length > i &&
+                default_batters[i].value == j) {
+                str += ` selected`;
+            }
+            str += `>${players[j].getName()}</option>`
         }
-        return response.text();
+        str += `</select></div>`;
+    }
 
-    }).then((text) => {
-        const box = boxList.addBox(text, () => {
+    lineupBox.innerHTML = str;
 
+    const batters = lineupBox.getElementsByTagName('select');
+
+    for (let i = 0; i < batters.length; i++) {
+        batters[i].addEventListener('change', () => {
+            execute();
         });
-        box.className = 'container';
-        func(box);
-        players.push(batter);
-        console.log(players);
-        execute();
-    }).catch(error => {
-        console.error(`분석 도구 생성 중 오류가 발생했습니다.: ${error}`);
-    });
+    }
 }
 
-const newBatter = new Batter();
+function addBox(opt, batter, func, toBottom = true) {
+    return new Promise((resolve, reject) => {
+        fetch(opt).then(response => {
+            if (!response.ok) {
+                throw new Error(`파일을 불러오는 데 실패했습니다: ${response.statusText}`);
+            }
+            return response.text();
 
-addBox("./template/batter.html", newBatter, (box) => {
-    newBatter.setDiv(box, execute);
-});
+        }).then((text) => {
+            const box = boxList.addBox(text, () => {
+                players = players.filter(p => p != batter);
+                setLineup();
+            });
+            box.className = 'container';
+            func(box);
+            players.push(batter);
+            console.log(players);
+            setLineup();
+            resolve();
+        }).catch(error => {
+            console.error(`분석 도구 생성 중 오류가 발생했습니다.: ${error}`);
+            reject();
+        });
+    });
+
+}
 
 const runner = new Runner();
-runner.setDiv(document, execute);
+
+const startNumSelector = document.getElementById("start-num");
+let ret;
 
 function execute() {
 
+    const batters = lineupBox.getElementsByTagName('select');
+    let batters_ability = [];
     let input_lineup = [];
 
+    for (let i = 0; i < players.length; i++) {
+        batters_ability.push((players[i]).getAbility());
+    }
+
     for (let i = 0; i < 9; i++) {
-        if (lineup.length <= i) {
-            input_lineup.push((players[lineup[lineup.length - 1]]).getAbility());
-            continue;
-        }
-        input_lineup.push((players[lineup[i]]).getAbility());
+        input_lineup.push(batters_ability[batters[i].value]);
     }
 
     const runner_ability = runner.getAbility();
 
-    const ret = calculate_lineup_re(input_lineup, runner_ability);
+    ret = calculate_lineup_re(input_lineup, runner_ability);
 
-    console.log(ret);
-    console.log(ret[0]);
-    
-    document.getElementById('result').innerHTML = re_visualize(ret[0]);
+    document.getElementById('result').innerHTML =
+        re_visualize(ret, parseInt(startNumSelector.value));
 
 }
+
+startNumSelector.addEventListener('change', () => {
+    document.getElementById('result').innerHTML =
+        re_visualize(ret, parseInt(startNumSelector.value));
+
+});
+
+runner.setDiv(document, execute);
+
+const addBatterBtn = document.getElementById("add-batter-btn");
+
+function addBatter() {
+    return new Promise((resolve, reject) => {
+        const newBatter = new Batter();
+
+        addBox("./template/batter.html", newBatter, (box) => {
+            newBatter.setDiv(box, execute);
+            newBatter.setName(`Player ${players.length}`);
+
+            const playerName = box.getElementsByClassName("player-name")[0];
+            playerName.value = newBatter.getName();
+            playerName.addEventListener('change', () => {
+                newBatter.setName(playerName.value);
+                setLineup();
+            });
+        }).then(() => {
+            resolve();
+
+        });
+
+    });
+
+}
+
+addBatterBtn.addEventListener('click', () => {
+    addBatter();
+})
+
+addBatter().then(() => {
+    execute();
+});

@@ -4,8 +4,7 @@ import { Batter } from "../batter.js"
 import { Runner } from "../runner.js"
 import { downloadCSV, readCSV } from "../download.js"
 
-function re_visualize(RE_results, leadoff_vector, idx) {
-
+function re_visualize(RE_results, idx) {
     if (!RE_results[idx]) {
         return "";
     }
@@ -16,16 +15,16 @@ function re_visualize(RE_results, leadoff_vector, idx) {
     ];
 
     let html = `
-        <table class="re-table">
-            <thead>
-                <tr>
-                    <th>주자 상황</th>
-                    <th>0 아웃</th>
-                    <th>1 아웃</th>
-                    <th>2 아웃</th>
-                </tr>
-            </thead>
-            <tbody>
+            <table class="re-table">
+                <thead>
+                    <tr>
+                        <th>주자 상황</th>
+                        <th>0 아웃</th>
+                        <th>1 아웃</th>
+                        <th>2 아웃</th>
+                    </tr>
+                </thead>
+                <tbody>
     `;
 
     for (let j = 0; j < 8; j++) {
@@ -42,25 +41,66 @@ function re_visualize(RE_results, leadoff_vector, idx) {
             </tr>
         `;
     }
-
+    
     html += `
-            </tbody>
-        </table>
+                </tbody>
+            </table>
     `;
 
-    let re = 0;
-    let sum = 0;
+    
+
+    return html;
+}
+
+function leadoff_visualize(leadoff_vector, idx) {
+
+    // --- 리드오프 등장 확률 섹션 추가 ---
+    let html = `
+            <table class="leadoff-table">
+                <thead>
+                    <tr>
+                        <th>타순</th>
+                        <th>이닝 시작 확률</th>
+                        <th>9이닝당 시작 횟수</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
 
     for (let i = 0; i < 9; i++) {
-        re += RE_results[i][0] * leadoff_vector[i];
-        sum += leadoff_vector[i];
+        // 현재 선택된 타자(idx)의 행을 강조 표시
+        const isSelected = (i === idx) ? 'style="background-color: #f0f7ff; font-weight: bold;"' : '';
+
+        html += `
+            <tr ${isSelected}>
+                <td>${i + 1}번 타자</td>
+                <td>${(leadoff_vector[i] / 9).toFixed(2)}%</td>
+                <td>${leadoff_vector[i].toFixed(3)}회</td>
+            </tr>
+        `;
     }
 
     html += `
-        <p>9이닝당 기대 득점: ${(re).toFixed(3)}</p>
-    `
-
+                </tbody>
+            </table>
+    `;
+    
     return html;
+}
+
+function get9RE(RE_results, leadoff_vector, idx) {
+    let total_re_9 = 0;
+
+    for (let i = 0; i < 9; i++) {
+        total_re_9 += RE_results[i][0] * leadoff_vector[i];
+    }
+
+    return `
+            <div class="final-score" style="margin-top: 15px; font-size: 1.2em; font-weight: bold; color: #2c3e50;">
+                <p>⚾ 9이닝당 팀 기대 득점: <span style="color: #e74c3c;">${total_re_9.toFixed(3)}</span></p>
+            </div>
+    `;
+
 }
 
 const boxList = new Box.BoxList(document.getElementById("boxes"));
@@ -112,6 +152,7 @@ function addBox(opt, batter, func, toBottom = true) {
                 }
                 players = players.filter(p => p != batter);
             });
+            box.style.position = 'relative';
             func(box);
             players.push(batter);
             resolve();
@@ -162,14 +203,27 @@ function execute() {
     pa_vector = retval['pa_vector']
     leadoff_vector = retval['leadoff_vector'];
 
-    document.getElementById('result').innerHTML =
-        re_visualize(ret, leadoff_vector, parseInt(startNumSelector.value));
+    const idx = parseInt(startNumSelector.value);
+
+    document.getElementById('result-re').innerHTML =
+        re_visualize(ret, idx);
+    document.getElementById('result-leadoff').innerHTML =
+        leadoff_visualize(leadoff_vector, idx);
+    document.getElementById('result-9re').innerHTML =
+        get9RE(ret, leadoff_vector, idx)
 
 }
 
 startNumSelector.addEventListener('change', () => {
-    document.getElementById('result').innerHTML =
-        re_visualize(ret, leadoff_vector, parseInt(startNumSelector.value));
+    
+    const idx = parseInt(startNumSelector.value);
+
+    document.getElementById('result-re').innerHTML =
+        re_visualize(ret, idx);
+    document.getElementById('result-leadoff').innerHTML =
+        leadoff_visualize(leadoff_vector, idx);
+    document.getElementById('result-9re').innerHTML =
+        get9RE(ret, leadoff_vector, idx)
 
 });
 
@@ -244,7 +298,7 @@ readCSVBtn.addEventListener('change', () => {
         // 1. 9번의 addBox 비동기 작업을 담을 배열 생성
         const addBatterPromises = [];
 
-        for (let i = 0; i < 9; i++) {
+        for (let i = 0; i < playerObj.length; i++) {
             const newBatter = new Batter();
             
             // addBox가 Promise를 반환하므로 이를 배열에 push
@@ -271,6 +325,7 @@ readCSVBtn.addEventListener('change', () => {
             let str = '';
             for (let i = 0; i < 9; i++) {
                 str += `<div><label>${i + 1}번타자</label>: <select>`;
+
                 for (let j = 0; j < players.length; j++) {
                     str += `<option value="${j}" ${i === j ? 'selected' : ''}>${players[j].getName()}</option>`;
                 }

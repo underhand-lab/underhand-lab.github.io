@@ -31,6 +31,8 @@ export function readCSV(csv) {
 
     for (var i = 1; i < lines.length; i++) {
 
+        if (lines[i].length < 1) continue;
+
         var obj = {};
         var currentline = lines[i].split(",");
 

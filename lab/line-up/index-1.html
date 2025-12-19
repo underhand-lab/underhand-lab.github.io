@@ -60,9 +60,23 @@
             </ul>
         </div>
     </div>
+    <div class="slider">
+        <div class="container neumorphism">
+            <div style="display:none;">
+                <button id="save-csv">라인업 저장</button>
+                <input type="file" id="read-csv" accept=".csv">
+                <label id="input-file" for="read-csv">라인업 불러오기</label>
+            </div>
+
+            <div>
+                <button id="open-line-up-pop-up">타선 편집</button>
+                <button id="open-batter-list-pop-up">타자 관리</button>
+                <button id="open-runner-pop-up">주자 정보 편집</button>
+
+            </div>
+        </div>
     </div>
-    </div>
-    <div id="wrapper" style="padding-bottom: 10px;">
+    <div id="wrapper" style="padding-bottom: 80px;">
         <div class="container neumorphism">
             <h1>⚾ 타선 기대 득점 계산기</h1>
             <details open>
@@ -104,128 +118,133 @@
             </p>
 
         </div>
-        <div class="container neumorphism">
-            <div style="display:none;">
-            <button id="save-csv">라인업 저장</button>
-            <input type="file" id="read-csv" accept=".csv">
-            <label id="input-file" for="read-csv">라인업 불러오기</label>
-            </div>
-            <details open>
-                <summary>
-                    <h1>타선</h1>
-                </summary>
+
+    </div>
+    <div id="line-up-pop-up" class="panel frostedglassmorphism" style="display:none;">
+        <div class="pop-up container neumorphism" style="height:90%;max-width:90%;">
+            <h1>타선</h1>
+            <hr>
+            <div class="pop-up-content" style="text-align: center;">
                 <div id="line-up" style="
                     display: flex;
                     flex-flow: column;
                     gap: 5px;">
                 </div>
-                <hr>
-            </details>
-
-            <div>
-                <details open>
-                    <summary>
-                        <h1>타자 능력</h1>
-                    </summary>
-
-                    <div id="boxes">
-                    </div>
-                    <div style="display:none;">
-                    <button id="add-batter-btn">타자 추가</button>
+            </div>
+            <hr>
+            <button id="close-line-up-pop-up">닫기</button>
+        </div>
+    </div>
+    <div id="batter-list-pop-up" class="panel frostedglassmorphism" style="display:none;">
+        <div class="pop-up container neumorphism" style="height:90%;max-width:90%;">
+            <h1>타자 능력 관리</h1>
+            <hr>
+            <button id="add-batter-btn">타자 추가</button>
+            <hr>
+            <div class="pop-up-content" style="
+                text-align: center;
+                height: calc(100% - 180px);
+                ">
+                <div id="boxes">
+                </div>
+                <div style="display:none;">
 
                     <input type="file" id="read-batter-csv" accept=".csv">
                     <label id="input-file" for="read-batter-csv">
                         타자 불러오기</label>
                     <div style="height:20px"></div>
-                    </div>
-                    <hr>
-                </details>
-                <details open>
-                    <hr>
-                    <summary>
-                        <h1>주루 및 수비 가정 확률 (조건부 확률)</h1>
-                    </summary>
-                    <div class="input-form">
-                        <div class="input-group">
-                            <label for="input_ratio_twohome">
-                                2루→홈 득점 성공률(단타)
-                            </label>
-                            <input type="number" class="input_ratio_twohome" value="0.40" step="0.01" min="0" max="1">
-                        </div>
-                        <div class="input-group">
-                            <label for="input_ratio_twohomeout">
-                                2루→홈 득점 시도 아웃 비율(단타)
-                            </label>
-                            <input type="number" class="input_ratio_twohomeout" value="0.05" step="0.01" min="0"
-                                max="1">
-
-                        </div>
-                        <div class="input-group">
-                            2루→3루 진루율(단타):
-                            <b class="input_ratio_twothree"></b>
-                        </div>
-
-                        <hr>
-
-                        <div class="input-group">
-                            <label for="input_ratio_onethree">
-                                1루→3루 진루율(단타)
-                            </label>
-                            <input type="number" class="input_ratio_onethree" value="0.30" step="0.01" min="0" max="1">
-                        </div>
-
-                        <div class="input-group">
-                            1루→2루 진루율(단타):
-                            <b class="input_ratio_onetwo"></b>
-                        </div>
-
-                        <hr>
-
-                        <div class="input-group">
-                            <label for="input_ratio_sf">
-                                3루주자 희생 플라이 성공률
-                            </label>
-                            <input type="number" class="input_ratio_sf" value="0.70" step="0.01" min="0" max="1">
-                        </div>
-                        <div class="input-group">
-                            <label for="input_ratio_sfx_out">
-                                3루주자 홈 아웃 확률 (SF)
-                            </label>
-                            <input type="number" class="input_ratio_sfx_out" value="0.05" step="0.01" min="0" max="1">
-                        </div>
-                        <div class="input-group">
-                            3루주자 태그업 시도 x 확률:
-                            <b class="input_ratio_sfx_stay"></b>
-                        </div>
-
-                        <hr>
-
-                        <div class="input-group">
-                            <label for="input_ratio_dp2x">
-                                1루주자만 아웃(땅볼) 확률
-                            </label>
-                            <input type="number" class="input_ratio_dp2x" value="0.03" step="0.01" min="0" max="1">
-                        </div>
-                        <div class="input-group">
-                            <label for="input_ratio_dp1x">
-                                타자만 아웃(땅볼) 확률
-                            </label>
-                            <input type="number" class="input_ratio_dp1x" value="0.03" step="0.01" min="0" max="1">
-                        </div>
-                        <div class="input-group">
-                            병살 확률:
-                            <b class="input_ratio_dp"></b>
-                        </div>
-                    </div>
-                    <!--p style="font-size: 0.8em; color: #666;">※ 나머지 확률은 주자가 머무르거나 일반 아웃으로 처리됩니다.</p>
-                    <hr style="wclassth: 100%; border-top: 1px dashed #ccc; margin: 5px 0;"-->
-                </details>
+                </div>
             </div>
+            <hr>
+            <button id="close-batter-list-pop-up">닫기</button>
         </div>
+    </div>
+    <div id="runner-pop-up" class="panel frostedglassmorphism" style="display:none;">
+        <div class="pop-up container neumorphism" style="height:90%;max-width:90%;">
+            <h1>주루 및 수비 가정 확률 (조건부 확률)</h1>
+            <hr>
 
+            <div class="pop-up-content" style="text-align: center;">
+                <div class="input-form">
+                    <div class="input-group">
+                        <label for="input_ratio_twohome">
+                            2루→홈 득점 성공률(단타)
+                        </label>
+                        <input type="number" class="input_ratio_twohome" value="0.40" step="0.01" min="0" max="1">
+                    </div>
+                    <div class="input-group">
+                        <label for="input_ratio_twohomeout">
+                            2루→홈 득점 시도 아웃 비율(단타)
+                        </label>
+                        <input type="number" class="input_ratio_twohomeout" value="0.05" step="0.01" min="0" max="1">
+
+                    </div>
+                    <div class="input-group">
+                        2루→3루 진루율(단타):
+                        <b class="input_ratio_twothree"></b>
+                    </div>
+
+                    <hr>
+
+                    <div class="input-group">
+                        <label for="input_ratio_onethree">
+                            1루→3루 진루율(단타)
+                        </label>
+                        <input type="number" class="input_ratio_onethree" value="0.30" step="0.01" min="0" max="1">
+                    </div>
+
+                    <div class="input-group">
+                        1루→2루 진루율(단타):
+                        <b class="input_ratio_onetwo"></b>
+                    </div>
+
+                    <hr>
+
+                    <div class="input-group">
+                        <label for="input_ratio_sf">
+                            3루주자 희생 플라이 성공률
+                        </label>
+                        <input type="number" class="input_ratio_sf" value="0.70" step="0.01" min="0" max="1">
+                    </div>
+                    <div class="input-group">
+                        <label for="input_ratio_sfx_out">
+                            3루주자 홈 아웃 확률 (SF)
+                        </label>
+                        <input type="number" class="input_ratio_sfx_out" value="0.05" step="0.01" min="0" max="1">
+                    </div>
+                    <div class="input-group">
+                        3루주자 태그업 시도 x 확률:
+                        <b class="input_ratio_sfx_stay"></b>
+                    </div>
+
+                    <hr>
+
+                    <div class="input-group">
+                        <label for="input_ratio_dp2x">
+                            1루주자만 아웃(땅볼) 확률
+                        </label>
+                        <input type="number" class="input_ratio_dp2x" value="0.03" step="0.01" min="0" max="1">
+                    </div>
+                    <div class="input-group">
+                        <label for="input_ratio_dp1x">
+                            타자만 아웃(땅볼) 확률
+                        </label>
+                        <input type="number" class="input_ratio_dp1x" value="0.03" step="0.01" min="0" max="1">
+                    </div>
+                    <div class="input-group">
+                        병살 확률:
+                        <b class="input_ratio_dp"></b>
+                    </div>
+                </div>
+                <!--p style="font-size: 0.8em; color: #666;">※ 나머지 확률은 주자가 머무르거나 일반 아웃으로 처리됩니다.</p>
+                    <hr style="wclassth: 100%; border-top: 1px dashed #ccc; margin: 5px 0;"-->
+            </div>
+            <hr>
+            <button id="close-runner-pop-up">닫기</button>
+        </div>
     </div>
 
-    <div id="edit-pop-up" class="panel frostedglassmorphism" style="display:none;">
+    <div id="batter-pop-up" class="panel frostedglassmorphism" style="display:none;">
         <div class="pop-up container neumorphism" style="height:90%;max-width:90%;">
             <h1>타자 정보 편집</h1>
             <hr>
@@ -344,8 +363,8 @@
                 </div>
             </div>
             <hr>
-            <button id="open-edit-pop-up" style="display:none;">닫기</button>
-            <button id="close-edit-pop-up">닫기</button>
+            <button id="open-batter-pop-up" style="display:none;">닫기</button>
+            <button id="close-batter-pop-up">닫기</button>
         </div>
     </div>
 </body>

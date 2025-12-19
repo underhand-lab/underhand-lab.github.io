@@ -93,8 +93,8 @@ function batterAbilityChanged() {
 batter.setDiv(document, batterAbilityChanged);
 runner.setDiv(document, execute);
 
-const batter_edit_div = document.getElementById('edit-pop-up');
-const default_batter_ability = batter.getAbilityRaw();
+const batterEditDiv = document.getElementById('batter-pop-up');
+const devaultBatterAbility = batter.getAbilityRaw();
 
 const startNumSelector = document.getElementById("start-num");
 
@@ -167,12 +167,13 @@ function addBatter(default_ability) {
                 target = new_value;
                 targetName = playerName;
                 batter.readJson(new_value);
-                batter_edit_div.style.display = 'block';
+                batterEditDiv.style.display = 'block';
                 
             });
 
         }).then(() => {
             setLineup();
+            execute();
             resolve();
             
         });
@@ -182,20 +183,32 @@ function addBatter(default_ability) {
 }
 
 addBatterBtn.addEventListener('click', () => {
-    addBatter(default_batter_ability);
+    addBatter(devaultBatterAbility);
 })
 
 const start = Object.assign({},
-            default_batter_ability);
+            devaultBatterAbility);
 start['name'] = '03 이승엽'
 
 addBatter(start);
 
-new PopUp(document.getElementById('edit-pop-up'),
-    document.getElementById('open-edit-pop-up'),
-    document.getElementById('close-edit-pop-up'));
+new PopUp(document.getElementById('runner-pop-up'),
+    document.getElementById('open-runner-pop-up'),
+    document.getElementById('close-runner-pop-up'));
+    
+new PopUp(document.getElementById('batter-pop-up'),
+    document.getElementById('open-batter-pop-up'),
+    document.getElementById('close-batter-pop-up'));
 
-document.getElementById('close-edit-pop-up').
+new PopUp(document.getElementById('line-up-pop-up'),
+    document.getElementById('open-line-up-pop-up'),
+    document.getElementById('close-line-up-pop-up'));
+
+new PopUp(document.getElementById('batter-list-pop-up'),
+    document.getElementById('open-batter-list-pop-up'),
+    document.getElementById('close-batter-list-pop-up'));
+
+document.getElementById('close-batter-pop-up').
     addEventListener('click', () => {
         setLineup();
         execute();

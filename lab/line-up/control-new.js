@@ -146,7 +146,7 @@ const addBatterBtn = document.getElementById("add-batter-btn");
 
 function addBatter(default_ability) {
     return new Promise((resolve, reject) => {
-        
+
         const new_value = Object.assign({}, default_ability);
 
         addBox("./template/batter-new.html", new_value, (box) => {
@@ -161,21 +161,20 @@ function addBatter(default_ability) {
 
             const playerName = box.getElementsByClassName('name')[0];
             playerName.innerHTML = name;
-            
+
             const btn = box.getElementsByClassName('edit-player')[0];
-            btn.addEventListener('click', ()=>{
+            btn.addEventListener('click', () => {
                 target = new_value;
                 targetName = playerName;
                 batter.readJson(new_value);
                 batterEditDiv.style.display = 'block';
-                
+
             });
 
         }).then(() => {
             setLineup();
-            execute();
             resolve();
-            
+
         });
 
     });
@@ -187,15 +186,18 @@ addBatterBtn.addEventListener('click', () => {
 })
 
 const start = Object.assign({},
-            devaultBatterAbility);
+    devaultBatterAbility);
 start['name'] = '03 이승엽'
 
-addBatter(start);
+addBatter(start).then(() => {
+
+    execute();
+});
 
 new PopUp(document.getElementById('runner-pop-up'),
     document.getElementById('open-runner-pop-up'),
     document.getElementById('close-runner-pop-up'));
-    
+
 new PopUp(document.getElementById('batter-pop-up'),
     document.getElementById('open-batter-pop-up'),
     document.getElementById('close-batter-pop-up'));

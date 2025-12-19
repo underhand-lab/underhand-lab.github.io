@@ -84,7 +84,6 @@ runner.setDiv(document, execute);
 
 execute();
 
-
 new PopUp(document.getElementById('guide'),
     document.getElementById('open-guide-button'),
     document.getElementById('close-guide-button'));

@@ -1,6 +1,11 @@
 .pop-up {
-    max-width: 450px;
-    height: 90%;
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%, -50%);
+    width: calc(100% - 90px);
+    max-width: 720px;
+    max-height: 90%;
     padding: 10px 25px;
 }
 
@@ -15,5 +20,5 @@
     overflow-x: hidden;
     margin: auto;
     padding: 0 20px;
-    height: calc(100% - 130px);
+    max-height: calc(81vh - 150px);
 }

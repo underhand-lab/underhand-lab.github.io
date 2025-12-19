@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Underhand Lab | Line-up Run Expectancy</title>
+
+    <link rel="stylesheet" href="/style/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/14.8.1/math.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/decimal.js/10.4.3/decimal.js"></script>
+    <script src="/src/markdown.js"></script>
+    <script src="./control.js" type="module"></script>
+    <style>
+        .input-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .input-group input {
+            max-width: 70px;
+        }
+        input[type=file] {
+            display:none;
+        }
+        #input-file {
+            font-family: 'KBO-Dia-Gothic_medium', Arial, sans-serif;
+            font-size: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin: 5px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <div class="nav">
+        <div style="flex-grow: 1">
+            <h1><a href="/">언더핸드 연구소</a> : <a href="/lab/">⚗️</a></h1>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="flex-grow: 1">
+            <ul>
+                <li>
+                    <a href="/lab/re/">기대 득점</a>
+                </li>
+                <li>
+                    <a href="/lab/line-up/" select="true">타선 기대 득점</a>
+                </li>
+            </ul>
+        </div>
+        </div>
+    </div>
+    </div>
+    <div id="wrapper" style="padding-bottom: 10px;">
+        <div class="container neumorphism">
+            <h1>⚾ 타선 기대 득점 계산기</h1>
+            <details open>
+                <summary>
+                    <h1>🎯</h1>
+                    <select id="start-num" style="font-size:20px;">
+                        <option value="0">1</option>
+                        <option value="1">2</option>
+                        <option value="2">3</option>
+                        <option value="3">4</option>
+                        <option value="4">5</option>
+                        <option value="5">6</option>
+                        <option value="6">7</option>
+                        <option value="7">8</option>
+                        <option value="8">9</option>
+                    </select>
+                    <h1>
+                        번 타자 시점 상황별 기대 득점
+                    </h1>
+                </summary>
+                <div id="result-re">
+                </div>
+            </details>
+            <details>
+                <summary>
+                    <h1>
+                        📊 타자별 이닝 선두타자 분석
+                    </h1>
+                </summary>
+                <div id="result-leadoff">
+                </div>
+            </details>
+            <div id="result-leadoff">
+            </div>
+            <div id="result-9re">
+            </div>
+            <p style="font-size: 0.9em; color: #666;">
+                ※ 기대득점 계산기에 비해 정확도가 떨어집니다.(부동 소수점 오차)
+            </p>
+        
+        </div>
+        <div class="container neumorphism">
+            <button id="save-csv">라인업 저장</button>
+            <input type="file" id="read-csv" accept=".csv">
+            <label id="input-file" for="read-csv">라인업 불러오기</label>
+
+            <details open>
+                <summary><h1>타선</h1></summary>
+                <div id="line-up" style="
+                    display: flex;
+                    flex-flow: column;
+                    gap: 5px;">
+                </div>
+                <hr>
+            </details>
+
+            <div>
+                <details open>
+                    <summary><h1>타자 능력</h1></summary>
+                    
+                    <div id="boxes">
+                    </div>
+                    <button id="add-batter-btn">타자 추가</button>
+                    
+                    <input type="file" id="read-batter-csv" accept=".csv">
+                    <label id="input-file" for="read-batter-csv">타자 불러오기</label>
+                    <div style="height:20px"></div>
+                    <hr>
+                </details>
+                <details open>
+                    <hr>
+                    <summary>
+                        <h1>주루 및 수비 가정 확률 (조건부 확률)</h1>
+                    </summary>
+                    <div class="input-form">
+                        <div class="input-group">
+                            <label for="input_ratio_twohome">
+                                2루→홈 득점 성공률(단타)
+                            </label>
+                            <input type="number" class="input_ratio_twohome" value="0.40" step="0.01" min="0" max="1">
+                        </div>
+                        <div class="input-group">
+                            <label for="input_ratio_twohomeout">
+                                2루→홈 득점 시도 아웃 비율(단타)
+                            </label>
+                            <input type="number" class="input_ratio_twohomeout" value="0.05" step="0.01" min="0"
+                                max="1">
+
+                        </div>
+                        <div class="input-group">
+                            2루→3루 진루율(단타):
+                            <b class="input_ratio_twothree"></b>
+                        </div>
+
+                        <hr>
+
+                        <div class="input-group">
+                            <label for="input_ratio_onethree">
+                                1루→3루 진루율(단타)
+                            </label>
+                            <input type="number" class="input_ratio_onethree" value="0.30" step="0.01" min="0" max="1">
+                        </div>
+
+                        <div class="input-group">
+                            1루→2루 진루율(단타):
+                            <b class="input_ratio_onetwo"></b>
+                        </div>
+
+                        <hr>
+
+                        <div class="input-group">
+                            <label for="input_ratio_sf">
+                                3루주자 희생 플라이 성공률
+                            </label>
+                            <input type="number" class="input_ratio_sf" value="0.70" step="0.01" min="0" max="1">
+                        </div>
+                        <div class="input-group">
+                            <label for="input_ratio_sfx_out">
+                                3루주자 홈 아웃 확률 (SF)
+                            </label>
+                            <input type="number" class="input_ratio_sfx_out" value="0.05" step="0.01" min="0" max="1">
+                        </div>
+                        <div class="input-group">
+                            3루주자 태그업 시도 x 확률:
+                            <b class="input_ratio_sfx_stay"></b>
+                        </div>
+
+                        <hr>
+
+                        <div class="input-group">
+                            <label for="input_ratio_dp2x">
+                                1루주자만 아웃(땅볼) 확률
+                            </label>
+                            <input type="number" class="input_ratio_dp2x" value="0.03" step="0.01" min="0" max="1">
+                        </div>
+                        <div class="input-group">
+                            <label for="input_ratio_dp1x">
+                                타자만 아웃(땅볼) 확률
+                            </label>
+                            <input type="number" class="input_ratio_dp1x" value="0.03" step="0.01" min="0" max="1">
+                        </div>
+                        <div class="input-group">
+                            병살 확률:
+                            <b class="input_ratio_dp"></b>
+                        </div>
+                    </div>
+                    <!--p style="font-size: 0.8em; color: #666;">※ 나머지 확률은 주자가 머무르거나 일반 아웃으로 처리됩니다.</p>
+                    <hr style="wclassth: 100%; border-top: 1px dashed #ccc; margin: 5px 0;"-->
+                </details>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

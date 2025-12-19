@@ -3,6 +3,7 @@ import { downloadCSV, readCSV } from "./download.js"
 class Batter {
     constructor() {
         this.load = false;
+        this.name = "Player";
     }
 
     setDiv(div, func) {
@@ -47,6 +48,16 @@ class Batter {
             func();
         });
 
+        this.nameInput = div.getElementsByClassName('player-name')[0];
+
+        if (this.nameInput) {
+            this.nameInput.addEventListener('change', () => {
+                this.setName(this.nameInput.value);
+                if (this.load) return;
+                func();
+            });
+        }
+
         const saveBtn = div.getElementsByClassName('save-csv')[0];
         const readBtnFile = div.getElementsByClassName('read-csv-file')[0];
         const readBtn = div.getElementsByClassName('read-csv')[0];
@@ -55,16 +66,13 @@ class Batter {
             downloadCSV([this.getAbilityRaw()], this.getName());
         });
 
-        this.nameInput = div.getElementsByClassName('player-name')[0];
 
         readBtn.addEventListener('click', () => {
             readBtnFile.click();
         })
         readBtnFile.addEventListener('change', () => {
             readBtnFile.files[0].text().then((csv)=> {
-                this.load = true;
                 this.readJson(readCSV(csv)[0]);
-                this.load = false;
                 readBtnFile.files = null;
                 func();
             });
@@ -101,6 +109,7 @@ class Batter {
     }
 
     readJson(json) {
+        this.load = true;
         for (let key in json) {
             if (key in this.input) {
                 this.input[key].value = json[key];
@@ -108,6 +117,7 @@ class Batter {
         }
         this.sac.value = 'sac' in json ? json['sac'] : 0;
         if (this.nameInput) {
+            this.name = json['name'];
             this.nameInput.value = json['name'];
             this.nameInput.dispatchEvent(new Event('change'));
         }
@@ -115,6 +125,7 @@ class Batter {
             this.name = json['name'];
         }
         this.getAbility();
+        this.load = false;
     }
 
     getAbility() {

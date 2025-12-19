@@ -232,13 +232,22 @@ runner.setDiv(document, execute);
 
 const addBatterBtn = document.getElementById("add-batter-btn");
 
-function addBatter() {
+function addBatter(defaultName) {
     return new Promise((resolve, reject) => {
         const newBatter = new Batter();
 
         addBox("./template/batter.html", newBatter, (box) => {
             newBatter.setDiv(box, execute);
-            newBatter.setName(`Player ${players.length}`);
+
+            let nextIdx = 0;
+            let name = `${defaultName}`;
+
+            while (players.some(p => p.getName() === name)) {
+                name = `${defaultName} ${nextIdx}`;
+                nextIdx++;
+            }
+
+            newBatter.setName(name);
 
             const playerName = box.getElementsByClassName("player-name")[0];
             playerName.value = newBatter.getName();
@@ -251,7 +260,7 @@ function addBatter() {
         }).then(() => {
             setLineup();
             resolve();
-
+            
         });
 
     });
@@ -259,10 +268,10 @@ function addBatter() {
 }
 
 addBatterBtn.addEventListener('click', () => {
-    addBatter();
+    addBatter('Player');
 })
 
-addBatter().then(() => {
+addBatter('03 이승엽').then(() => {
     execute();
 });
 

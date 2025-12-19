@@ -64,8 +64,6 @@ function read_inputs_and_calculate(batter_ability, runner_ability) {
 
     const re_results = calculate_run_expectancy(batter_ability, runner_ability);
 
-    console.log(re_results);
-
     document.getElementById('result').innerHTML = re_visualize(re_results);
 }
 

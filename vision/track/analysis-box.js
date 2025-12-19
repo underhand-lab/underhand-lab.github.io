@@ -96,7 +96,7 @@ function addBox(opt, frameMaker, func, toBottom = true) {
 
 addVideoBoxBtn.addEventListener('click', () => {
     const newPoseFrameMaker = new FrameMaker.TrackFrameMaker();
-    addBox("/template/video.html", newPoseFrameMaker, (box) => {
+    addBox("/vision/template/video.html", newPoseFrameMaker, (box) => {
 
         const newCanvas = box.querySelectorAll("canvas")[0];
         newPoseFrameMaker.setInstance(newCanvas);
@@ -108,7 +108,7 @@ addVideoBoxBtn.addEventListener('click', () => {
 addTableBoxBtn.addEventListener('click', () => {
     const newTableFrameMaker = new FrameMaker.CustomTableFrameMaker();
 
-    addBox("/template/table-track.html", newTableFrameMaker, (box) => {
+    addBox("/vision/template/table-track.html", newTableFrameMaker, (box) => {
 
         const newDiv = box.getElementsByClassName("table")[0];
         newTableFrameMaker.setInstance(newDiv);
@@ -120,7 +120,7 @@ addTableBoxBtn.addEventListener('click', () => {
 
 const newPoseFrameMaker = new FrameMaker.TrackFrameMaker();
 
-addBox("/template/video.html", newPoseFrameMaker, (box) => {
+addBox("/vision/template/video.html", newPoseFrameMaker, (box) => {
 
     const newCanvas = box.querySelectorAll("canvas")[0];
     newPoseFrameMaker.setInstance(newCanvas);
@@ -129,7 +129,7 @@ addBox("/template/video.html", newPoseFrameMaker, (box) => {
 
 const newTableFrameMaker = new FrameMaker.CustomTableFrameMaker();
 
-addBox("/template/table-track.html", newTableFrameMaker, (box) => {
+addBox("/vision/template/table-track.html", newTableFrameMaker, (box) => {
 
     const newDiv = box.getElementsByClassName("table")[0];
     newTableFrameMaker.setInstance(newDiv);

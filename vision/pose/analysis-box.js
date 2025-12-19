@@ -100,7 +100,7 @@ function addBox(opt, frameMaker, func, toBottom = true) {
 
 addVideoBoxBtn.addEventListener('click', () => {
     const newPoseFrameMaker = new PoseFrameMaker.PoseBoneFrameMaker();
-    addBox("/template/video.html", newPoseFrameMaker, (box) => {
+    addBox("/vision/template/video.html", newPoseFrameMaker, (box) => {
 
         const newCanvas = box.querySelectorAll("canvas")[0];
         newPoseFrameMaker.setInstance(newCanvas);
@@ -112,7 +112,7 @@ addVideoBoxBtn.addEventListener('click', () => {
 add3dVideoBoxBtn.addEventListener('click', () => {
     const newPoseFrameMaker = new PoseFrameMaker.Pose3DFrameMaker();
 
-    addBox("/template/3d-video.html", newPoseFrameMaker, (box) => {
+    addBox("/vision/template/3d-video.html", newPoseFrameMaker, (box) => {
 
         const newCanvas = box.querySelectorAll("canvas")[0];
         newPoseFrameMaker.setInstance(newCanvas);
@@ -124,7 +124,7 @@ add3dVideoBoxBtn.addEventListener('click', () => {
 addGraphBoxBtn.addEventListener('click', () => {
     const newGraphFrameMaker = new PoseFrameMaker.CustomGraphFrameMaker();
 
-    addBox("/template/graph.html", newGraphFrameMaker, (box) => {
+    addBox("/vision/template/graph.html", newGraphFrameMaker, (box) => {
 
         const newCanvas = box.querySelectorAll("canvas")[0];
         newGraphFrameMaker.setInstance(newCanvas);
@@ -144,7 +144,7 @@ addGraphBoxBtn.addEventListener('click', () => {
 addTableBoxBtn.addEventListener('click', () => {
     const newTableFrameMaker = new PoseFrameMaker.CustomTableFrameMaker();
 
-    addBox("/template/table-pose.html", newTableFrameMaker, (box) => {
+    addBox("/vision/template/table-pose.html", newTableFrameMaker, (box) => {
 
         const newDiv = box.getElementsByClassName("table")[0];
         newTableFrameMaker.setInstance(newDiv);
@@ -163,7 +163,7 @@ addTableBoxBtn.addEventListener('click', () => {
 });
 
 const newPoseFrameMaker = new PoseFrameMaker.PoseBoneFrameMaker();
-addBox("/template/video.html", newPoseFrameMaker, (box) => {
+addBox("/vision/template/video.html", newPoseFrameMaker, (box) => {
 
     const newCanvas = box.querySelectorAll("canvas")[0];
     newPoseFrameMaker.setInstance(newCanvas);
@@ -171,7 +171,7 @@ addBox("/template/video.html", newPoseFrameMaker, (box) => {
 }, false);
 
 const newGraphFrameMaker = new PoseFrameMaker.CustomGraphFrameMaker();
-addBox("/template/graph.html", newGraphFrameMaker, (box) => {
+addBox("/vision/template/graph.html", newGraphFrameMaker, (box) => {
 
     const newCanvas = box.querySelectorAll("canvas")[0];
     newGraphFrameMaker.setInstance(newCanvas);

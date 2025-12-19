@@ -104,6 +104,7 @@ td {
     border: 1px solid #ddd;
     /* 셀 테두리 */
     padding: 8px;
+    overflow-x:auto;
 }
 
 th {

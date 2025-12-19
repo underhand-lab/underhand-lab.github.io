@@ -25,11 +25,12 @@ export class MediaPipePoseDetector {
 
     poseDetector = undefined;
 
-    constructor() {
+    constructor(option) {
         this.canvas = document.createElement('canvas');
+        this.option = option;
     }
 
-    async initialize() {
+    async initialize(option) {
         console.log("초기화중");
 
         try {
@@ -41,7 +42,7 @@ export class MediaPipePoseDetector {
                 vision,
                 {
                     baseOptions: {
-                        modelAssetPath: "../external/models/pose_landmarker_heavy.task"
+                        modelAssetPath: this.option
                     },
                     runningMode: "VIDEO",
                     minPoseDetectionConfidence: 0.3,

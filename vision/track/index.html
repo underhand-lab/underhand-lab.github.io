@@ -42,9 +42,9 @@
             <input type="range" id="frameSlider" min="0" value="0">
             <div style="display:flex; flex-wrap: nowrap;gap:10px;">
                 <div style="flex-grow: 1;text-align: left;line-height: 42px;white-space: nowrap;">
+                    <button id="open-process-pop-up">분석</button>
                     <label for="confInput">CONF: </label>
-                    <input type="number" pattern="\d*" inputmode="decimal" id="confInput" value="0.01" min="0" max="1"
-                        step="0.01" style="width:45px;">
+                    <input type="number" pattern="\d*" inputmode="decimal" id="confInput" value="0.01" min="0" max="1" step="0.01">
                 </div>
                 <div style="text-align: right;white-space: nowrap;overflow:hidden;">
                     <button id="open-guide-button">도움말</button>
@@ -55,39 +55,6 @@
     </div>
 
     <div id="wrapper">
-        <div class="container neumorphism">
-            <details open>
-                <summary>
-                    <h1>새로운 동영상 처리</h1>
-                </summary>
-                <div>
-                    <div class="input-section">
-                        <div style="flex-grow: 1;">
-                            <input type="file" id="video-files" multiple accept="video/*">
-                        </div>
-                        <div style="text-align: left;">
-                            <label for="model">모델: </label>
-                            <select id="model" name="model">
-                                <option value="yolo11x">yolo11x</option>
-                                <option value="yolo11l">yolo11l</option>
-                                <option value="yolo11m" selected>yolo11m</option>
-                                <option value="yolo11s">yolo11s</option>
-                                <option value="yolo11n">yolo11n</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <button id="process-button" disabled>처리 시작</button>
-
-                    <div id="status-section">
-                        <p id="status-message">처리전</p>
-                        <div id="progress-bar-container">
-                            <div id="progress-bar"></div>
-                        </div>
-                    </div>
-                </div>
-            </details>
-        </div>
         <div>
             <div id="boxes"></div>
         </div>
@@ -95,7 +62,41 @@
             <a id="download-link" href="#" download="processed_data.json">처리된 데이터 다운로드</a>
         </div>
     </div>
+    <div id="process-pop-up" class="panel frostedglassmorphism">
+        <div class="pop-up container neumorphism">
+            <h1>새로운 동영상 처리</h1>
+            <hr>
+            <div>
 
+                <div class="input-section">
+                    <div style="flex-grow: 1;">
+                        <input type="file" id="video-files" multiple accept="video/*">
+                    </div>
+                    <div style="text-align: left;">
+                        <label for="model">모델: </label>
+                        <select id="model" name="model">
+                            <option value="yolo11x">yolo11x</option>
+                            <option value="yolo11l">yolo11l</option>
+                            <option value="yolo11m" selected>yolo11m</option>
+                            <option value="yolo11s">yolo11s</option>
+                            <option value="yolo11n">yolo11n</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button id="process-button" disabled>처리 시작</button>
+
+                <div id="status-section">
+                    <p id="status-message">처리전</p>
+                    <div id="progress-bar-container">
+                        <div id="progress-bar"></div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <button id="close-process-pop-up">취소</button>
+        </div>
+    </div>
     <div id="guide" class="panel frostedglassmorphism" style="display:none;">
         <div class="pop-up container neumorphism">
             <h1>도움말</h1>

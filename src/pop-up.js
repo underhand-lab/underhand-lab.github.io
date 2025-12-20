@@ -3,6 +3,10 @@ class PopUp {
     constructor(target, openButton, closeButton) {
         this.target = target;
 
+        console.log(target);
+        console.log(openButton);
+        console.log(closeButton);
+
         openButton.addEventListener('click', () => {
             this.open();
         });

@@ -197,7 +197,7 @@ saveCSVBtn.addEventListener('click', () => {
     }
     /*
     */
-
+    
     downloadCSV(lineup, 'line-up');
 })
 

@@ -84,18 +84,10 @@ runner.setDiv(document, execute);
 
 execute();
 
-new PopUp(document.getElementById('guide'),
-    document.getElementById('open-guide-button'),
-    document.getElementById('close-guide-button'));
+new PopUp(document.getElementById('runner-pop-up'),
+    document.getElementById('open-runner-pop-up'),
+    document.getElementById('close-runner-pop-up'));
 
-new PopUp(document.getElementById('model-state'),
-    document.getElementById('open-model-state-button'),
-    document.getElementById('close-model-state-button'));
-
-new PopUp(document.getElementById('model-run'),
-    document.getElementById('open-model-run-button'),
-    document.getElementById('close-model-run-button'));
-
-new PopUp(document.getElementById('model-not'),
-    document.getElementById('open-model-not-button'),
-    document.getElementById('close-model-not-button'));
+new PopUp(document.getElementById('batter-pop-up'),
+    document.getElementById('open-batter-pop-up'),
+    document.getElementById('close-batter-pop-up'));

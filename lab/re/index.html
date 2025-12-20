@@ -49,7 +49,13 @@
         </div>
     </div>
     </div>
-    <div id="wrapper" style="padding-bottom: 10px;">
+    <div class="slider">
+        <div class="container neumorphism">
+            <button id="open-batter-pop-up">타자 능력 설정</button>
+            <button id="open-runner-pop-up">주자 능력 설정</button>
+        </div>
+    </div>
+    <div id="wrapper" style="padding-bottom: 80px;">
         <div class="container neumorphism">
             <h1>⚾ 야구 기대 득점 계산기</h1>
 
@@ -63,215 +69,211 @@
                 <option value="2">비율 스탯</option>
             </select>
 
-            <div>
-                <details class="input-form-2" open>
-                    <hr>
-                    <summary>
-                        <h1>누적 타석 결과</h1>
-                    </summary>
-                    <div class="input-form">
-                        <div class="input-group">
-                            타석:
-                            <b class="input_cumulative_pa"></b>
-                        </div>
-                        <div class="input-group">
-                            타수:
-                            <b class="input_cumulative_ab"></b>
-                        </div>
-                        <div class="input-group">
-                            안타:
-                            <b class="input_cumulative_hit"></b>
-                        </div>
-                        <div class="input-group">
-                            출루:
-                            <b class="input_cumulative_ob"></b>
-                        </div>
-                        <div class="input-group">
-                            장타수:
-                            <b class="input_cumulative_tb"></b>
-                        </div>
+        </div>
+
+    </div>
+
+    <div id="batter-pop-up" class="panel frostedglassmorphism">
+        <div class="pop-up container neumorphism">
+            <h1>누적 타석 결과</h1>
+            <hr>
+            <div class="pop-up-content" style="text-align:center;">
+                <div>
+                    <button class="save-csv">저장</button>
+                    <input class='read-csv-file' type="file" accept=".csv" style="display:none;">
+                    <button class="read-csv">불러오기</button>
+
+                </div>
+                <hr>
+                <div class="input-form">
+                    <div class="input-group">
+                        타석:
+                        <b class="input_cumulative_pa"></b>
                     </div>
-                    <div class="input-form">
-                        <div class="input-group">
-                            타율:
-                            <b class="input_cumulative_ba"></b>
-                        </div>
-                        <div class="input-group">
-                            출루율:
-                            <b class="input_cumulative_oba"></b>
-                        </div>
-                        <div class="input-group">
-                            장타율:
-                            <b class="input_cumulative_slg"></b>
-                        </div>
-                        <div class="input-group">
-                            OPS:
-                            <b class="input_cumulative_ops"></b>
-                        </div>
+                    <div class="input-group">
+                        타수:
+                        <b class="input_cumulative_ab"></b>
                     </div>
-                    <hr>
-
-                    <div class="input-form">
-                        <div class="input-group">
-                            <label for="input_cumulative_bb">
-                                볼넷
-                            </label>
-                            <input type="number" class="input_cumulative_bb" value="111" step="1" min="0">
-                        </div>
-                        <div class="input-group">
-                            <label for="input_cumulative_sh">
-                                단타(SH)
-                            </label>
-                            <input type="number" class="input_cumulative_sh" value="65" step="1" min="0">
-                        </div>
-                        <div class="input-group">
-                            <label for="input_cumulative_dh">
-                                2루타(DH)
-                            </label>
-                            <input type="number" class="input_cumulative_dh" value="23" step="1" min="0">
-                        </div>
-                        <div class="input-group">
-                            <label for="input_cumulative_th">
-                                3루타(TH)
-                            </label>
-                            <input type="number" class="input_cumulative_th" value="0" step="1" min="0">
-                        </div>
-                        <div class="input-group">
-                            <label for="input_cumulative_hr">
-                                홈런(HR)
-                            </label>
-                            <input type="number" class="input_cumulative_hr" value="56" step="1" min="0">
-                        </div>
+                    <div class="input-group">
+                        안타:
+                        <b class="input_cumulative_hit"></b>
                     </div>
-                    <hr>
-                    <div class="input-form">
-                        <div class="input-group">
-                            <label for="input_cumulative_gb">
-                                땅볼 아웃(GB)
-                            </label>
-                            <input type="number" class="input_cumulative_gb" value="117" step="1" min="0">
-                        </div>
-                        <div class="input-group">
-                            <label for="input_cumulative_fb">
-                                뜬공 아웃(FB)
-                            </label>
-                            <input type="number" class="input_cumulative_fb" value="135" step="1" min="0">
-                        </div>
-                        <div class="input-group">
-                            <label for="input_cumulative_so">
-                                삼진(SO)
-                            </label>
-                            <input type="number" class="input_cumulative_so" value="89" step="1" min="0">
-                        </div>
-                        <div class="input-group">
-                            <label for="input_cumulative_sacrifice">
-                                희생타
-                            </label>
-                            <input type="number" class="input_cumulative_sacrifice" value="6" step="1" min="0">
-                        </div>
-                        <p style="font-size: 0.9em; color: #666;">
-                            ※ 희생타는 기대 득점에 반영되지 않지만, 누적 스탯으로 산출되어 예시로 보여지는 타율, 출루율, 장타율을 정확하게 표시하기 위해 사용됩니다.
-                        </p>
+                    <div class="input-group">
+                        출루:
+                        <b class="input_cumulative_ob"></b>
                     </div>
-                    <hr>
-                    <div>
-                        <button class="save-csv">저장</button>
-                        <input class='read-csv-file' type="file" accept=".csv" style="display:none;">
-                        <button class="read-csv">불러오기</button>
-
+                    <div class="input-group">
+                        장타수:
+                        <b class="input_cumulative_tb"></b>
                     </div>
-                    <hr>
-                </details>
-                <details open>
-                    <hr>
-                    <summary>
-                        <h1>주루 및 수비 가정 확률 (조건부 확률)</h1>
-                    </summary>
-                    <div class="input-form">
-                        <div class="input-group">
-                            <label for="input_ratio_twohome">
-                                2루→홈 득점 성공률(단타)
-                            </label>
-                            <input type="number" class="input_ratio_twohome" value="0.40" step="0.01" min="0" max="1">
-                        </div>
-                        <div class="input-group">
-                            <label for="input_ratio_twohomeout">
-                                2루→홈 득점 시도 아웃 비율(단타)
-                            </label>
-                            <input type="number" class="input_ratio_twohomeout" value="0.05" step="0.01" min="0"
-                                max="1">
-
-                        </div>
-                        <div class="input-group">
-                            2루→3루 진루율(단타):
-                            <b class="input_ratio_twothree"></b>
-                        </div>
-
-                        <hr>
-
-                        <div class="input-group">
-                            <label for="input_ratio_onethree">
-                                1루→3루 진루율(단타)
-                            </label>
-                            <input type="number" class="input_ratio_onethree" value="0.30" step="0.01" min="0" max="1">
-                        </div>
-
-                        <div class="input-group">
-                            1루→2루 진루율(단타):
-                            <b class="input_ratio_onetwo"></b>
-                        </div>
-
-                        <hr>
-
-                        <div class="input-group">
-                            <label for="input_ratio_sf">
-                                3루주자 희생 플라이 성공률
-                            </label>
-                            <input type="number" class="input_ratio_sf" value="0.70" step="0.01" min="0" max="1">
-                        </div>
-                        <div class="input-group">
-                            <label for="input_ratio_sfx_out">
-                                3루주자 홈 아웃 확률 (SF)
-                            </label>
-                            <input type="number" class="input_ratio_sfx_out" value="0.05" step="0.01" min="0" max="1">
-                        </div>
-                        <div class="input-group">
-                            3루주자 태그업 시도 x 확률:
-                            <b class="input_ratio_sfx_stay"></b>
-                        </div>
-
-                        <hr>
-
-                        <div class="input-group">
-                            <label for="input_ratio_dp2x">
-                                1루주자만 아웃(땅볼) 확률
-                            </label>
-                            <input type="number" class="input_ratio_dp2x" value="0.03" step="0.01" min="0" max="1">
-                        </div>
-                        <div class="input-group">
-                            <label for="input_ratio_dp1x">
-                                타자만 아웃(땅볼) 확률
-                            </label>
-                            <input type="number" class="input_ratio_dp1x" value="0.03" step="0.01" min="0" max="1">
-                        </div>
-                        <div class="input-group">
-                            병살 확률:
-                            <b class="input_ratio_dp"></b>
-                        </div>
+                </div>
+                <div class="input-form">
+                    <div class="input-group">
+                        타율:
+                        <b class="input_cumulative_ba"></b>
                     </div>
-                    <!--p style="font-size: 0.8em; color: #666;">※ 나머지 확률은 주자가 머무르거나 일반 아웃으로 처리됩니다.</p>
-                    <hr style="wclassth: 100%; border-top: 1px dashed #ccc; margin: 5px 0;"-->
-                </details>
+                    <div class="input-group">
+                        출루율:
+                        <b class="input_cumulative_oba"></b>
+                    </div>
+                    <div class="input-group">
+                        장타율:
+                        <b class="input_cumulative_slg"></b>
+                    </div>
+                    <div class="input-group">
+                        OPS:
+                        <b class="input_cumulative_ops"></b>
+                    </div>
+                </div>
+                <hr>
+
+                <div class="input-form">
+                    <div class="input-group">
+                        <label for="input_cumulative_bb">
+                            볼넷
+                        </label>
+                        <input type="number" class="input_cumulative_bb" value="111" step="1" min="0">
+                    </div>
+                    <div class="input-group">
+                        <label for="input_cumulative_sh">
+                            단타(SH)
+                        </label>
+                        <input type="number" class="input_cumulative_sh" value="65" step="1" min="0">
+                    </div>
+                    <div class="input-group">
+                        <label for="input_cumulative_dh">
+                            2루타(DH)
+                        </label>
+                        <input type="number" class="input_cumulative_dh" value="23" step="1" min="0">
+                    </div>
+                    <div class="input-group">
+                        <label for="input_cumulative_th">
+                            3루타(TH)
+                        </label>
+                        <input type="number" class="input_cumulative_th" value="0" step="1" min="0">
+                    </div>
+                    <div class="input-group">
+                        <label for="input_cumulative_hr">
+                            홈런(HR)
+                        </label>
+                        <input type="number" class="input_cumulative_hr" value="56" step="1" min="0">
+                    </div>
+                </div>
+                <hr>
+                <div class="input-form">
+                    <div class="input-group">
+                        <label for="input_cumulative_gb">
+                            땅볼 아웃(GB)
+                        </label>
+                        <input type="number" class="input_cumulative_gb" value="117" step="1" min="0">
+                    </div>
+                    <div class="input-group">
+                        <label for="input_cumulative_fb">
+                            뜬공 아웃(FB)
+                        </label>
+                        <input type="number" class="input_cumulative_fb" value="135" step="1" min="0">
+                    </div>
+                    <div class="input-group">
+                        <label for="input_cumulative_so">
+                            삼진(SO)
+                        </label>
+                        <input type="number" class="input_cumulative_so" value="89" step="1" min="0">
+                    </div>
+                    <div class="input-group">
+                        <label for="input_cumulative_sacrifice">
+                            희생타
+                        </label>
+                        <input type="number" class="input_cumulative_sacrifice" value="6" step="1" min="0">
+                    </div>
+                    <p style="font-size: 0.9em; color: #666;">
+                        ※ 희생타는 기대 득점에 반영되지 않지만, 누적 스탯으로 산출되어 예시로 보여지는 타율, 출루율, 장타율을 정확하게 표시하기 위해 사용됩니다.
+                    </p>
+                </div>
+                <hr>
             </div>
-
+            <button id="close-batter-pop-up">닫기</button>
         </div>
-        <div class="container neumorphism">
-            <button id="open-guide-button">도움말</button>
-            <button id="open-model-state-button">주자 모델 시나리오</button>
-            <button id="open-model-run-button">득점 모델 시나리오</button>
-            <button id="open-model-not-button">미반영 시나리오</button>
-        </div>
+    </div>
+    <div id="runner-pop-up" class="panel frostedglassmorphism" style="display:none;">
+        <div class="pop-up container neumorphism">
+            <h1>주루 및 수비 가정 확률 (조건부 확률)</h1>
+            <hr>
+            <div class="pop-up-content input-form">
+                <div class="input-group">
+                    <label for="input_ratio_twohome">
+                        2루→홈 득점 성공률(단타)
+                    </label>
+                    <input type="number" class="input_ratio_twohome" value="0.40" step="0.01" min="0" max="1">
+                </div>
+                <div class="input-group">
+                    <label for="input_ratio_twohomeout">
+                        2루→홈 득점 시도 아웃 비율(단타)
+                    </label>
+                    <input type="number" class="input_ratio_twohomeout" value="0.05" step="0.01" min="0" max="1">
 
+                </div>
+                <div class="input-group">
+                    2루→3루 진루율(단타):
+                    <b class="input_ratio_twothree"></b>
+                </div>
+
+                <hr>
+
+                <div class="input-group">
+                    <label for="input_ratio_onethree">
+                        1루→3루 진루율(단타)
+                    </label>
+                    <input type="number" class="input_ratio_onethree" value="0.30" step="0.01" min="0" max="1">
+                </div>
+
+                <div class="input-group">
+                    1루→2루 진루율(단타):
+                    <b class="input_ratio_onetwo"></b>
+                </div>
+
+                <hr>
+
+                <div class="input-group">
+                    <label for="input_ratio_sf">
+                        3루주자 희생 플라이 성공률
+                    </label>
+                    <input type="number" class="input_ratio_sf" value="0.70" step="0.01" min="0" max="1">
+                </div>
+                <div class="input-group">
+                    <label for="input_ratio_sfx_out">
+                        3루주자 홈 아웃 확률 (SF)
+                    </label>
+                    <input type="number" class="input_ratio_sfx_out" value="0.05" step="0.01" min="0" max="1">
+                </div>
+                <div class="input-group">
+                    3루주자 태그업 시도 x 확률:
+                    <b class="input_ratio_sfx_stay"></b>
+                </div>
+
+                <hr>
+
+                <div class="input-group">
+                    <label for="input_ratio_dp2x">
+                        1루주자만 아웃(땅볼) 확률
+                    </label>
+                    <input type="number" class="input_ratio_dp2x" value="0.03" step="0.01" min="0" max="1">
+                </div>
+                <div class="input-group">
+                    <label for="input_ratio_dp1x">
+                        타자만 아웃(땅볼) 확률
+                    </label>
+                    <input type="number" class="input_ratio_dp1x" value="0.03" step="0.01" min="0" max="1">
+                </div>
+                <div class="input-group">
+                    병살 확률:
+                    <b class="input_ratio_dp"></b>
+                </div>
+            </div>
+            <hr>
+            <button id="close-runner-pop-up">닫기</button>
+            <!--p style="font-size: 0.8em; color: #666;">※ 나머지 확률은 주자가 머무르거나 일반 아웃으로 처리됩니다.</p>
+                    <hr style="wclassth: 100%; border-top: 1px dashed #ccc; margin: 5px 0;"-->
+        </div>
     </div>
     <div id="guide" class="panel frostedglassmorphism" style="display:none;">
         <div class="pop-up container neumorphism">
@@ -287,7 +289,7 @@
         <div class="pop-up container neumorphism">
             <h1>주자, 아웃카운트 전이 모델 시나리오</h1>
             <hr>
-            <div class="markdown-container pop-up-content" data-markdown-file="./model-state.md">
+            <div class="markdown-container pop-up-content" data-markdown-file="../model-state.md">
             </div>
             <hr>
             <button id="close-model-state-button">닫기</button>
@@ -297,7 +299,7 @@
         <div class="pop-up container neumorphism">
             <h1>득점 전이 모델 시나리오</h1>
             <hr>
-            <div class="markdown-container pop-up-content" data-markdown-file="./model-run.md">
+            <div class="markdown-container pop-up-content" data-markdown-file="../model-run.md">
             </div>
             <hr>
             <button id="close-model-run-button">닫기</button>
@@ -307,7 +309,7 @@
         <div class="pop-up container neumorphism">
             <h1>미반영 시나리오</h1>
             <hr>
-            <div class="markdown-container pop-up-content" data-markdown-file="./model-not.md">
+            <div class="markdown-container pop-up-content" data-markdown-file="../model-not.md">
             </div>
             <hr>
             <button id="close-model-not-button">닫기</button>

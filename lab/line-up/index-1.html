@@ -81,7 +81,7 @@
     <div id="wrapper" style="padding-bottom: 80px;">
         <div class="container neumorphism">
             <h1>⚾ 타선 기대 득점 계산기</h1>
-            <details open>
+            <details>
                 <summary>
                     <h1>🎯</h1>
                     <select id="start-num" style="font-size:20px;">
@@ -122,7 +122,7 @@
         </div>
 
     </div>
-    <div id="line-up-pop-up" class="panel frostedglassmorphism" style="display:none;">
+    <div id="line-up-pop-up" class="panel frostedglassmorphism">
         <div class="pop-up container neumorphism">
             <h1>타선</h1>
             <hr>
@@ -137,7 +137,7 @@
             <button id="close-line-up-pop-up">닫기</button>
         </div>
     </div>
-    <div id="batter-list-pop-up" class="panel frostedglassmorphism" style="display:none;">
+    <div id="batter-list-pop-up" class="panel frostedglassmorphism">
         <div class="pop-up container neumorphism">
             <h1>타자 능력 관리</h1>
             <hr>
@@ -367,6 +367,47 @@
             <hr>
             <button id="open-batter-pop-up" style="display:none;">닫기</button>
             <button id="close-batter-pop-up">닫기</button>
+        </div>
+    </div>
+    
+    <div id="guide" class="panel frostedglassmorphism" style="display:none;">
+        <div class="pop-up container neumorphism">
+            <h1>도움말</h1>
+            <hr>
+            <div class="markdown-container pop-up-content" data-markdown-file="../guide.md">
+            </div>
+            <hr>
+            <button id="close-guide-button">닫기</button>
+        </div>
+    </div>
+    <div id="model-state" class="panel frostedglassmorphism" style="display:none;">
+        <div class="pop-up container neumorphism">
+            <h1>주자, 아웃카운트 전이 모델 시나리오</h1>
+            <hr>
+            <div class="markdown-container pop-up-content" data-markdown-file="../model-state.md">
+            </div>
+            <hr>
+            <button id="close-model-state-button">닫기</button>
+        </div>
+    </div>
+    <div id="model-run" class="panel frostedglassmorphism" style="display:none;">
+        <div class="pop-up container neumorphism">
+            <h1>득점 전이 모델 시나리오</h1>
+            <hr>
+            <div class="markdown-container pop-up-content" data-markdown-file="../model-run.md">
+            </div>
+            <hr>
+            <button id="close-model-run-button">닫기</button>
+        </div>
+    </div>
+    <div id="model-not" class="panel frostedglassmorphism" style="display:none;">
+        <div class="pop-up container neumorphism">
+            <h1>미반영 시나리오</h1>
+            <hr>
+            <div class="markdown-container pop-up-content" data-markdown-file="../model-not.md">
+            </div>
+            <hr>
+            <button id="close-model-not-button">닫기</button>
         </div>
     </div>
 </body>

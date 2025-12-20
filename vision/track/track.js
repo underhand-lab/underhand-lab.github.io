@@ -70,3 +70,7 @@ processButton.addEventListener('click', async () => {
 new PopUp(document.getElementById('guide'),
     document.getElementById('open-guide-button'),
     document.getElementById('close-guide-button'));
+
+new PopUp(document.getElementById('process-pop-up'),
+    document.getElementById('open-process-pop-up'),
+    document.getElementById('close-process-pop-up'));

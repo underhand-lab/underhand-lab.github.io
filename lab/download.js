@@ -1,24 +1,36 @@
-export function downloadCSV(json, filename) {
-    let csvContent = "data:text/csv;charset=utf-8,";
+export async function downloadCSV(json, filename) {
 
-    // 1. 헤더 추가 (JSON 키 활용)
     const headers = Object.keys(json[0]);
-    csvContent += headers.join(',') + '\r\n';
+    const csvRows = json.map(row => 
+        headers.map(header => {
+            const value = row[header];
+            const safeValue = (value === null || value === undefined) ? "" : value;
+            
+            // 데이터 내부에 쉼표(,)나 줄바꿈이 있을 경우를 대비해 큰따옴표로 감싸기
+            return `"${String(safeValue).replace(/"/g, '""')}"`;
+        }).join(',')
+    );
+    const csvContent = [headers.join(','), ...csvRows].join('\n');
 
-    // 2. 데이터 추가
-    json.forEach(row => {
-        const values = headers.map(header => row[header]);
-        csvContent += values.join(',') + '\r\n';
-    });
+    try {
+        // 2. 파일 저장 대화상자 열기
+        const handle = await window.showSaveFilePicker({
+            suggestedName: filename,
+            types: [{
+                description: 'CSV File',
+                accept: { 'text/csv': ['.csv'] },
+            }],
+        });
 
-    // 3. 다운로드 링크 생성 및 클릭
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", filename);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+        // 3. 파일에 쓰기
+        const writable = await handle.createWritable();
+        await writable.write(csvContent);
+        await writable.close();
+
+        console.log("파일이 성공적으로 저장되었습니다.");
+    } catch (err) {
+        console.error("저장이 취소되었거나 에러가 발생했습니다.", err);
+    }
 }
 
 export function readCSV(csv) {

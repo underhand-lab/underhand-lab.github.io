@@ -25,9 +25,11 @@
         .input-group input {
             max-width: 70px;
         }
+
         input[type=file] {
-            display:none;
+            display: none;
         }
+
         #input-file {
             font-family: 'KBO-Dia-Gothic_medium', Arial, sans-serif;
             font-size: 15px;
@@ -38,28 +40,27 @@
             padding: 5px 10px;
             margin: 5px;
         }
-
     </style>
 
 </head>
 
 <body>
     <div class="nav">
-        <div style="flex-grow: 1">
-            <h1><a href="/">언더핸드 연구소</a> : <a href="/lab/">⚗️</a></h1>
+        <div>
+            <div style="flex-grow: 1">
+                <h1><a href="/">언더핸드 연구소</a> : <a href="/lab/">⚗️</a></h1>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="flex-grow: 1">
+                <ul>
+                    <li>
+                        <a href="/lab/re/">개인</a>
+                    </li>
+                    <li>
+                        <a href="/lab/line-up/" select="true">타선 기반</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="flex-grow: 1">
-            <ul>
-                <li>
-                    <a href="/lab/re/">기대 득점</a>
-                </li>
-                <li>
-                    <a href="/lab/line-up/" select="true">타선 기대 득점</a>
-                </li>
-            </ul>
-        </div>
-        </div>
-    </div>
     </div>
     <div id="wrapper" style="padding-bottom: 10px;">
         <div class="container neumorphism">
@@ -101,7 +102,7 @@
             <p style="font-size: 0.9em; color: #666;">
                 ※ 기대득점 계산기에 비해 정확도가 떨어집니다.(부동 소수점 오차)
             </p>
-        
+
         </div>
         <div class="container neumorphism">
             <button id="save-csv">라인업 저장</button>
@@ -109,7 +110,9 @@
             <label id="input-file" for="read-csv">라인업 불러오기</label>
 
             <details open>
-                <summary><h1>타선</h1></summary>
+                <summary>
+                    <h1>타선</h1>
+                </summary>
                 <div id="line-up" style="
                     display: flex;
                     flex-flow: column;
@@ -120,12 +123,14 @@
 
             <div>
                 <details open>
-                    <summary><h1>타자 능력</h1></summary>
-                    
+                    <summary>
+                        <h1>타자 능력</h1>
+                    </summary>
+
                     <div id="boxes">
                     </div>
                     <button id="add-batter-btn">타자 추가</button>
-                    
+
                     <input type="file" id="read-batter-csv" accept=".csv">
                     <label id="input-file" for="read-batter-csv">타자 불러오기</label>
                     <div style="height:20px"></div>

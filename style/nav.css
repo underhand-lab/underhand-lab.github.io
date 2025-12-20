@@ -8,9 +8,41 @@
     font-size: 15px;
     margin: 0;
     z-index: 1;
+}
+
+.nav > div {
     display:flex;
     flex-wrap: wrap;
     justify-content: center;
+
+}
+
+@media screen and (min-width: 360px) {
+    .nav > div { 
+        min-width: 360px;
+        width: 100%;
+        max-width: 10000px;
+    }
+
+}
+
+@media screen and (max-width: 360px) {
+
+    .nav > div { 
+        max-width: 340px;
+        min-width: 200px;
+        
+    }
+}
+
+@media screen and (max-width: 200px) {
+
+    .nav > div { 
+        max-width: 200px;
+        min-width: 0px;
+        
+    }
+
 }
 
 .nav h1 {
@@ -38,9 +70,9 @@
     content: " ";
     display: block;
     width: 0px;
-    height: 3px;
+    height: 4px;
     background-color: var(--primary-color);
-    margin: 3px auto 3px;
+    margin: 2px auto 3px;
     padding: 0;
     transition: width 0.3s ease;
     

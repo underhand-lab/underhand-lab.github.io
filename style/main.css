@@ -136,14 +136,7 @@ th {
     float: right;
 }
 
-@media screen and (max-width: 328px) {
-
-    #wrapper {
-        padding: 105px 20px 120px;
-    }
-}
-
-@media screen and (min-width: 329px) {
+@media screen and (min-width: 360px) {
 
     #wrapper {
         padding: 50px 20px 120px;
@@ -151,7 +144,14 @@ th {
 
 }
 
-@media screen and (max-width: 198px) {
+@media screen and (max-width: 360px) {
+
+    #wrapper {
+        padding: 105px 20px 120px;
+    }
+}
+
+@media screen and (max-width: 200px) {
 
     #wrapper {
         padding: 140px 20px 120px;

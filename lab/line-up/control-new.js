@@ -166,7 +166,7 @@ function addBatter(refAbility) {
 
 addBatterBtn.addEventListener('click', () => {
     addBatter(devaultBatterAbility).then(() => {
-        
+        setLineup();
         const scrollDiv = document.getElementById("boxes");
         scrollDiv.scrollTo({
             top: scrollDiv.scrollHeight,

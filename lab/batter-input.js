@@ -1,6 +1,6 @@
 import { downloadCSV, readCSV } from "./download.js"
 
-class Batter {
+class BatterInput {
     constructor() {
         this.load = false;
         this.name = "Player";
@@ -73,7 +73,7 @@ class Batter {
         readBtnFile.addEventListener('change', () => {
             readBtnFile.files[0].text().then((csv)=> {
                 this.readJson(readCSV(csv)[0]);
-                readBtnFile.files = null;
+                readBtnFile.value = "";
                 func();
             });
         });
@@ -187,4 +187,4 @@ class Batter {
     }
 }
 
-export { Batter }
+export { BatterInput }

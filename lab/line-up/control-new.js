@@ -1,20 +1,22 @@
 import * as Box from "/src/box/box.js";
 import { calculate_lineup_re } from "./run.js"
-import { Batter } from "../batter.js"
-import { Runner } from "../runner.js"
+import { BatterInput } from "../batter-input.js"
+import { RunnerInput } from "../runner-input.js"
 import { downloadCSV, readCSV } from "../download.js"
+import { PlayerList } from "./line-up.js"
 import { re_visualize, leadoff_visualize, get9RE } from "./visualize.js";
 import { PopUp } from "/src/pop-up.js"
 
 const boxList = new Box.BoxList(document.getElementById("boxes"));
-let players = [];
-
+const playerList = new PlayerList();
 const lineupBox = document.getElementById("line-up");
 
 function setLineup() {
 
     let str = ''
     const default_batters = lineupBox.getElementsByTagName('select');
+    const players = playerList.getAllPlayers();
+
     for (let i = 0; i < 9; i++) {
         str += `<div><label>${i + 1}번타자</label>: `
         str += `<select>`;
@@ -50,16 +52,12 @@ function addBox(opt, batter, func) {
 
         }).then((text) => {
             const box = boxList.addBox(text, () => {
-                if (players.length < 2) {
-                    throw new Error(`선수가 1명 이상 필요합니다.`)
-                }
-                players = players.filter(p => p != batter);
+                playerList.removePlayer(batter);
                 setLineup();
                 execute();
             });
             box.style.position = 'relative';
             func(box);
-            players.push(batter);
             resolve();
 
         }).catch(error => {
@@ -70,8 +68,8 @@ function addBox(opt, batter, func) {
 
 }
 
-const batter = new Batter();
-const runner = new Runner();
+const batter = new BatterInput();
+const runner = new RunnerInput();
 
 let target;
 let targetName;
@@ -85,6 +83,7 @@ function batterAbilityChanged() {
     for (const key in newValue) {
         target[key] = newValue[key];
     }
+
     batter.getAbility();
     targetName.innerHTML = target['name'];
 
@@ -101,19 +100,13 @@ const startNumSelector = document.getElementById("start-num");
 function getLineup(func) {
 
     const batters = lineupBox.getElementsByTagName('select');
-    let batters_ability = [];
-    let input_lineup = [];
-
-    for (let i = 0; i < players.length; i++) {
-        batters_ability.push(func(players[i]));
-    }
+    let inputLineup = [];
 
     for (let i = 0; i < 9; i++) {
-        input_lineup.push(Object.assign({},
-            batters_ability[batters[i].value]));
+        inputLineup.push(parseInt(batters[i].value));
     }
 
-    return input_lineup;
+    return playerList.getLineup(inputLineup).map(ability => func(ability));
 
 }
 
@@ -144,54 +137,83 @@ function execute() {
 
 const addBatterBtn = document.getElementById("add-batter-btn");
 
-function addBatter(default_ability) {
+function addBatter(refAbility) {
+
+    const newPlayer = Object.assign({}, refAbility);
+    playerList.addPlayer(newPlayer, () => { });
+
     return new Promise((resolve, reject) => {
-
-        const new_value = Object.assign({}, default_ability);
-
-        addBox("./template/batter-new.html", new_value, (box) => {
-            let nextIdx = 0;
-            let name = `${new_value['name']}`;
-
-            while (players.some(p => p['name'] === name)) {
-                name = `${new_value['name']} ${nextIdx}`;
-                nextIdx++;
-            }
-            new_value['name'] = name;
+        addBox("./template/batter-new.html", newPlayer, (box) => {
 
             const playerName = box.getElementsByClassName('name')[0];
-            playerName.innerHTML = name;
+            playerName.innerHTML = newPlayer['name'];
 
             const btn = box.getElementsByClassName('edit-player')[0];
             btn.addEventListener('click', () => {
-                target = new_value;
+                target = newPlayer;
                 targetName = playerName;
-                batter.readJson(new_value);
+                batter.readJson(newPlayer);
                 batterEditDiv.style.display = 'block';
 
             });
 
         }).then(() => {
-            setLineup();
             resolve();
-
         });
 
     });
-
 }
 
 addBatterBtn.addEventListener('click', () => {
-    addBatter(devaultBatterAbility);
+    addBatter(devaultBatterAbility).then(() => {
+        
+        const scrollDiv = document.getElementById("boxes");
+        scrollDiv.scrollTo({
+            top: scrollDiv.scrollHeight,
+                behavior: 'smooth' // 부드럽게 이동하고 싶을 때 추가
+        });
+    });
 })
 
 const start = Object.assign({},
     devaultBatterAbility);
-start['name'] = '03 이승엽'
+start['name'] = '03 이승엽';
 
 addBatter(start).then(() => {
-
+    setLineup();
     execute();
+});
+
+const saveCSVBtn = document.getElementById("save-csv");
+
+saveCSVBtn.addEventListener('click', () => {
+    downloadCSV(playerList.getAllPlayers(), 'line-up');
+});
+
+const readBatterCSVBtn = document.getElementById("read-batter-csv");
+
+readBatterCSVBtn.addEventListener('change', () => {
+
+    readBatterCSVBtn.files[0].text().then((csv) => {
+        const playerObjs = readCSV(csv);
+
+        const addBatterPromises = [];
+
+        for (let i = 0; i < playerObjs.length; i++) {
+            const p = addBatter(playerObjs[i]);
+            addBatterPromises.push(p);
+        }
+        Promise.all(addBatterPromises).then(() => {
+            setLineup();
+            const scrollDiv = document.getElementById("boxes");
+            scrollDiv.scrollTo({
+                top: scrollDiv.scrollHeight,
+                    behavior: 'smooth' // 부드럽게 이동하고 싶을 때 추가
+            });
+            readBatterCSVBtn.value = "";
+        });
+    });
+
 });
 
 new PopUp(document.getElementById('runner-pop-up'),

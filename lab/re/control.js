@@ -1,7 +1,7 @@
 import { calculate_run_expectancy } from "./run.js"
 import { PopUp } from "/src/pop-up.js"
-import { Batter } from "../batter.js"
-import { Runner } from "../runner.js"
+import { BatterInput } from "../batter-input.js"
+import { RunnerInput } from "../runner-input.js"
 
 /**
  * ----------------------------------------------------
@@ -67,20 +67,20 @@ function read_inputs_and_calculate(batter_ability, runner_ability) {
     document.getElementById('result').innerHTML = re_visualize(re_results);
 }
 
-const batter = new Batter();
-const runner = new Runner();
+const batterInput = new BatterInput();
+const runnerInput = new RunnerInput();
 
 function execute() {
 
-    const batter_ability = batter.getAbility();
-    const runner_ability = runner.getAbility();
+    const batter_ability = batterInput.getAbility();
+    const runner_ability = runnerInput.getAbility();
 
     read_inputs_and_calculate(batter_ability, runner_ability);
 
 }
 
-batter.setDiv(document, execute);
-runner.setDiv(document, execute);
+batterInput.setDiv(document, execute);
+runnerInput.setDiv(document, execute);
 
 execute();
 

@@ -1,4 +1,4 @@
-class Runner {
+class RunnerInput {
     constructor() {
 
     }
@@ -97,4 +97,4 @@ class Runner {
     }
 }
 
-export { Runner }
+export { RunnerInput }

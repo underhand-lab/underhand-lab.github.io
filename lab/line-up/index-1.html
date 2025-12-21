@@ -64,12 +64,6 @@
     </div>
     <div class="slider">
         <div class="container neumorphism">
-            <div style="display:none;">
-                <button id="save-csv">라인업 저장</button>
-                <input type="file" id="read-csv" accept=".csv">
-                <label id="input-file" for="read-csv">라인업 불러오기</label>
-            </div>
-
             <div>
                 <button id="open-line-up-pop-up">타선 편집</button>
                 <button id="open-batter-list-pop-up">타자 관리</button>
@@ -141,21 +135,25 @@
         <div class="pop-up container neumorphism">
             <h1>타자 능력 관리</h1>
             <hr>
-            <button id="add-batter-btn">타자 추가</button>
+            <div>
+                <button id="save-csv">
+                    타자 리스트 저장
+                </button>
+                <input type="file" id="read-batter-csv" accept=".csv">
+                <label id="input-file" for="read-batter-csv">
+                    타자 리스트 불러오기
+                </label>
+            </div>
             <hr>
-            <div class="pop-up-content" style="
+            <div>
+                <button id="add-batter-btn">타자 추가</button>
+            </div>
+            <hr>
+            <div id="boxes" class="pop-up-content" style="
                 text-align: center;
                 min-height: 300px;
+                max-height: calc(81vh - 250px);
                 ">
-                <div id="boxes">
-                </div>
-                <div style="display:none;">
-
-                    <input type="file" id="read-batter-csv" accept=".csv">
-                    <label id="input-file" for="read-batter-csv">
-                        타자 불러오기</label>
-                    <div style="height:20px"></div>
-                </div>
             </div>
             <hr>
             <button id="close-batter-list-pop-up">닫기</button>
@@ -249,16 +247,16 @@
     <div id="batter-pop-up" class="panel frostedglassmorphism" style="display:none;">
         <div class="pop-up container neumorphism">
             <h1>타자 정보 편집</h1>
+            <hr>    
+            <div>
+                <input class="player-name" type="text" value="batter" />
+                <button class="save-csv">저장</button>
+                <input class='read-csv-file' type="file" accept=".csv" style="display:none;">
+                <button class="read-csv">불러오기</button>
+
+            </div>
             <hr>
             <div class="pop-up-content" style="text-align: center;">
-                <div>
-                    <input class="player-name" type="text" value="batter" />
-                    <button class="save-csv">저장</button>
-                    <input class='read-csv-file' type="file" accept=".csv" style="display:none;">
-                    <button class="read-csv">불러오기</button>
-
-                </div>
-                <hr>
                 <div class="input-form">
                     <div class="input-group">
                         타석:
@@ -369,7 +367,7 @@
             <button id="close-batter-pop-up">닫기</button>
         </div>
     </div>
-    
+
     <div id="guide" class="panel frostedglassmorphism" style="display:none;">
         <div class="pop-up container neumorphism">
             <h1>도움말</h1>

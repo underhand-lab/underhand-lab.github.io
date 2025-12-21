@@ -1,7 +1,7 @@
 import * as Box from "/src/box/box.js";
 import { calculate_lineup_re } from "./run.js"
-import { Batter } from "../batter.js"
-import { Runner } from "../runner.js"
+import { BatterInput } from "../batter-input.js"
+import { RunnerInput } from "../runner-input.js"
 import { downloadCSV, readCSV } from "../download.js"
 import { re_visualize, leadoff_visualize, get9RE } from "./visualize.js";
 
@@ -68,7 +68,7 @@ function addBox(opt, batter, func, toBottom = true) {
 
 }
 
-const runner = new Runner();
+const runner = new RunnerInput();
 
 const startNumSelector = document.getElementById("start-num");
 let ret
@@ -136,7 +136,7 @@ const addBatterBtn = document.getElementById("add-batter-btn");
 
 function addBatter(defaultName) {
     return new Promise((resolve, reject) => {
-        const newBatter = new Batter();
+        const newBatter = new BatterInput();
 
         addBox("./template/batter.html", newBatter, (box) => {
             newBatter.setDiv(box, execute);
@@ -212,7 +212,7 @@ readCSVBtn.addEventListener('change', () => {
         const addBatterPromises = [];
 
         for (let i = 0; i < playerObj.length; i++) {
-            const newBatter = new Batter();
+            const newBatter = new BatterInput();
 
             // addBox가 Promise를 반환하므로 이를 배열에 push
             const p = addBox("./template/batter.html", newBatter, (box) => {
@@ -267,7 +267,7 @@ readBatterCSVBtn.addEventListener('change', () => {
     readBatterCSVBtn.files[0].text().then((csv) => {
         const playerObj = readCSV(csv)[0];
 
-        const newBatter = new Batter();
+        const newBatter = new BatterInput();
 
         // addBox가 Promise를 반환하므로 이를 배열에 push
         addBox("./template/batter.html", newBatter, (box) => {

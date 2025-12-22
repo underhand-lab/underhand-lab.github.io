@@ -1,4 +1,4 @@
-function re_visualize(RE_results, idx) {
+function visualizeRE(RE_results, idx) {
     if (!RE_results[idx]) {
         return "";
     }
@@ -46,7 +46,7 @@ function re_visualize(RE_results, idx) {
     return html;
 }
 
-function leadoff_visualize(leadoff_vector, idx) {
+function visualizeLeadoff(leadoff_vector, idx) {
 
     // --- 리드오프 등장 확률 섹션 추가 ---
     let html = `
@@ -97,4 +97,4 @@ function get9RE(RE_results, leadoff_vector, idx) {
 
 }
 
-export { re_visualize, leadoff_visualize, get9RE };
+export { visualizeRE, visualizeLeadoff, get9RE };

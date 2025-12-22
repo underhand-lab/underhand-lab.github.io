@@ -1,5 +1,5 @@
 import { calculate_markov_core } from "/src/re/RE.js";
-import { RuleEngine } from "/src/re/rule-engine/RuleEngine.js";
+import * as TransitionEngine from "/src/re/transition-engine/index.js";
 
 
 const stateManager = {
@@ -21,8 +21,8 @@ const stateManager = {
     }
 };
 
-export function calculate_lineup_re(lineup_abilities, runner_ability) {
-    const ruleEngine = new RuleEngine();
+export function calculateLineupRE(lineup_abilities, runner_ability) {
+    const ruleEngine = new TransitionEngine.V1();
     const { P_full, N_data, RE_data, L } =
         calculate_markov_core(lineup_abilities, runner_ability,
             stateManager, ruleEngine);

@@ -1,5 +1,5 @@
 import * as Box from "/src/box/box.js";
-import { calculate_lineup_re } from "./run-line-up.js"
+import { calculateLineupRE } from "./re-line-up.js"
 import { BatterInput } from "/src/re/input/batter-input.js"
 import { RunnerInput } from "/src/re/input/runner-input.js"
 import { downloadCSV, readCSV } from "/src/csv/download.js"
@@ -101,7 +101,7 @@ function execute() {
     });
     const runner_ability = runner.getAbility();
 
-    const retval = calculate_lineup_re(input_lineup, runner_ability);
+    const retval = calculateLineupRE(input_lineup, runner_ability);
 
     ret = retval['re'];
     leadoff_vector = retval['leadoff_vector'];

@@ -40,6 +40,20 @@
             padding: 5px 10px;
             margin: 5px;
         }
+        .toggle {
+            position:absolute;
+            bottom:0;
+            left:50%;
+            transform: translateX(-50%);
+            width: calc(100% - 70px);
+            max-width: 720px;
+        }
+        .toggle-content {
+            min-height: 50px;
+            max-height: calc(50vh - 150px);
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
     </style>
 
 </head>
@@ -74,48 +88,52 @@
     </div>
     <div id="wrapper" style="padding-bottom: 80px;">
         <div class="container neumorphism">
+            <details>
+                <summary>
+                    <h1>🎯</h1>
+                    <select id="start-num" style="font-size:20px;">
+                        <option value="0">1</option>
+                        <option value="1">2</option>
+                        <option value="2">3</option>
+                        <option value="3">4</option>
+                        <option value="4">5</option>
+                        <option value="5">6</option>
+                        <option value="6">7</option>
+                        <option value="7">8</option>
+                        <option value="8">9</option>
+                    </select>
+                    <h1>
+                        번 타자 시점 상황별 기대 득점
+                    </h1>
+                </summary>
+                <div id="result-re">
+                </div>
+            </details>
+            <details>
+                <summary>
+                    <h1>
+                        📊 타자별 이닝 선두타자 분석
+                    </h1>
+                </summary>
+                <div id="result-leadoff">
+                </div>
+            </details>
+            <div id="result-leadoff">
+            </div>
             <div id="result-9re">
             </div>
             <p style="font-size: 0.9em; color: #666;">
-                ※ 리그 기대 득점 계산기에 비해 정확도가 떨어집니다.(부동 소수점 오차)
+                ※ 기대득점 계산기에 비해 정확도가 떨어집니다.(부동 소수점 오차)
             </p>
 
-        </div>
-        <div class="container neumorphism">
-            <h1>
-                🎯
-            <select id="start-num" style="font-size:20px;display:inline;">
-                <option value="0">1</option>
-                <option value="1">2</option>
-                <option value="2">3</option>
-                <option value="3">4</option>
-                <option value="4">5</option>
-                <option value="5">6</option>
-                <option value="6">7</option>
-                <option value="7">8</option>
-                <option value="8">9</option>
-            </select>
-                번 타자 시점 상황별 기대 득점
-            </h1>
-            <div id="result-re">
-            </div>
-        </div>
-        <div class="container neumorphism">
-            <h1>
-                📊 타자별 이닝 선두타자 분석
-            </h1>
-            <div id="result-leadoff">
-            </div>
-            <div id="result-leadoff">
-            </div>
         </div>
 
     </div>
     <div id="line-up-pop-up" class="panel frostedglassmorphism" style="/*display:none;*/">
-        <div class="pop-up container neumorphism">
+        <div class="toggle container neumorphism">
             <h1>타선</h1>
             <hr>
-            <div class="pop-up-content" style="text-align: center;padding: 20px 0px;">
+            <div class="toggle-content" style="text-align: center;padding: 20px 0px;">
                 <div id="line-up" style="
                     display: flex;
                     flex-flow: column;
@@ -127,7 +145,7 @@
         </div>
     </div>
     <div id="batter-list-pop-up" class="panel frostedglassmorphism" style="/*display:none;*/">
-        <div class="pop-up container neumorphism">
+        <div class="toggle container neumorphism">
             <h1>타자 능력 관리</h1>
             <hr>
             <div>
@@ -144,7 +162,7 @@
                 <button id="add-batter-btn">타자 추가</button>
             </div>
             <hr>
-            <div id="boxes" class="pop-up-content" style="
+            <div id="boxes" class="toggle-content" style="
                 text-align: center;
                 min-height: 300px;
                 max-height: calc(81vh - 250px);
@@ -155,11 +173,11 @@
         </div>
     </div>
     <div id="runner-pop-up" class="panel frostedglassmorphism" style="display:none;">
-        <div class="pop-up container neumorphism">
+        <div class="toggle container neumorphism">
             <h1>주루 및 수비 가정 확률 (조건부 확률)</h1>
             <hr>
 
-            <div class="pop-up-content" style="text-align: center;">
+            <div class="toggle-content" style="text-align: center;">
                 <div class="input-form">
                     <div class="input-group">
                         <label for="input_ratio_twohome">
@@ -240,9 +258,9 @@
     </div>
 
     <div id="batter-pop-up" class="panel frostedglassmorphism" style="display:none;">
-        <div class="pop-up container neumorphism">
+        <div class="toggle container neumorphism">
             <h1>타자 정보 편집</h1>
-            <hr>
+            <hr>    
             <div>
                 <input class="player-name" type="text" value="batter" />
                 <button class="save-csv">저장</button>
@@ -251,7 +269,7 @@
 
             </div>
             <hr>
-            <div class="pop-up-content" style="text-align: center;">
+            <div class="toggle-content" style="text-align: center;">
                 <div class="input-form">
                     <div class="input-group">
                         타석:

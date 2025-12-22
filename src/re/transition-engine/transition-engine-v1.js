@@ -1,5 +1,5 @@
 // rule-engine/RuleEngine.js
-class RuleEngine {
+class TransitionEngineV1 {
 
     getTransitions(action, state, r) {
         const { out, b1, b2, b3 } = state;
@@ -202,4 +202,4 @@ class RuleEngine {
     }
 }
 
-export { RuleEngine };
+export { TransitionEngineV1 };

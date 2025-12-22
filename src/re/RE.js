@@ -10,9 +10,7 @@ export function calculate_markov_core(abilities, runner, stateManager, engine) {
         const batter = abilities[b];
         const nextB = (b + 1) % L;
 
-        const ACTION_ORDER = ['bb', 'so', 'fb', 'gb', 'hr', 'th', 'dh', 'sh'];
-
-        for (const action of ACTION_ORDER) {
+        for (const action of Object.keys(batter)) {
             const pAction = batter[action] || 0;
             if (pAction <= 0) continue;
 

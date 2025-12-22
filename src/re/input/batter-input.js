@@ -33,8 +33,10 @@ class BatterInput {
             'ops': div.getElementsByClassName('input_cumulative_ops')[0],
         }
 
+        this.sf = div.getElementsByClassName(
+            'input_cumulative_sf')[0];
         this.sac = div.getElementsByClassName(
-            'input_cumulative_sacrifice')[0];
+            'input_cumulative_sac')[0];
         
         for (let key in this.input) {
             (this.input[key]).addEventListener('change', () => {
@@ -43,6 +45,11 @@ class BatterInput {
             });
         }
         
+        this.sf.addEventListener('change', () => {
+            if (this.load) return;
+            func();
+        });
+
         this.sac.addEventListener('change', () => {
             if (this.load) return;
             func();
@@ -90,21 +97,22 @@ class BatterInput {
 
     getAbilityRaw() {
 
-        let batter_ability_raw = {};
-        batter_ability_raw['name'] = this.getName();
+        let batterAbilityRaw = {};
+        batterAbilityRaw['name'] = this.getName();
 
         let pa = 0;
 
         for (let key in this.input) {
-            batter_ability_raw[key] = parseInt(
+            batterAbilityRaw[key] = parseInt(
                 this.input[key].value);
-            pa += batter_ability_raw[key];
+            pa += batterAbilityRaw[key];
         }
 
-        batter_ability_raw['pa'] = pa;
-        batter_ability_raw['sac'] = parseInt(this.sac.value);
+        batterAbilityRaw['pa'] = pa;
+        batterAbilityRaw['sf'] = parseInt(this.sf.value);
+        batterAbilityRaw['sac'] = parseInt(this.sac.value);
 
-        return batter_ability_raw;
+        return batterAbilityRaw;
         
     }
 
@@ -116,6 +124,7 @@ class BatterInput {
             }
         }
         this.sac.value = 'sac' in json ? json['sac'] : 0;
+        this.sf.value = 'sf' in json ? json['sf'] : 0;
         if (this.nameInput) {
             this.name = json['name'];
             this.nameInput.value = json['name'];
@@ -130,42 +139,43 @@ class BatterInput {
 
     getAbility() {
 
-        const batter_ability_raw = this.getAbilityRaw();
+        const batterAbilityRaw = this.getAbilityRaw();
 
-        const pa = new Decimal(batter_ability_raw['pa']);
+        const pa = new Decimal(batterAbilityRaw['pa']);
 
         const batter_ability = {
-            'bb': new Decimal(batter_ability_raw["bb"]).div(pa),
+            'bb': new Decimal(batterAbilityRaw["bb"]).div(pa),
 
-            'so': new Decimal(batter_ability_raw["so"]).div(pa),
-            'gb': new Decimal(batter_ability_raw["gb"]).div(pa),
-            'fb': new Decimal(batter_ability_raw["fb"]).div(pa),
+            'so': new Decimal(batterAbilityRaw["so"]).div(pa),
+            'gb': new Decimal(batterAbilityRaw["gb"]).div(pa),
+            'fb': new Decimal(batterAbilityRaw["fb"]).div(pa),
 
-            'sh': new Decimal(batter_ability_raw["sh"]).div(pa),
-            'dh': new Decimal(batter_ability_raw["dh"]).div(pa),
-            'th': new Decimal(batter_ability_raw["th"]).div(pa),
-            'hr': new Decimal(batter_ability_raw["hr"]).div(pa),
+            'sh': new Decimal(batterAbilityRaw["sh"]).div(pa),
+            'dh': new Decimal(batterAbilityRaw["dh"]).div(pa),
+            'th': new Decimal(batterAbilityRaw["th"]).div(pa),
+            'hr': new Decimal(batterAbilityRaw["hr"]).div(pa),
         }
 
-        const hit = batter_ability_raw["sh"]
-            + batter_ability_raw["dh"]
-            + batter_ability_raw["th"]
-            + batter_ability_raw["hr"];
+        const hit = batterAbilityRaw["sh"]
+            + batterAbilityRaw["dh"]
+            + batterAbilityRaw["th"]
+            + batterAbilityRaw["hr"];
 
-        const ob = hit + batter_ability_raw["bb"];
+        const ob = hit + batterAbilityRaw["bb"];
 
-        const tb = batter_ability_raw["sh"]
-            + batter_ability_raw["dh"] * 2
-            + batter_ability_raw["th"] * 3
-            + batter_ability_raw["hr"] * 4;
+        const tb = batterAbilityRaw["sh"]
+            + batterAbilityRaw["dh"] * 2
+            + batterAbilityRaw["th"] * 3
+            + batterAbilityRaw["hr"] * 4;
 
-        this.sac.max = Math.min(pa - ob,
-            batter_ability_raw["fb"]
-            + batter_ability_raw["gb"]);
+        this.sac.max = Math.min(batterAbilityRaw["gb"]);
+        this.sf.max = Math.min(pa - ob, batterAbilityRaw["fb"]);
 
         this.sac.value = Math.min(this.sac.max, this.sac.value);
+        this.sf.value = Math.min(this.sf.max, this.sf.value);
 
-        const ab = pa - batter_ability_raw["bb"] - parseInt(this.sac.value);
+        const ab = pa - batterAbilityRaw["bb"]
+            - parseInt(this.sac.value) - parseInt(this.sf.value);
 
         this.derived['pa'].innerHTML = pa;
         this.derived['ab'].innerHTML = ab;
@@ -173,11 +183,14 @@ class BatterInput {
         this.derived['ob'].innerHTML = ob;
         this.derived['tb'].innerHTML = tb;
 
+        const oba = (ob / (pa - this.sac.value));
+        const slg = (tb / ab);
+
         this.derived['ba'].innerHTML = (hit / ab).toFixed(3);
-        this.derived['oba'].innerHTML = (ob / pa).toFixed(3);
-        this.derived['slg'].innerHTML = (tb / ab).toFixed(3);
+        this.derived['oba'].innerHTML = oba.toFixed(3);
+        this.derived['slg'].innerHTML = slg.toFixed(3);
         this.derived['ops'].innerHTML =
-            ((ob / pa) + (tb / ab)).toFixed(3);
+            (oba + slg).toFixed(3);
 
         for (let key in batter_ability) {
             batter_ability[key] = parseFloat(batter_ability[key]);

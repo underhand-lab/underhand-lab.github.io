@@ -3,7 +3,7 @@ import { calculateLineupRE } from "./re-line-up.js"
 import { BatterInput } from "/src/re/input/batter-input.js"
 import { RunnerInput } from "/src/re/input/runner-input.js"
 import { downloadCSV, readCSV } from "/src/csv/download.js"
-import { re_visualize, leadoff_visualize, get9RE } from "./visualize.js";
+import { visualizeRE, visualizeLeadoff, get9RE } from "./visualize.js";
 
 const boxList = new Box.BoxList(document.getElementById("boxes"));
 let players = [];
@@ -109,9 +109,9 @@ function execute() {
     const idx = parseInt(startNumSelector.value);
 
     document.getElementById('result-re').innerHTML =
-        re_visualize(ret, idx);
+        visualizeRE(ret, idx);
     document.getElementById('result-leadoff').innerHTML =
-        leadoff_visualize(leadoff_vector, idx);
+        visualizeLeadoff(leadoff_vector, idx);
     document.getElementById('result-9re').innerHTML =
         get9RE(ret, leadoff_vector, idx)
 
@@ -122,9 +122,9 @@ startNumSelector.addEventListener('change', () => {
     const idx = parseInt(startNumSelector.value);
 
     document.getElementById('result-re').innerHTML =
-        re_visualize(ret, idx);
+        visualizeRE(ret, idx);
     document.getElementById('result-leadoff').innerHTML =
-        leadoff_visualize(leadoff_vector, idx);
+        visualizeLeadoff(leadoff_vector, idx);
     document.getElementById('result-9re').innerHTML =
         get9RE(ret, leadoff_vector, idx)
 

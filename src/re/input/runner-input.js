@@ -1,100 +1,113 @@
 class RunnerInput {
-    constructor() {
+    constructor() {}
 
+    setDiv(div, onUpdate) {
+        // UI 클래스명은 기존 HTML 구조를 유지하며, 내부 키값만 1B 규칙으로 변경합니다.
+        this.inputs = {
+            // 1루타(1B) 시 주자 진루 상황
+            's_r1_r2_safe': div.getElementsByClassName(
+                'input_runner_s_r1_r2_safe')[0],
+            's_r1_r2_out': div.getElementsByClassName(
+                'input_runner_s_r1_r2_out')[0],
+
+            '1B_r2_home_safe':  div.getElementsByClassName(
+                'input_runner_1B_r2_home_safe')[0],
+            '1B_r2_home_out':   div.getElementsByClassName(
+                'input_runner_1B_r2_home_out')[0],
+
+            '2B_r1_home_safe':  div.getElementsByClassName(
+                'input_runner_2B_r1_home_safe')[0],
+            '2B_r1_home_out':   div.getElementsByClassName(
+                'input_runner_2B_r1_home_out')[0],
+
+            '1B_r1_r3_safe':    div.getElementsByClassName(
+                'input_runner_1B_r1_r3_safe')[0],
+            '1B_r1_r3_out':    div.getElementsByClassName(
+                'input_runner_1B_r1_r3_out')[0],
+
+            // 뜬공(fo) 상황
+            'fo_r3_home_safe':  div.getElementsByClassName(
+                'input_runner_fo_r3_home_safe')[0],
+            'fo_r3_home_out':   div.getElementsByClassName(
+                'input_runner_fo_r3_home_out')[0],
+
+            // 땅볼(go) 상황
+            'go_r1_r2_out': div.getElementsByClassName(
+                'input_runner_go_r1_r2_out')[0],
+            'go_b_r1_out':  div.getElementsByClassName(
+                'input_runner_go_b_r1_out')[0],
+        };
+
+        this.derivedElements = {
+            's_r1_r1_safe':    div.getElementsByClassName('input_runner_s_r1_r1_safe')[0],
+            '1B_r2_r3_safe':    div.getElementsByClassName('input_runner_1B_r2_r3_safe')[0],
+            '2B_r1_r3_safe':    div.getElementsByClassName('input_runner_2B_r1_r3_safe')[0],
+            '1B_r1_r2_safe':    div.getElementsByClassName('input_runner_1B_r1_r2_safe')[0],
+            'fo_r3_r3_safe':    div.getElementsByClassName('input_runner_fo_r3_r3_safe')[0],
+            'go_double_play':   div.getElementsByClassName('input_runner_go_double_play')[0],
+        };
+
+        for (let key in this.inputs) {
+            this.inputs[key].addEventListener('change', () => onUpdate());
+        }
     }
 
-    setDiv(div, func) {
-
-        this.input = {
-
-            'twohome': div.getElementsByClassName(
-                'input_ratio_twohome')[0],
-            'twohomeout': div.getElementsByClassName(
-                'input_ratio_twohomeout')[0],
-
-            'onethree': div.getElementsByClassName(
-                'input_ratio_onethree')[0],
-
-            'sf': div.getElementsByClassName(
-                'input_ratio_sf')[0],
-            'sfx_out': div.getElementsByClassName(
-                'input_ratio_sfx_out')[0],
-
-            'dp2x': div.getElementsByClassName(
-                'input_ratio_dp2x')[0],
-            'dp1x': div.getElementsByClassName(
-                'input_ratio_dp1x')[0],
+    _calculateRemaining(inputs, values, target, list) {
+        let remaining = new Decimal(1);
+        for (let v of list) {
+            remaining = remaining.minus(values[v] || 0);
         }
 
-        this.derived = {
-            'sfx_stay': div.getElementsByClassName(
-                'input_ratio_sfx_stay')[0],
-            'twothree': div.getElementsByClassName(
-                'input_ratio_twothree')[0],
-            'onetwo': div.getElementsByClassName(
-                'input_ratio_onetwo')[0],
-            'dp': div.getElementsByClassName('input_ratio_dp')[0],
-        }
+        this.derivedElements[target].innerHTML = remaining.toString();
+        values[target] = remaining;
 
-        for (let key in this.input) {
-            (this.input[key]).addEventListener('change', () => {
-                func();
-            });
-        }
-
-    }
-
-    func(input, value, target, list) {
-        let ret = new Decimal(1);
-
-        for (let v in list) {
-            ret = ret.minus(value[list[v]]);
-        }
-
-        this.derived[target].innerHTML = ret;
-        value[target] = ret;
-
-        for (let x in list) {
-            let t = new Decimal(1);
-            for (let y in list) {
-                if (x == y) continue;
-                t = t.minus(value[list[y]]);
+        for (let x of list) {
+            let limit = new Decimal(1);
+            for (let y of list) {
+                if (x === y) continue;
+                limit = limit.minus(values[y] || 0);
             }
-            input[list[x]].max = t;
+            inputs[x].max = limit.toString();
         }
-
     }
 
     getAbility() {
+        const params = {};
 
-        const runner_ability = {};
-
-        for (let key in this.input) {
-            const value = new Decimal(Math.min(
-                this.input[key].value, this.input[key].max));
-            runner_ability[key] = value;
-            this.input[key].value = value;
+        // 1. 기본 입력값 수집
+        for (let key in this.inputs) {
+            const val = new Decimal(Math.min(
+                this.inputs[key].value || 0, 
+                this.inputs[key].max || 1
+            ));
+            params[key] = val;
+            this.inputs[key].value = val.toString();
         }
-
-        runner_ability['sfx_stay'] = new Decimal(1).minus(
-            runner_ability['sf']).minus(runner_ability['sfx_out']);
-            
-        this.func(this.input, runner_ability, 'sfx_stay',
-            ['sfx_out', 'sf']);
-        this.func(this.input, runner_ability, 'twothree',
-            ['twohomeout', 'twohome']);
-        this.func(this.input, runner_ability, 'onetwo',
-            ['onethree']);
-        this.func(this.input, runner_ability, 'dp',
-            ['dp2x', 'dp1x']);
-
-        for (let key in runner_ability) {
-            runner_ability[key] = parseFloat(runner_ability[key]);
-        }
-
-        return runner_ability;
         
+        // [뜬공] fo_r3_home_safe/out 제외 -> 3루 잔루(fo_r3_r3_safe)
+        this._calculateRemaining(this.inputs, params, 's_r1_r1_safe', ['s_r1_r2_safe', 's_r1_r2_out']);
+        
+        // [뜬공] fo_r3_home_safe/out 제외 -> 3루 잔루(fo_r3_r3_safe)
+        this._calculateRemaining(this.inputs, params, 'fo_r3_r3_safe', ['fo_r3_home_safe', 'fo_r3_home_out']);
+        
+        // [1루타] 2루 주자 홈/아웃 제외 -> 3루 진루(1B_r2_r3_safe)
+        this._calculateRemaining(this.inputs, params, '1B_r2_r3_safe', ['1B_r2_home_safe', '1B_r2_home_out']);
+        
+        this._calculateRemaining(this.inputs, params, '2B_r1_r3_safe', ['2B_r1_home_safe', '2B_r1_home_out']);
+        
+        // [1루타] 1루 주자 3루 진루 제외 -> 2루 진루(1B_r1_r2_safe)
+        this._calculateRemaining(this.inputs, params, '1B_r1_r2_safe', ['1B_r1_r3_safe', '1B_r1_r3_out']);
+        
+        // [땅볼] 야수선택 2종 제외 -> 병살타(go_double_play)
+        this._calculateRemaining(this.inputs, params, 'go_double_play', ['go_r1_r2_out', 'go_b_r1_out']);
+
+        // 3. 엔진 연산을 위해 숫자형으로 변환
+        for (let key in params) {
+            params[key] = parseFloat(params[key]);
+        }
+
+        return params;
     }
 }
 
-export { RunnerInput }
+export { RunnerInput };

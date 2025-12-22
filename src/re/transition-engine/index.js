@@ -1,1 +1,4 @@
-export { TransitionEngineV1 as V1 } from "./transition-engine-v1.js";
+export { TransitionEngineV1 as StandardV1 } from "./transition-engine-v1.js";
+
+export { TransitionEngineV2 as StandardV2 } from "./transition-engine-v2.js";
+export { TransitionEngineV3 as Standard } from "./transition-engine-v3.js";

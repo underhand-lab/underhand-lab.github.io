@@ -9,34 +9,34 @@ class BatterInput {
     setDiv(div, func) {
 
         this.input = {
-            'bb': div.getElementsByClassName('input_cumulative_bb')[0],
+            'bb': div.getElementsByClassName('input-batter-bb')[0],
 
-            'so': div.getElementsByClassName('input_cumulative_so')[0],
-            'gb': div.getElementsByClassName('input_cumulative_gb')[0],
-            'fb': div.getElementsByClassName('input_cumulative_fb')[0],
+            'so': div.getElementsByClassName('input-batter-so')[0],
+            'go': div.getElementsByClassName('input-batter-go')[0],
+            'fo': div.getElementsByClassName('input-batter-fo')[0],
 
-            'dh': div.getElementsByClassName('input_cumulative_dh')[0],
-            'th': div.getElementsByClassName('input_cumulative_th')[0],
-            'hr': div.getElementsByClassName('input_cumulative_hr')[0],
-            'sh': div.getElementsByClassName('input_cumulative_sh')[0],
+            '1B': div.getElementsByClassName('input-batter-1B')[0],
+            '2B': div.getElementsByClassName('input-batter-2B')[0],
+            '3B': div.getElementsByClassName('input-batter-3B')[0],
+            'hr': div.getElementsByClassName('input-batter-hr')[0],
         }
 
         this.derived = {
-            'pa': div.getElementsByClassName('input_cumulative_pa')[0],
-            'ab': div.getElementsByClassName('input_cumulative_ab')[0],
-            'hit': div.getElementsByClassName('input_cumulative_hit')[0],
-            'ob': div.getElementsByClassName('input_cumulative_ob')[0],
-            'tb': div.getElementsByClassName('input_cumulative_tb')[0],
-            'ba': div.getElementsByClassName('input_cumulative_ba')[0],
-            'oba': div.getElementsByClassName('input_cumulative_oba')[0],
-            'slg': div.getElementsByClassName('input_cumulative_slg')[0],
-            'ops': div.getElementsByClassName('input_cumulative_ops')[0],
+            'pa': div.getElementsByClassName('input-batter-pa')[0],
+            'ab': div.getElementsByClassName('input-batter-ab')[0],
+            'hit': div.getElementsByClassName('input-batter-hit')[0],
+            'ob': div.getElementsByClassName('input-batter-ob')[0],
+            'tb': div.getElementsByClassName('input-batter-tb')[0],
+            'ba': div.getElementsByClassName('input-batter-ba')[0],
+            'oba': div.getElementsByClassName('input-batter-oba')[0],
+            'slg': div.getElementsByClassName('input-batter-slg')[0],
+            'ops': div.getElementsByClassName('input-batter-ops')[0],
         }
 
         this.sf = div.getElementsByClassName(
-            'input_cumulative_sf')[0];
+            'input-batter-sf')[0];
         this.sac = div.getElementsByClassName(
-            'input_cumulative_sac')[0];
+            'input-batter-sac')[0];
         
         for (let key in this.input) {
             (this.input[key]).addEventListener('change', () => {
@@ -147,29 +147,29 @@ class BatterInput {
             'bb': new Decimal(batterAbilityRaw["bb"]).div(pa),
 
             'so': new Decimal(batterAbilityRaw["so"]).div(pa),
-            'gb': new Decimal(batterAbilityRaw["gb"]).div(pa),
-            'fb': new Decimal(batterAbilityRaw["fb"]).div(pa),
+            'go': new Decimal(batterAbilityRaw["go"]).div(pa),
+            'fo': new Decimal(batterAbilityRaw["fo"]).div(pa),
 
-            'sh': new Decimal(batterAbilityRaw["sh"]).div(pa),
-            'dh': new Decimal(batterAbilityRaw["dh"]).div(pa),
-            'th': new Decimal(batterAbilityRaw["th"]).div(pa),
+            '1B': new Decimal(batterAbilityRaw["1B"]).div(pa),
+            '2B': new Decimal(batterAbilityRaw["2B"]).div(pa),
+            '3B': new Decimal(batterAbilityRaw["3B"]).div(pa),
             'hr': new Decimal(batterAbilityRaw["hr"]).div(pa),
         }
 
-        const hit = batterAbilityRaw["sh"]
-            + batterAbilityRaw["dh"]
-            + batterAbilityRaw["th"]
+        const hit = batterAbilityRaw["1B"]
+            + batterAbilityRaw["2B"]
+            + batterAbilityRaw["3B"]
             + batterAbilityRaw["hr"];
 
         const ob = hit + batterAbilityRaw["bb"];
 
-        const tb = batterAbilityRaw["sh"]
-            + batterAbilityRaw["dh"] * 2
-            + batterAbilityRaw["th"] * 3
+        const tb = batterAbilityRaw["1B"]
+            + batterAbilityRaw["2B"] * 2
+            + batterAbilityRaw["3B"] * 3
             + batterAbilityRaw["hr"] * 4;
 
-        this.sac.max = Math.min(batterAbilityRaw["gb"]);
-        this.sf.max = Math.min(pa - ob, batterAbilityRaw["fb"]);
+        this.sac.max = Math.min(batterAbilityRaw["go"]);
+        this.sf.max = Math.min(pa - ob, batterAbilityRaw["fo"]);
 
         this.sac.value = Math.min(this.sac.max, this.sac.value);
         this.sf.value = Math.min(this.sf.max, this.sf.value);

@@ -1,5 +1,55 @@
 // rule-engine/RuleEngine.js
-class TransitionEngineV1 {
+class TransitionEngineV3 {
+
+    /**
+     * @param {Array} transitions - 타석 결과로 생성된 전이 배열
+     * @param {Object} r - 확률 파라미터 객체
+     * @param {number} currentOut - 현재 상태의 아웃 카운트
+     */
+    applyBasestealing(transitions, r, currentOut) {
+        const finalTransitions = [];
+
+        transitions.forEach(t => {
+            const [b1, b2, b3] = t.bases;
+            
+            // 도루 가능 상황 체크:
+            // 1. 타석 결과 후 1루에 주자가 있고 2루가 비어있음
+            // 2. 타석 결과 후 아웃 카운트가 3 미만 (이닝이 끝나지 않음)
+            const totalOutsAfterAction = currentOut + t.outDelta;
+
+            if (b1 && !b2 && totalOutsAfterAction < 3) {
+                const p_sb = r['s_r1_r2_safe'] || 0; 
+                const p_cs = r['s_r1_r2_out'] || 0; 
+                const p_no_attempt = 1 - p_sb - p_cs;
+
+                // 1. 도루 시도 안 함
+                finalTransitions.push({
+                    ...t,
+                    prob: t.prob * p_no_attempt
+                });
+
+                // 2. 도루 성공 (1루 주자 -> 2루)
+                finalTransitions.push({
+                    ...t,
+                    prob: t.prob * p_sb,
+                    bases: [0, 1, b3]
+                });
+
+                // 3. 도루 실패 (1루 주자 삭제, outDelta 증가)
+                finalTransitions.push({
+                    ...t,
+                    prob: t.prob * p_cs,
+                    outDelta: t.outDelta + 1,
+                    bases: [0, 0, b3] // b2는 원래 비어있었으므로 1루 주자만 제거
+                });
+            } else {
+                // 도루 상황이 아니면 원본 유지
+                finalTransitions.push(t);
+            }
+        });
+
+        return finalTransitions;
+    }
 
     getTransitions(action, state, r) {
         const { out, b1, b2, b3 } = state;
@@ -145,7 +195,14 @@ class TransitionEngineV1 {
                     });
                     // 1루 → 2루
                     T.push({
-                        prob: 1 - r['1B_r1_r3_safe'],
+                        prob: r['1B_r1_r3_out'],
+                        outDelta: 1,
+                        bases: [1, 0, 0],
+                        runs: b3
+                    });
+                    // 1루 → 2루
+                    T.push({
+                        prob: r['1B_r1_r2_safe'],
                         outDelta: 0,
                         bases: [1, 1, 0],
                         runs: b3
@@ -165,12 +222,37 @@ class TransitionEngineV1 {
                DH : 2루타
             ===================== */
             case '2B':
-                T.push({
-                    prob: 1,
-                    outDelta: 0,
-                    bases: [0, 1, b1],
-                    runs: b2 + b3
-                });
+                if (b1) {
+                    // 1루 주자 홈 성공 (득점: 2루/3루 주자 + 1루 주자)
+                    T.push({
+                        prob: r['2B_r1_home_safe'],
+                        outDelta: 0,
+                        bases: [0, 1, 0],
+                        runs: b2 + b3 + 1
+                    });
+                    // 1루 주자 홈 실패 (아웃 증가, 득점: 2루/3루 주자만)
+                    T.push({
+                        prob: r['2B_r1_home_out'],
+                        outDelta: 1,
+                        bases: [0, 1, 0],
+                        runs: b2 + b3
+                    });
+                    // 1루 주자 3루 안착 (득점: 2루/3루 주자)
+                    T.push({
+                        prob: r['2B_r1_r3_safe'],
+                        outDelta: 0,
+                        bases: [0, 1, 1],
+                        runs: b2 + b3
+                    });
+                } else {
+                    // 1루에 주자가 없는 경우 (일반적인 2루타)
+                    T.push({
+                        prob: 1,
+                        outDelta: 0,
+                        bases: [0, 1, 0],
+                        runs: b2 + b3
+                    });
+                }
                 break;
 
             /* =====================
@@ -198,8 +280,8 @@ class TransitionEngineV1 {
                 break;
         }
 
-        return T;
+        return this.applyBasestealing(T, r, out);
     }
 }
 
-export { TransitionEngineV1 };
+export { TransitionEngineV3 };

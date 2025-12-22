@@ -22,7 +22,7 @@ const stateManager = {
 };
 
 export function calculateLineupRE(lineup_abilities, runner_ability) {
-    const ruleEngine = new TransitionEngine.V1();
+    const ruleEngine = new TransitionEngine.Standard();
     const { P_full, N_data, RE_data, L } =
         calculate_markov_core(lineup_abilities, runner_ability,
             stateManager, ruleEngine);

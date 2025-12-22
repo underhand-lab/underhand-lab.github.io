@@ -61,7 +61,7 @@ function visualizeRunValue(RE, runnerAbility) {
     }
 
     const labels = ['볼넷', '1루타', '2루타', '3루타', '홈런', '삼진', '뜬공', '땅볼'];
-    const actions = ['bb', 'sh', 'dh', 'th', 'hr', 'so', 'fb', 'gb'];
+    const actions = ['bb', '1B', '2B', '3B', 'hr', 'so', 'fo', 'go'];
 
     // 1. 가치 데이터를 먼저 계산하여 배열에 저장
     let dataList = actions.map((action, index) => {
@@ -107,7 +107,7 @@ function visualizeRunValue(RE, runnerAbility) {
 const batterInput = new BatterInput();
 const runnerInput = new RunnerInput();
 
-const transitionEngine = new TransitionEngine.V1();
+const transitionEngine = new TransitionEngine.Standard();
 
 function execute() {
 

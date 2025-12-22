@@ -1,5 +1,5 @@
 // rule-engine/RuleEngine.js
-class TransitionEngineV1 {
+class TransitionEngineV2 {
 
     getTransitions(action, state, r) {
         const { out, b1, b2, b3 } = state;
@@ -145,7 +145,14 @@ class TransitionEngineV1 {
                     });
                     // 1루 → 2루
                     T.push({
-                        prob: 1 - r['1B_r1_r3_safe'],
+                        prob: r['1B_r1_r3_out'],
+                        outDelta: 1,
+                        bases: [1, 0, 0],
+                        runs: b3
+                    });
+                    // 1루 → 2루
+                    T.push({
+                        prob: r['1B_r1_r2_safe'],
                         outDelta: 0,
                         bases: [1, 1, 0],
                         runs: b3
@@ -165,12 +172,37 @@ class TransitionEngineV1 {
                DH : 2루타
             ===================== */
             case '2B':
-                T.push({
-                    prob: 1,
-                    outDelta: 0,
-                    bases: [0, 1, b1],
-                    runs: b2 + b3
-                });
+                if (b1) {
+                    // 1루 주자 홈 성공 (득점: 2루/3루 주자 + 1루 주자)
+                    T.push({
+                        prob: r['2B_r1_home_safe'],
+                        outDelta: 0,
+                        bases: [0, 1, 0],
+                        runs: b2 + b3 + 1
+                    });
+                    // 1루 주자 홈 실패 (아웃 증가, 득점: 2루/3루 주자만)
+                    T.push({
+                        prob: r['2B_r1_home_out'],
+                        outDelta: 1,
+                        bases: [0, 1, 0],
+                        runs: b2 + b3
+                    });
+                    // 1루 주자 3루 안착 (득점: 2루/3루 주자)
+                    T.push({
+                        prob: r['2B_r1_r3_safe'],
+                        outDelta: 0,
+                        bases: [0, 1, 1],
+                        runs: b2 + b3
+                    });
+                } else {
+                    // 1루에 주자가 없는 경우 (일반적인 2루타)
+                    T.push({
+                        prob: 1,
+                        outDelta: 0,
+                        bases: [0, 1, 0],
+                        runs: b2 + b3
+                    });
+                }
                 break;
 
             /* =====================
@@ -202,4 +234,4 @@ class TransitionEngineV1 {
     }
 }
 
-export { TransitionEngineV1 };
+export { TransitionEngineV2 };

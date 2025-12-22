@@ -74,12 +74,6 @@ export function getRunValue(
         const state = stateManager.reverseState(i);
         const stateObj = { out: state[1], b3: state[2], b2: state[3], b1: state[4] };
 
-        if ((action == 'fo' || action == 'go')) {
-        const transitions = transitionEngine.getTransitions(
-            action, stateObj, runnerAbility);
-            console.log(action + ":" + calculateActionValue(i, action, transitions, RE_data));
-        }
-
         const transitions = transitionEngine.getTransitions(
             action, stateObj, runnerAbility);
         totalValue += calculateActionValue(

@@ -12,7 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/decimal.js/10.4.3/decimal.js"></script>
     <script src="/src/markdown.js"></script>
-    <script src="./control-new.js" type="module"></script>
+    <script src="./control.js" type="module"></script>
     <style>
         .input-form {
             display: flex;
@@ -116,7 +116,7 @@
         </div>
 
     </div>
-    <div id="line-up-pop-up" class="panel frostedglassmorphism">
+    <div id="line-up-pop-up" class="panel frostedglassmorphism" style="/*display:none;*/">
         <div class="pop-up container neumorphism">
             <h1>타선</h1>
             <hr>
@@ -131,7 +131,7 @@
             <button id="close-line-up-pop-up">닫기</button>
         </div>
     </div>
-    <div id="batter-list-pop-up" class="panel frostedglassmorphism">
+    <div id="batter-list-pop-up" class="panel frostedglassmorphism" style="/*display:none;*/">
         <div class="pop-up container neumorphism">
             <h1>타자 능력 관리</h1>
             <hr>
@@ -382,7 +382,7 @@
         <div class="pop-up container neumorphism">
             <h1>주자, 아웃카운트 전이 모델 시나리오</h1>
             <hr>
-            <div class="markdown-container pop-up-content" data-markdown-file="../model-state.md">
+            <div class="markdown-container pop-up-content" data-markdown-file="../model/model-state.md">
             </div>
             <hr>
             <button id="close-model-state-button">닫기</button>
@@ -392,7 +392,7 @@
         <div class="pop-up container neumorphism">
             <h1>득점 전이 모델 시나리오</h1>
             <hr>
-            <div class="markdown-container pop-up-content" data-markdown-file="../model-run.md">
+            <div class="markdown-container pop-up-content" data-markdown-file="../model/model-run.md">
             </div>
             <hr>
             <button id="close-model-run-button">닫기</button>
@@ -402,7 +402,7 @@
         <div class="pop-up container neumorphism">
             <h1>미반영 시나리오</h1>
             <hr>
-            <div class="markdown-container pop-up-content" data-markdown-file="../model-not.md">
+            <div class="markdown-container pop-up-content" data-markdown-file="../model/model-not.md">
             </div>
             <hr>
             <button id="close-model-not-button">닫기</button>

@@ -1,7 +1,7 @@
-import { calculate_run_expectancy } from "./run.js"
+import { calculate_run_expectancy } from "./run-personal.js"
 import { PopUp } from "/src/pop-up.js"
-import { BatterInput } from "../batter-input.js"
-import { RunnerInput } from "../runner-input.js"
+import { BatterInput } from "/src/re/input/batter-input.js"
+import { RunnerInput } from "/src/re/input/runner-input.js"
 
 /**
  * ----------------------------------------------------

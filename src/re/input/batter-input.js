@@ -1,4 +1,4 @@
-import { downloadCSV, readCSV } from "./download.js"
+import { downloadCSV, readCSV } from "/src/csv/download.js"
 
 class BatterInput {
     constructor() {

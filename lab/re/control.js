@@ -54,17 +54,26 @@ function visualizeRE(RE) {
 
     return html;
 }
+
 function visualizeRunValue(RE, runnerAbility) {
     if (!RE) {
-        // 오류 메시지는 solve_absorbing_chain_equation에서 이미 처리됨
         return "";
     }
 
-    const label = ['볼넷', '1루타', '2루타', '3루타',
-        '홈런', '삼진', '뜬공', '땅볼'];
-    const list = ['bb', 'sh', 'dh', 'th', 'hr',
-        'so', 'fb', 'gb'
-    ];
+    const labels = ['볼넷', '1루타', '2루타', '3루타', '홈런', '삼진', '뜬공', '땅볼'];
+    const actions = ['bb', 'sh', 'dh', 'th', 'hr', 'so', 'fb', 'gb'];
+
+    // 1. 가치 데이터를 먼저 계산하여 배열에 저장
+    let dataList = actions.map((action, index) => {
+        const value = getRunValue(action, runnerAbility, transitionEngine, RE);
+        return {
+            label: labels[index],
+            value: value
+        };
+    });
+
+    // 2. 가치(value) 기준 내림차순 정렬
+    dataList.sort((a, b) => b.value - a.value);
 
     let html = `
         <table class="re-table">
@@ -77,12 +86,12 @@ function visualizeRunValue(RE, runnerAbility) {
             <tbody>
     `;
 
-    for (let j = 0; j < 8; j++) {
-
+    // 3. 정렬된 데이터로 HTML 생성
+    for (const item of dataList) {
         html += `
             <tr>
-                <td class="runner-state">${label[j]}</td>
-                <td>${getRunValue(list[j], runnerAbility, transitionEngine, RE).toFixed(3)}</td>
+                <td class="runner-state">${item.label}</td>
+                <td>${item.value.toFixed(3)}</td>
             </tr>
         `;
     }

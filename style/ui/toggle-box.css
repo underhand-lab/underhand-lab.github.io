@@ -1,6 +1,6 @@
 .toggle {
     position: absolute;
-    bottom: 70px;
+    bottom: 60px;
     left: 50%;
     transform: translateX(-50%);
     width: calc(100% - 70px);
@@ -39,25 +39,15 @@
     line-height: 20px;
 }
 
-.toggle-content,
-.toggle-content-a {
-    min-height: 50px;
-    overflow-y: scroll;
-    overflow-x: hidden;
+.toggle-content, .toggle .content {
     transition: max-height 2s cubic-bezier(0, 1, 0, 1);
-}
-
-.toggle-content {
     max-height: calc(81vh - 150px);
 }
 
-.toggle-content-a {
-    max-height: calc(68vh - 150px);
-}
-
 *[data-toggle="min"] .toggle-content,
+*[data-toggle="min"] .toggle .content,
 *[data-toggle="min"] .toggle-content-a {
-    max-height: calc(150px);
+    max-height: 150px;
 }
 
 .panel:has(.toggle) {

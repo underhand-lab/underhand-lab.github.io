@@ -121,7 +121,7 @@ function addBatter(refAbility) {
 
     return new Promise((resolve, reject) => {
         boxList.addBoxTemplate("./template/batter-new.html", () => {
-            playerList.removePlayer(batter);
+            playerList.removePlayer(newPlayer);
             setLineup();
             execute();
         }, (box)=> {

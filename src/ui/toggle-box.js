@@ -23,20 +23,22 @@ class ToggleBox {
         }
 
         if (toggleBtn) {
+            toggleBtn.innerHTML = this.toggled ? '⧉' : '⛶';
             toggleBtn.addEventListener('click', () => {
 
                 if (this.toggled) {
                     this.toggled = false;
                     this.target.dataset.toggle = "min";
-                    toggleBtn.innerHTML = '+';
+                    toggleBtn.innerHTML = '⛶';
                     return;
                 }
                 this.toggled = true;
                 this.target.dataset.toggle = "max";
-                toggleBtn.innerHTML = '-';
+                toggleBtn.innerHTML = '⧉';
 
             });
         }
+
 
     }
 

@@ -10,16 +10,12 @@
     z-index: 10;
 }
 
-.pop-up ul {
+.content ul {
     list-style-type: circle;
     list-style-position: inside;
 }
 
-.pop-up-content {
-    text-align: left;
-    overflow-y: scroll;
-    overflow-x: hidden;
+.pop-up-content, .pop-up .content {
     margin: auto;
-    padding: 0 20px;
-    max-height: calc(81vh - 150px);
+    max-height: calc(72vh - 150px);
 }

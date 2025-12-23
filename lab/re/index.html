@@ -25,6 +25,9 @@
         .input-group input {
             max-width: 70px;
         }
+        h3 {
+            margin-bottom: 0;
+        }
     </style>
 
 </head>
@@ -86,45 +89,45 @@
     </div>
 
     <div id="batter-pop-up" class="panel frostedglassmorphism" style="/*display:none;*/">
-        <div class="pop-up container neumorphism">
+        <div class="toggle container neumorphism">
             <h1>누적 타석 결과</h1>
             <hr>
-            <div>
-                <button class="save-csv">저장</button>
-                <input class='read-csv-file' type="file" accept=".csv" style="display:none;">
-                <button class="read-csv">불러오기</button>
+            <button class="close-btn">✕</button>
+            <button class="toggle-btn">-</button>
+            <div class="content" style="text-align:center;">
+                <div>
+                    <button class="save-csv">저장</button>
+                    <input class='read-csv-file' type="file" accept=".csv" style="display:none;">
+                    <button class="read-csv">불러오기</button>
 
-            </div>
-            <hr>
-            <div class="pop-up-content" style="text-align:center;">
-                <div class="html-container" data-src="/lab/template/batter-input.html">
+                </div>
+                <hr>
+                <div class="html-container scrolled-content"
+                    data-src="/lab/template/batter-input.html">
                 </div>
             </div>
-            <hr>
-            <button class="close-btn">닫기</button>
         </div>
     </div>
     <div id="runner-pop-up" class="panel frostedglassmorphism" style="display:none;">
-        <div class="pop-up container neumorphism">
+        <div class="toggle container neumorphism">
             <h1>주자 능력</h1>
+            <button class="close-btn">✕</button>
+            <button class="toggle-btn">-</button>
             <hr>
-            <div class="pop-up-content" style="text-align: center;">
-                <div class="html-container" data-src="/lab/template/runner-input.html">
-                    <hr>
-                    <button class="close-btn">닫기</button>
+            <div class="content" style="text-align: center;">
+                <div class="html-container scrolled-content"
+                    data-src="/lab/template/runner-input.html">
                     <!--p style="font-size: 0.8em; color: #666;">※ 나머지 확률은 주자가 머무르거나 일반 아웃으로 처리됩니다.</p>
                     <hr style="wclassth: 100%; border-top: 1px da1Bed #ccc; margin: 5px 0;"-->
                 </div>
             </div>
-            <hr>
-            <button class="close-btn">닫기</button>
         </div>
     </div>
     <div id="guide" class="panel frostedglassmorphism" style="display:none;">
         <div class="pop-up container neumorphism">
             <h1>도움말</h1>
             <hr>
-            <div class="markdown-container pop-up-content" data-markdown-file="../guide.md">
+            <div class="markdown-container content" data-markdown-file="../guide.md">
             </div>
             <hr>
             <button class="close-btn">닫기</button>
@@ -134,7 +137,7 @@
         <div class="pop-up container neumorphism">
             <h1>주자, 아웃카운트 전이 모델 시나리오</h1>
             <hr>
-            <div class="markdown-container pop-up-content" data-markdown-file="../model/model-state.md">
+            <div class="markdown-container content" data-markdown-file="../model/model-state.md">
             </div>
             <hr>
             <button class="close-btn">닫기</button>
@@ -144,7 +147,7 @@
         <div class="pop-up container neumorphism">
             <h1>득점 전이 모델 시나리오</h1>
             <hr>
-            <div class="markdown-container pop-up-content" data-markdown-file="../model/model-run.md">
+            <div class="markdown-container content" data-markdown-file="../model/model-run.md">
             </div>
             <hr>
             <button class="close-btn">닫기</button>
@@ -154,7 +157,7 @@
         <div class="pop-up container neumorphism">
             <h1>미반영 시나리오</h1>
             <hr>
-            <div class="markdown-container pop-up-content" data-markdown-file="../model/model-not.md">
+            <div class="markdown-container content" data-markdown-file="../model/model-not.md">
             </div>
             <hr>
             <button class="close-btn">닫기</button>

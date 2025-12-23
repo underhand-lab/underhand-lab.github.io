@@ -237,3 +237,15 @@ th {
     margin-top: 10px;
     font-size: 1.2em;
 }
+
+.scrolled-content {
+    padding: 0 20px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+}
+

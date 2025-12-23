@@ -5,6 +5,8 @@ import { BatterInput } from "/src/re/input/batter-input.js";
 import { RunnerInput } from "/src/re/input/runner-input.js";
 import * as TransitionEngine from "/src/re/transition-engine/index.js";
 
+import * as _ from "/src/module/import-html.js";
+
 const batterInput = new BatterInput();
 const runnerInput = new RunnerInput();
 

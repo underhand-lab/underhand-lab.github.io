@@ -59,10 +59,14 @@
 *[data-toggle="min"] .toggle-content-a {
     max-height: calc(150px);
 }
-/*
-.frostedglassmorphism {
-    background: rgba(200, 200, 200, 0.2);
+
+.panel:has(.toggle) {
+    z-index: 1;
+}
+
+.frostedglassmorphism:has(.toggle) {
+    background: rgba(255, 255, 255, 0);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(1px);
-}*/
+}

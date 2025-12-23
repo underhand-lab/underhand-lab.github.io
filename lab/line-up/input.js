@@ -6,6 +6,8 @@ import { downloadCSV, readCSV } from "/src/csv/download.js"
 import { PlayerList } from "./line-up.js"
 import { visualizeRE, visualizeLeadoff, get9RE } from "./visualize.js";
 
+import * as _ from "/src/module/import-html.js";
+
 const boxList = new BoxList(document.getElementById("boxes"));
 const playerList = new PlayerList();
 const lineupBox = document.getElementById("line-up");

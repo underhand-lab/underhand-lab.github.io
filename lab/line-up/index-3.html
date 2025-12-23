@@ -12,7 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/decimal.js/10.4.3/decimal.js"></script>
     <script src="/src/markdown.js"></script>
-    <script src="./control.js" type="module"></script>
+    <script src="./control-3.js" type="module"></script>
     <style>
         .input-form {
             display: flex;
@@ -41,20 +41,62 @@
             margin: 5px;
         }
 
+        .nav {
+            z-index: 3;
+        }
+
+        .slider {
+            z-index: 3;
+        }
+
         .toggle {
             position: absolute;
-            bottom: 0;
+            bottom: 70px;
             left: 50%;
             transform: translateX(-50%);
             width: calc(100% - 70px);
-            max-width: 720px;
+            max-width: 750px;
+        }
+
+        .toggle-box-button {
+            position: absolute;
+            font-family: sans-serif;
+            font-weight: 1000;
+            top: 5px;
+            right: 45px;
+            width: 25px;
+            height: 25px;
+            background-color: transparent;
+            border: none;
+            color: gray;
+            font-size: 20px;
+            padding: 0;
+            line-height: 20px;
+        }
+
+        .toggle-content, .toggle-content-a {
+            min-height: 50px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            transition: max-height 2s cubic-bezier(0, 1, 0, 1);
         }
 
         .toggle-content {
-            min-height: 50px;
-            max-height: calc(50vh - 150px);
-            overflow-y: scroll;
-            overflow-x: hidden;
+            max-height: calc(81vh - 150px);
+        }
+        .toggle-content-a {
+            max-height: calc(72vh - 150px);
+        }
+
+        .toggle[data-toggle="min"] .toggle-content,
+        .toggle[data-toggle="min"] .toggle-content-a {
+            max-height: calc(150px);
+        }
+        .frostedglassmorphism {
+            background: rgba(200, 200, 200, 0.2);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(1px);
         }
     </style>
 
@@ -132,8 +174,12 @@
 
     </div>
     <div id="line-up-pop-up" class="panel frostedglassmorphism" style="/*display:none;*/">
-        <div class="toggle container neumorphism">
+        <div id="line-up-toggle" class="toggle container neumorphism">
             <h1>타선</h1>
+            <button class="remove-box-button"  
+                id="close-line-up-pop-up">✕</button>
+            <button class="toggle-box-button"
+                id="toggle-line-up">-</button>
             <hr>
             <div class="toggle-content" style="text-align: center;padding: 20px 0px;">
                 <div id="line-up" style="
@@ -142,13 +188,15 @@
                     gap: 15px;">
                 </div>
             </div>
-            <hr>
-            <button id="close-line-up-pop-up">닫기</button>
         </div>
     </div>
     <div id="batter-list-pop-up" class="panel frostedglassmorphism" style="/*display:none;*/">
-        <div class="toggle container neumorphism">
-            <h1>타자 능력 관리</h1>
+        <div id="batter-list-toggle" class="toggle container neumorphism" >
+            <div>
+                <h1>타자 능력 관리</h1>
+                <button class="toggle-box-button" id="toggle-batter-list-pop-up">-</button>
+                <button class="remove-box-button" id="close-batter-list-pop-up">✕</button>
+            </div>
             <hr>
             <div>
                 <button id="save-csv">
@@ -160,46 +208,40 @@
                 </label>
             </div>
             <hr>
-            <div>
-                <button id="add-batter-btn">타자 추가</button>
+            <div id="boxes" class="toggle-content-a">
             </div>
             <hr>
-            <div id="boxes" class="toggle-content" style="
-                text-align: center;
-                min-height: 300px;
-                max-height: calc(81vh - 250px);
-                ">
-            </div>
-            <hr>
-            <button id="close-batter-list-pop-up">닫기</button>
+            <button id="add-batter-btn">타자 추가</button>
         </div>
     </div>
     <div id="runner-pop-up" class="panel frostedglassmorphism" style="display:none;">
-        <div class="toggle container neumorphism">
+        <div id="runner-toggle" class="toggle container neumorphism">
             <h1>주루 및 수비 가정 확률 (조건부 확률)</h1>
+            <button class="toggle-box-button" 
+                id="toggle-runner">-</button>
+            <button class="remove-box-button"
+                id="close-runner-pop-up">✕</button>
             <hr>
 
             <div class="toggle-content" style="text-align: center;">
                 <div class="input-form">
-                    
+
                     <div class="input-group">
                         <label for="input_runner_s_r1_r2_safe">
                             도루 시도 성공률
                         </label>
-                        <input type="number" class="input_runner_s_r1_r2_safe" value="0.10" step="0.01" min="0"
-                            max="1">
+                        <input type="number" class="input_runner_s_r1_r2_safe" value="0.10" step="0.01" min="0" max="1">
                     </div>
-                    
+
                     <div class="input-group">
                         <label for="input_runner_s_r1_r2_out">
                             도루 시도 실패율
                         </label>
-                        <input type="number" class="input_runner_s_r1_r2_out" value="0.025" step="0.01" min="0"
-                            max="1">
+                        <input type="number" class="input_runner_s_r1_r2_out" value="0.025" step="0.01" min="0" max="1">
                     </div>
                     <b class="input_runner_s_r1_r1_safe" style="display:none;"></b>
                     <hr>
-                    
+
                     <div class="input-group">
                         <label for="input_runner_1B_r2_home_safe">
                             2루→홈 득점 성공률(단타)
@@ -306,15 +348,18 @@
                 <!--p style="font-size: 0.8em; color: #666;">※ 나머지 확률은 주자가 머무르거나 일반 아웃으로 처리됩니다.</p>
                     <hr style="wclassth: 100%; border-top: 1px da1Bed #ccc; margin: 5px 0;"-->
             </div>
-            <hr>
-            <button id="close-runner-pop-up">닫기</button>
         </div>
     </div>
 
     <div id="batter-pop-up" class="panel frostedglassmorphism" style="display:none;">
-        <div class="toggle container neumorphism">
+        <div id="batter-toggle" class="toggle container neumorphism">
             <h1>타자 정보 편집</h1>
             <hr>
+            <button id="open-batter-pop-up" style="display:none;">닫기</button>
+            <button class="toggle-box-button" 
+                id="toggle-batter">-</button>
+            <button class="remove-box-button" 
+                id="close-batter-pop-up">✕</button>
             <div>
                 <input class="player-name" type="text" value="batter" />
                 <button class="save-csv">저장</button>
@@ -435,9 +480,6 @@
                     </p>
                 </div>
             </div>
-            <hr>
-            <button id="open-batter-pop-up" style="display:none;">닫기</button>
-            <button id="close-batter-pop-up">닫기</button>
         </div>
     </div>
 

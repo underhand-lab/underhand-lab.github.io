@@ -1,7 +1,7 @@
 import * as PoseAnalysis from "/src/pose/analysis-tool/index.js";
 import * as PoseFrameMaker from '/src/pose/frame-maker/index.js';
-import * as Box from "/src/box/box.js"
-import { PopUp } from "/src/pop-up.js"
+import { BoxList } from "/src/ui/box-list.js"
+import { PopUp } from "/src/ui/pop-up.js"
 
 const currentFrameIdxSpan = document.getElementById('currentFrameIdx');
 const totalFramesSpan = document.getElementById('totalFrames');
@@ -47,18 +47,20 @@ function setData(data) {
 
 }
 
-
 const analysisSelect = new PopUp(
     document.getElementById('analysis'),
-    document.getElementById('add-box-button'),
-    document.getElementById('cancel-add-box-button'));
+    document.getElementById('add-box-button'));
 
-const addVideoBoxBtn = document.getElementById('add-video-box-button');
-const add3dVideoBoxBtn = document.getElementById('add-3d-video-box-button');
-const addGraphBoxBtn = document.getElementById('add-graph-box-button');
-const addTableBoxBtn = document.getElementById('add-table-box-button');
+const addVideoBoxBtn =
+    document.getElementById('add-video-box-button');
+const add3dVideoBoxBtn =
+    document.getElementById('add-3d-video-box-button');
+const addGraphBoxBtn =
+    document.getElementById('add-graph-box-button');
+const addTableBoxBtn =
+    document.getElementById('add-table-box-button');
 
-const boxList = new Box.BoxList(document.getElementById("boxes"));
+const boxList = new BoxList(document.getElementById("boxes"));
 
 const analysisTool = {
     "angle": new PoseAnalysis.AngleAnalysisTool(),
@@ -67,52 +69,47 @@ const analysisTool = {
     "height": new PoseAnalysis.HeightAnalysisTool(),
 }
 
-function addBox(opt, frameMaker, func, toBottom = true) {
-    fetch(opt)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`파일을 불러오는 데 실패했습니다: ${response.statusText}`);
-            }
-            return response.text();
-        })
-        .then((text) => {
-            const box = boxList.addBox(text, () => {
-                frameMakers = frameMakers.filter(fm => fm !== frameMaker);
-                console.log(frameMakers);
-            });
+function addToolDefault(src, frameMaker, func) {
+    return new Promise((resolve, reject) => {
+        boxList.addBoxTemplate(src, () => {
+            frameMakers = frameMakers.filter(fm => fm !== frameMaker);
+
+        }, (box) => {
             box.className = 'container neumorphism';
             func(box);
-            if (toBottom) {
-                let bottom = document.body.scrollHeight;
-                window.scrollTo({ top: bottom, left: 0, behavior: 'smooth' })
-            }
             frameMaker.setData(processedData);
 
             frameMakers.push(frameMaker);
             frameMaker.drawImageAt(nowIdx());
             analysisSelect.close();
-        })
-        .catch(error => {
-            console.error(`분석 도구 생성 중 오류가 발생했습니다.: ${error}`);
+            resolve();
         });
+    });
 
+}
+
+function addTool(src, frameMaker, func) {
+    addToolDefault(src, frameMaker, func).then(() => {
+        let bottom = document.body.scrollHeight;
+        window.scrollTo({ top: bottom, left: 0, behavior: 'smooth' });
+    })
 }
 
 addVideoBoxBtn.addEventListener('click', () => {
     const newPoseFrameMaker = new PoseFrameMaker.PoseBoneFrameMaker();
-    addBox("/vision/template/video.html", newPoseFrameMaker, (box) => {
+    addTool("/vision/template/video.html", newPoseFrameMaker, (box) => {
 
         const newCanvas = box.querySelectorAll("canvas")[0];
         newPoseFrameMaker.setInstance(newCanvas);
 
-    });
+    }).then();
 
 });
 
 add3dVideoBoxBtn.addEventListener('click', () => {
     const newPoseFrameMaker = new PoseFrameMaker.Pose3DFrameMaker();
 
-    addBox("/vision/template/3d-video.html", newPoseFrameMaker, (box) => {
+    addTool("/vision/template/3d-video.html", newPoseFrameMaker, (box) => {
 
         const newCanvas = box.querySelectorAll("canvas")[0];
         newPoseFrameMaker.setInstance(newCanvas);
@@ -124,7 +121,7 @@ add3dVideoBoxBtn.addEventListener('click', () => {
 addGraphBoxBtn.addEventListener('click', () => {
     const newGraphFrameMaker = new PoseFrameMaker.CustomGraphFrameMaker();
 
-    addBox("/vision/template/graph.html", newGraphFrameMaker, (box) => {
+    addTool("/vision/template/graph.html", newGraphFrameMaker, (box) => {
 
         const newCanvas = box.querySelectorAll("canvas")[0];
         newGraphFrameMaker.setInstance(newCanvas);
@@ -144,34 +141,35 @@ addGraphBoxBtn.addEventListener('click', () => {
 addTableBoxBtn.addEventListener('click', () => {
     const newTableFrameMaker = new PoseFrameMaker.CustomTableFrameMaker();
 
-    addBox("/vision/template/table-pose.html", newTableFrameMaker, (box) => {
+    addTool("/vision/template/table-pose.html", newTableFrameMaker,
+        (box) => {
+            const newDiv = box.getElementsByClassName("table")[0];
+            newTableFrameMaker.setInstance(newDiv);
 
-        const newDiv = box.getElementsByClassName("table")[0];
-        newTableFrameMaker.setInstance(newDiv);
+            const options = box.querySelectorAll("select")[0];
 
-        const options = box.querySelectorAll("select")[0];
+            options.addEventListener("change", () => {
+                newTableFrameMaker.changeAnalysisTool(analysisTool[options.value]);
+                newTableFrameMaker.drawImageAt(nowIdx());
+            });
 
-        options.addEventListener("change", () => {
             newTableFrameMaker.changeAnalysisTool(analysisTool[options.value]);
-            newTableFrameMaker.drawImageAt(nowIdx());
+
         });
-
-        newTableFrameMaker.changeAnalysisTool(analysisTool[options.value]);
-
-    });
 
 });
 
 const newPoseFrameMaker = new PoseFrameMaker.PoseBoneFrameMaker();
-addBox("/vision/template/video.html", newPoseFrameMaker, (box) => {
 
+addToolDefault("/vision/template/video.html", newPoseFrameMaker, (box) => {
     const newCanvas = box.querySelectorAll("canvas")[0];
     newPoseFrameMaker.setInstance(newCanvas);
 
-}, false);
+});
 
 const newGraphFrameMaker = new PoseFrameMaker.CustomGraphFrameMaker();
-addBox("/vision/template/graph.html", newGraphFrameMaker, (box) => {
+
+addToolDefault("/vision/template/graph.html", newGraphFrameMaker, (box) => {
 
     const newCanvas = box.querySelectorAll("canvas")[0];
     newGraphFrameMaker.setInstance(newCanvas);
@@ -184,6 +182,6 @@ addBox("/vision/template/graph.html", newGraphFrameMaker, (box) => {
 
     newGraphFrameMaker.changeAnalysisTool(analysisTool[options.value]);
 
-}, false);
+});
 
 export { setData }

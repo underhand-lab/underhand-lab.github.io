@@ -1,0 +1,62 @@
+class ToggleBox {
+
+    constructor(targetElement, openBtn, toggled) {
+
+        this.target = targetElement;
+        this.toggled = toggled;
+
+        const closeBtn = targetElement.
+            getElementsByClassName('close-btn')[0];
+        const toggleBtn = targetElement.
+            getElementsByClassName('toggle-btn')[0];
+
+        if (openBtn) {
+            openBtn.addEventListener('click', () => {
+                this.open();
+            });
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                this.close();
+            });
+        }
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+
+                if (this.toggled) {
+                    this.toggled = false;
+                    this.target.dataset.toggle = "min";
+                    toggleBtn.innerHTML = '+';
+                    return;
+                }
+                this.toggled = true;
+                this.target.dataset.toggle = "max";
+                toggleBtn.innerHTML = '-';
+
+            });
+        }
+
+    }
+
+    open() {
+        this.target.style.display = "block";
+    }
+
+    close() {
+        this.target.style.display = "none";
+    }
+
+    addCloseEvent(event) {
+        
+        const closeBtn = this.target.
+            getElementsByClassName('close-btn')[0];
+        if (closeBtn) {
+            closeBtn.addEventListener('click', event);
+        }
+    }
+
+}
+
+export { ToggleBox }

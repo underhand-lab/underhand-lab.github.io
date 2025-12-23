@@ -1,7 +1,7 @@
 import * as PoseDetector from '/src/pose/pose-detector/index.js';
 import { PoseProcessor } from '/src/pose/processor.js';
 import * as AnalysisBox from './analysis-box.js';
-import { PopUp } from "/src/pop-up.js"
+import { PopUp } from "/src/ui/pop-up.js"
 
 const fileInput = document.getElementById('video-files');
 fileInput.addEventListener('change', () => {
@@ -62,9 +62,7 @@ processButton.addEventListener('click', async () => {
 });
 
 new PopUp(document.getElementById('guide'),
-    document.getElementById('open-guide-button'),
-    document.getElementById('close-guide-button'));
+    document.getElementById('open-guide-button'));
 
 new PopUp(document.getElementById('process-pop-up'),
-    document.getElementById('open-process-pop-up'),
-    document.getElementById('close-process-pop-up'));
+    document.getElementById('open-process-pop-up'));

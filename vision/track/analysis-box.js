@@ -1,7 +1,7 @@
 import * as FrameMaker from '/src/track/frame-maker/index.js';
-import * as Box from "/src/box/box.js"
-import * as Analysis from "/src/track/calc/analysis.js"
-import { PopUp } from "/src/pop-up.js"
+import * as Analysis from "/src/track/calc/analysis.js";
+import { BoxList } from "/src/ui/box-list.js";
+import { PopUp } from "/src/ui/pop-up.js";
 
 let frameMakers = [];
 let processedData = null;
@@ -59,82 +59,77 @@ const analysisSelect = new PopUp(
 const addVideoBoxBtn = document.getElementById('add-video-box-button');
 const addTableBoxBtn = document.getElementById('add-table-box-button');
 
-const boxList = new Box.BoxList(document.getElementById("boxes"));
+const boxList = new BoxList(document.getElementById("boxes"));
 
-function addBox(opt, frameMaker, func, toBottom = true) {
-    fetch(opt)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`파일을 불러오는 데 실패했습니다: ${response.statusText}`);
-            }
-            return response.text();
-        })
-        .then((text) => {
-            const box = boxList.addBox(text, () => {
-                frameMakers = frameMakers.filter(fm => fm !== frameMaker);
-            });
-
+function addToolDefault(src, frameMaker, func, toBottom = true) {
+    return new Promise((resolve, reject) => {
+        boxList.addBoxTemplate(src, () => {
+            frameMakers = frameMakers.filter(fm => fm !== frameMaker);
+    
+        }, (box) => {
             box.className = 'container neumorphism';
             func(box);
-            if (toBottom) {
-                let bottom = document.body.scrollHeight;
-                window.scrollTo({ top: bottom, left: 0, behavior: 'smooth' })
-            }
-
             frameMaker.setData(processedData);
-
+    
             frameMakers.push(frameMaker);
             frameMaker.drawImageAt(nowIdx());
             analysisSelect.close();
-
-        })
-        .catch(error => {
-            console.error(`분석 도구 생성 중 오류가 발생했습니다.: ${error}`);
+            resolve();
         });
+    });
 
+}
+
+function addTool(src, frameMaker, func) {
+    addToolDefault(src, frameMaker, func).then(() => {
+        let bottom = document.body.scrollHeight;
+        window.scrollTo({ top: bottom, left: 0, behavior: 'smooth' })
+
+    });
 }
 
 addVideoBoxBtn.addEventListener('click', () => {
     const newPoseFrameMaker = new FrameMaker.TrackFrameMaker();
-    addBox("/vision/template/video.html", newPoseFrameMaker, (box) => {
+    addTool("/vision/template/video.html", newPoseFrameMaker,
+        (box) => {
+            const newCanvas = box.querySelectorAll("canvas")[0];
+            newPoseFrameMaker.setInstance(newCanvas);
 
-        const newCanvas = box.querySelectorAll("canvas")[0];
-        newPoseFrameMaker.setInstance(newCanvas);
-
-    });
+        });
 
 });
 
 addTableBoxBtn.addEventListener('click', () => {
     const newTableFrameMaker = new FrameMaker.CustomTableFrameMaker();
 
-    addBox("/vision/template/table-track.html", newTableFrameMaker, (box) => {
+    addTool("/vision/template/table-track.html", newTableFrameMaker,
+        (box) => {
+            const newDiv = box.getElementsByClassName("table")[0];
+            newTableFrameMaker.setInstance(newDiv);
 
-        const newDiv = box.getElementsByClassName("table")[0];
-        newTableFrameMaker.setInstance(newDiv);
-
-        newTableFrameMaker.changeAnalysisTool(new Analysis.BallAnalysisTool());
-    });
+            newTableFrameMaker.changeAnalysisTool(new Analysis.BallAnalysisTool());
+        });
 
 });
 
 const newPoseFrameMaker = new FrameMaker.TrackFrameMaker();
 
-addBox("/vision/template/video.html", newPoseFrameMaker, (box) => {
-
-    const newCanvas = box.querySelectorAll("canvas")[0];
-    newPoseFrameMaker.setInstance(newCanvas);
-    
-}, false);
+addToolDefault("/vision/template/video.html", newPoseFrameMaker,
+    (box) => {
+        const newCanvas = box.querySelectorAll("canvas")[0];
+        newPoseFrameMaker.setInstance(newCanvas);
+        
+    });
 
 const newTableFrameMaker = new FrameMaker.CustomTableFrameMaker();
 
-addBox("/vision/template/table-track.html", newTableFrameMaker, (box) => {
+addToolDefault("/vision/template/table-track.html", newTableFrameMaker,
+    (box) => {
+        const newDiv = box.getElementsByClassName("table")[0];
+        newTableFrameMaker.setInstance(newDiv);
+        newTableFrameMaker.changeAnalysisTool(
+            new Analysis.BallAnalysisTool());
 
-    const newDiv = box.getElementsByClassName("table")[0];
-    newTableFrameMaker.setInstance(newDiv);
-    newTableFrameMaker.changeAnalysisTool(new Analysis.BallAnalysisTool());
-
-}, false);
+    });
 
 export { setData }

@@ -1,6 +1,6 @@
 import { TrackProcessor } from '/src/track/processor.js';
 import * as BallDetector from '/src/track/ball-detector/index.js';
-import { PopUp } from "/src/pop-up.js"
+import { PopUp } from "/src/ui/pop-up.js"
 import * as AnalysisBox from "./analysis-box.js"
 
 const fileInput = document.getElementById('video-files');
@@ -68,9 +68,7 @@ processButton.addEventListener('click', async () => {
 });
 
 new PopUp(document.getElementById('guide'),
-    document.getElementById('open-guide-button'),
-    document.getElementById('close-guide-button'));
+    document.getElementById('open-guide-button'));
 
 new PopUp(document.getElementById('process-pop-up'),
-    document.getElementById('open-process-pop-up'),
-    document.getElementById('close-process-pop-up'));
+    document.getElementById('open-process-pop-up'));

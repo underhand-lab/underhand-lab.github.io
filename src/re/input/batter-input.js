@@ -37,7 +37,7 @@ class BatterInput {
             'input-batter-sf')[0];
         this.sac = div.getElementsByClassName(
             'input-batter-sac')[0];
-        
+
         for (let key in this.input) {
             (this.input[key]).addEventListener('change', () => {
                 if (this.load) return;

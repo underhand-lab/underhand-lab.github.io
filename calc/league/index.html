@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Underhand Lab | RE | League</title>
+
+    <link rel="stylesheet" href="/style/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/14.8.1/math.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/decimal.js/10.4.3/decimal.js"></script>
+    <script src="/src/module/import-html.js" type="module"></script>
+    <script src="/src/markdown.js"></script>
+    <script src="./control.js" type="module"></script>
+    <style>
+        .input-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .input-group input {
+            max-width: 70px;
+        }
+
+        h3 {
+            margin-bottom: 0;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="nav">
+        <div>
+            <div style="flex-grow: 1">
+                <h1><a href="/">언더핸드 연구소</a> : <a href="/calc/">🧮</a></h1>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="flex-grow: 1">
+                <ul>
+                    <li>
+                        <a href="/calc/league/" select="true">리그</a>
+                    </li>
+                    <li>
+                        <a href="/calc/line-up/">타선 기반</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="slider">
+        <div class="container neumorphism">
+            <button id="open-batter-league">리그 타격 기록 설정</button>
+            <button id="open-runner-league">리그 주자 능력 설정</button>
+        </div>
+    </div>
+    <div id="wrapper" style="padding-bottom: 80px;">
+        <div class="container neumorphism">
+            <div id="result-9re">
+            </div>
+            <p style="font-size: 0.9em; color: #666;">
+                ※ 입력하신 타격 스탯을 가진 타자들이 연속해서 타석에 들어선다고 가정할 때, 각각의 주자 상황, 아웃 카운트에서 기대되는 득점 값을 계산합니다.
+            </p>
+        </div>
+        <div class="container neumorphism">
+            <h1>✨ 개인 확장 가치 계산기</h1>
+            <div>
+            </div>
+            <hr>
+            <button id="open-batter-personal">개인 타격 기록 설정</button>
+            <hr>
+            <h1 id="personal-woba">가중 출루율</h1>
+
+        </div>
+        <div class="container neumorphism">
+            <h1>🎲 리그 RE24</h1>
+            <div id="result">
+            </div>
+        </div>
+        <div class="container neumorphism">
+            <h1>💎 리그 타구 가치</h1>
+            <div id="value">
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+    </div>
+    <div id="batter-personal" class="panel frostedglassmorphism"
+        style="display:none;">
+        <div class="toggle container neumorphism">
+            <h1>개인 타격 기록</h1>
+            <hr>
+            <button class="close-btn">✕</button>
+            <button class="toggle-btn">-</button>
+            <div class="content">
+                <div>
+                    <button class="save-csv">저장</button>
+                    <input class='read-csv-file' type="file" accept=".csv" style="display:none;">
+                    <button class="read-csv">불러오기</button>
+
+                </div>
+                <hr>
+                <div class="html-container scrolled-content" data-src="/calc/template/batter-input.html">
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+
+    <div id="batter-league" class="panel frostedglassmorphism"
+        style="/*display:none;*/">
+        <div class="toggle container neumorphism">
+            <h1>리그 타격 기록</h1>
+            <hr>
+            <button class="close-btn">✕</button>
+            <button class="toggle-btn">-</button>
+            <div class="content">
+                <div>
+                    <button class="save-csv">저장</button>
+                    <input class='read-csv-file' type="file" accept=".csv" style="display:none;">
+                    <button class="read-csv">불러오기</button>
+
+                </div>
+                <hr>
+                <div class="html-container scrolled-content" data-src="/calc/template/batter-input.html">
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+    <div id="runner-league" class="panel frostedglassmorphism" style="display:none;">
+        <div class="toggle container neumorphism">
+            <h1>리그 주자 능력</h1>
+            <button class="close-btn">✕</button>
+            <button class="toggle-btn">-</button>
+            <hr>
+            <div class="content" style="text-align: center;">
+                <div class="html-container scrolled-content" data-src="/calc/template/runner-input.html">
+                    <!--p style="font-size: 0.8em; color: #666;">※ 나머지 확률은 주자가 머무르거나 일반 아웃으로 처리됩니다.</p>
+                    <hr style="wclassth: 100%; border-top: 1px da1Bed #ccc; margin: 5px 0;"-->
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+    <div id="guide" class="panel frostedglassmorphism" style="display:none;">
+        <div class="pop-up container neumorphism">
+            <h1>도움말</h1>
+            <hr>
+            <div class="markdown-container content" data-markdown-file="../guide.md">
+            </div>
+            <hr>
+            <button class="close-btn">닫기</button>
+        </div>
+    </div>
+    <div id="model-state" class="panel frostedglassmorphism" style="display:none;">
+        <div class="pop-up container neumorphism">
+            <h1>주자, 아웃카운트 전이 모델 시나리오</h1>
+            <hr>
+            <div class="markdown-container content" data-markdown-file="../model/model-state.md">
+            </div>
+            <hr>
+            <button class="close-btn">닫기</button>
+        </div>
+    </div>
+    <div id="model-run" class="panel frostedglassmorphism" style="display:none;">
+        <div class="pop-up container neumorphism">
+            <h1>득점 전이 모델 시나리오</h1>
+            <hr>
+            <div class="markdown-container content" data-markdown-file="../model/model-run.md">
+            </div>
+            <hr>
+            <button class="close-btn">닫기</button>
+        </div>
+    </div>
+    <div id="model-not" class="panel frostedglassmorphism" style="display:none;">
+        <div class="pop-up container neumorphism">
+            <h1>미반영 시나리오</h1>
+            <hr>
+            <div class="markdown-container content" data-markdown-file="../model/model-not.md">
+            </div>
+            <hr>
+            <button class="close-btn">닫기</button>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -3,7 +3,7 @@
 - 9이닝당 기대득점: (무사 주자 없음 상태에서의 기대 득점) * 9
 - 흡수 마르코프 연쇄를 이용하여 기대 득점 계산
 <div style="display: flex;justify-content: center;">
-    <image src='/lab/식.png' alt="RE = (I - Q)^{-1} \centerdot R_{immediate}"></image>
+    <image src='/calc/식.png' alt="RE = (I - Q)^{-1} \centerdot R_{immediate}"></image>
 </div>
     
 ---

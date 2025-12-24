@@ -1,7 +1,8 @@
 .toggle {
     position: absolute;
-    bottom: 60px;
+    padding-bottom: 70px;
     left: 50%;
+    bottom: 0;
     transform: translateX(-50%);
     width: calc(100% - 70px);
     max-width: 750px;

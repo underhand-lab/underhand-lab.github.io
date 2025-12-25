@@ -19,3 +19,11 @@
     margin: auto;
     max-height: calc(72vh - 150px);
 }
+
+*[data-state="open"]:has(.pop-up) {
+    display:block;
+}
+
+*[data-state="close"]:has(.pop-up) {
+    display:none;
+}

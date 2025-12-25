@@ -43,11 +43,20 @@
 .toggle-content, .toggle .content {
     transition: max-height 2s cubic-bezier(0, 1, 0, 1);
     max-height: calc(81vh - 150px);
+    height: 100vh;
 }
 
-*[data-toggle="min"] .toggle-content,
-*[data-toggle="min"] .toggle .content,
-*[data-toggle="min"] .toggle-content-a {
+*:has(.toggle) {
+    display:block;
+}
+
+*[data-state="close"]:has(.toggle) {
+    display:none;
+}
+
+*[data-state="min"] .toggle-content,
+*[data-state="min"] .toggle .content,
+*[data-state="min"] .toggle-content-a {
     max-height: 150px;
 }
 

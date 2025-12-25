@@ -47,11 +47,11 @@
     </div>
     <div class="slider">
         <div class="container neumorphism">
-            <input type="range" id="frameSlider" min="0" value="0"><div style="display:flex; flex-wrap: nowrap;gap:10px;">
+            <input type="range" id="frameSlider" min="0" value="0"><div style="display:flex; flex-wrap: nowrap;gap:10px;overflow-x:auto;">
                 <div style="flex-grow: 1;text-align: left;line-height: 42px;white-space: nowrap;">
                     <button id="open-process-pop-up">분석</button>
                 </div>
-                <div style="text-align: right;white-space: nowrap;overflow:hidden;">
+                <div style="text-align: right;white-space: nowrap;">
                     <button id="open-guide-button">도움말</button>
                     <button id="add-box-button">도구 추가</button>
                     <div id="download-section" style="display: none;">
@@ -67,7 +67,8 @@
             <div id="boxes"></div>
         </div>
     </div>
-    <div id="process-pop-up" class="panel frostedglassmorphism">
+    <div id="process-pop-up" class="panel frostedglassmorphism"
+        data-state="open">
         <div class="pop-up container neumorphism">
             <h1>새로운 동영상 처리</h1>
             <hr>
@@ -98,7 +99,8 @@
             <button class="close-btn">취소</button>
         </div>
     </div>
-    <div id="guide" class="panel frostedglassmorphism" style="display:none;">
+    <div id="guide" class="panel frostedglassmorphism" 
+        data-state="close">
         <div class="pop-up container neumorphism">
             <h1>도움말</h1>
             <hr>
@@ -112,7 +114,8 @@
         </div>
     </div>
 
-    <div id="analysis" class="panel frostedglassmorphism" style="display:none;">
+    <div id="analysis" class="panel frostedglassmorphism" 
+        data-state="close">
         <div class="pop-up container neumorphism" style="max-width: 300px;">
             <h1>도구 추가</h1>
             <hr>

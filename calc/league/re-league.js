@@ -27,6 +27,7 @@ export function calculateRE(
             stateManager, transitionEngine);
 
 }
+
 function getSituationWeights(N_data, L) {
     // 1번 타자(0), 0아웃, 무주자 상태에서 시작하는 행을 찾습니다.
     // N_data[i][j]는 i에서 시작해 j에 머무는 횟수의 기댓값입니다.
@@ -75,4 +76,79 @@ export function getRunValue(action, runnerAbility, engine,
     }
 
     return totalWeightedValue;
+}
+
+export function calculateWeightedRunValue(reValues) {
+    
+    const avgOutRE = (reValues['so'].value + reValues['go'].value + reValues['fo'].value) / 3;
+
+    return {
+        bb: (reValues['bb'].value - avgOutRE),
+        s1b: (reValues['1B'].value - avgOutRE),
+        s2b: (reValues['2B'].value - avgOutRE),
+        s3b: (reValues['3B'].value - avgOutRE),
+        hr: (reValues['hr'].value - avgOutRE)
+    };
+
+}
+
+export function calculateCustomWOBA(weights, batterStats) {
+
+    // 3. 분자 (Weighted Runs) 계산
+    const weightedSum =
+        (batterStats['bb'] * weights.bb) +
+        (batterStats['1B'] * weights.s1b) +
+        (batterStats['2B'] * weights.s2b) +
+        (batterStats['3B'] * weights.s3b) +
+        (batterStats['hr'] * weights.hr);
+
+    // 4. 분모 (PA - Intentional BB 제외, 여기선 단순 PA 사용) 계산
+    // 공식: AB + BB - IBB + SF + HBP
+    const ab = batterStats['1B'] + batterStats['2B'] + batterStats['3B'] +
+        batterStats['hr'] + batterStats['so'] + batterStats['go'] + batterStats['fo'];
+
+    const pa = ab + batterStats['bb'] + batterStats['sf'];
+
+    if (pa === 0) return 0;
+
+    const wOBA = weightedSum / pa;
+
+    return wOBA;
+}
+
+export function calculateLeagueRunPerPA(startRE, leagueStats) {
+    // 1. 리그 평균 타자의 결과 총합 (보통 한 시즌치 데이터)
+    const hits = leagueStats['1B'] + leagueStats['2B'] + leagueStats['3B'] + leagueStats['hr'];
+    const outs = leagueStats['so'] + leagueStats['go'] + leagueStats['fo'];
+    const walks = leagueStats['bb'];
+    const sf = leagueStats['sf'] || 0;
+
+    const totalPA = hits + outs + walks + sf;
+
+    // 2. 이닝당 평균 타석 수 (Average PA per Inning) 계산
+    // 야구는 한 이닝에 무조건 3아웃이 발생해야 끝납니다.
+    // 공식: (전체 타석 / 전체 아웃) * 3
+    const avgPAperInning = (totalPA / (outs + sf)) * 3;
+
+    // 3. 타석당 기대 득점 (Run per PA)
+    // (이닝당 기대 득점 / 이닝당 평균 타석 수)
+    return startRE / avgPAperInning;
+}
+
+/**
+ * 2. 최종 wRC+ 계산
+ * @param {number} playerWoba - 타자의 wOBA (Unscaled)
+ * @param {number} leagueWoba - 리그 평균 wOBA (Unscaled)
+ * @param {number} runPerPa - 위에서 구한 리그 평균 타석당 득점
+ */
+export function calculateWRCPlus(playerWoba, leagueWoba, runPerPa, wobaScale) {
+    // 1. wOBA Scale을 적용하지 않은 상태이므로 스케일 상수는 1.0으로 간주
+    // 2. wRAA (평균 대비 득점 생산력) 계산
+    const wraaPerPa = (playerWoba - leagueWoba) / wobaScale;
+
+    // 3. 증폭 로직 적용 (wRC+ 공식)
+    // ((초과생산 / 평균생산) + 1) * 100
+    const wrcPlus = ((wraaPerPa / runPerPa) + 1) * 100;
+
+    return wrcPlus;
 }

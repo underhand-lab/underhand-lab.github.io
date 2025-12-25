@@ -8,10 +8,3 @@ new ToggleBox(document.getElementById('batter-league'),
     document.getElementById('open-batter-league'), true);
 new ToggleBox(document.getElementById('runner-league'),
     document.getElementById('open-runner-league'), true);
-
-/*
-new PopUp(document.getElementById('runner-pop-up'),
-    document.getElementById('open-runner-pop-up'));
-
-new PopUp(document.getElementById('batter-pop-up'),
-    document.getElementById('open-batter-pop-up'));*/

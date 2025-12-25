@@ -21,12 +21,13 @@ class PopUp {
     }
 
     open() {
-        this.target.style.display = "block";
+        this.target.dataset.state = "open";
     }
 
     close() {
-        this.target.style.display = "none";
+        this.target.dataset.state = "close";
     }
+
     addCloseEvent(event) {
         
         const closeBtn = this.target.

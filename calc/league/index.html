@@ -76,6 +76,7 @@
             <button id="open-batter-personal">개인 타격 기록 설정</button>
             <hr>
             <h1 id="personal-woba">가중 출루율</h1>
+            <h1 id="personal-wrcplus">가중 출루율</h1>
 
         </div>
         <div class="container neumorphism">
@@ -94,7 +95,7 @@
 
     </div>
     <div id="batter-personal" class="panel frostedglassmorphism"
-        style="display:none;">
+        data-state="close">
         <div class="toggle container neumorphism">
             <h1>개인 타격 기록</h1>
             <hr>
@@ -116,7 +117,7 @@
     </div>
 
     <div id="batter-league" class="panel frostedglassmorphism"
-        style="/*display:none;*/">
+        data-state="max">
         <div class="toggle container neumorphism">
             <h1>리그 타격 기록</h1>
             <hr>
@@ -136,7 +137,8 @@
             <hr>
         </div>
     </div>
-    <div id="runner-league" class="panel frostedglassmorphism" style="display:none;">
+    <div id="runner-league" class="panel frostedglassmorphism" 
+        data-state="close">
         <div class="toggle container neumorphism">
             <h1>리그 주자 능력</h1>
             <button class="close-btn">✕</button>
@@ -151,7 +153,8 @@
             <hr>
         </div>
     </div>
-    <div id="guide" class="panel frostedglassmorphism" style="display:none;">
+    <div id="guide" class="panel frostedglassmorphism" 
+        data-state="close">
         <div class="pop-up container neumorphism">
             <h1>도움말</h1>
             <hr>
@@ -161,7 +164,8 @@
             <button class="close-btn">닫기</button>
         </div>
     </div>
-    <div id="model-state" class="panel frostedglassmorphism" style="display:none;">
+    <div id="model-state" class="panel frostedglassmorphism" 
+        data-state="close">
         <div class="pop-up container neumorphism">
             <h1>주자, 아웃카운트 전이 모델 시나리오</h1>
             <hr>
@@ -171,7 +175,8 @@
             <button class="close-btn">닫기</button>
         </div>
     </div>
-    <div id="model-run" class="panel frostedglassmorphism" style="display:none;">
+    <div id="model-run" class="panel frostedglassmorphism" 
+        data-state="close">
         <div class="pop-up container neumorphism">
             <h1>득점 전이 모델 시나리오</h1>
             <hr>
@@ -181,7 +186,8 @@
             <button class="close-btn">닫기</button>
         </div>
     </div>
-    <div id="model-not" class="panel frostedglassmorphism" style="display:none;">
+    <div id="model-not" class="panel frostedglassmorphism" 
+        data-state="close">
         <div class="pop-up container neumorphism">
             <h1>미반영 시나리오</h1>
             <hr>

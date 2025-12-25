@@ -107,7 +107,8 @@ addTableBoxBtn.addEventListener('click', () => {
             const newDiv = box.getElementsByClassName("table")[0];
             newTableFrameMaker.setInstance(newDiv);
 
-            newTableFrameMaker.changeAnalysisTool(new Analysis.BallAnalysisTool());
+            newTableFrameMaker.changeAnalysisTool(
+                new Analysis.BallAnalysisTool());
         });
 
 });
@@ -119,17 +120,20 @@ addToolDefault("/vision/template/video.html", newPoseFrameMaker,
         const newCanvas = box.querySelectorAll("canvas")[0];
         newPoseFrameMaker.setInstance(newCanvas);
         
+    }).then(() => {
+        const newTableFrameMaker = new FrameMaker.CustomTableFrameMaker();
+
+        addToolDefault("/vision/template/table-track.html",
+             newTableFrameMaker,
+            (box) => {
+                const newDiv = box.getElementsByClassName("table")[0];
+                newTableFrameMaker.setInstance(newDiv);
+                newTableFrameMaker.changeAnalysisTool(
+                    new Analysis.BallAnalysisTool());
+
+            });
+
     });
 
-const newTableFrameMaker = new FrameMaker.CustomTableFrameMaker();
-
-addToolDefault("/vision/template/table-track.html", newTableFrameMaker,
-    (box) => {
-        const newDiv = box.getElementsByClassName("table")[0];
-        newTableFrameMaker.setInstance(newDiv);
-        newTableFrameMaker.changeAnalysisTool(
-            new Analysis.BallAnalysisTool());
-
-    });
 
 export { setData }

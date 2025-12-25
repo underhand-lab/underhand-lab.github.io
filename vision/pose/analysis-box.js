@@ -161,27 +161,33 @@ addTableBoxBtn.addEventListener('click', () => {
 
 const newPoseFrameMaker = new PoseFrameMaker.PoseBoneFrameMaker();
 
-addToolDefault("/vision/template/video.html", newPoseFrameMaker, (box) => {
+addToolDefault("/vision/template/video.html", newPoseFrameMaker,
+    (box) => {
     const newCanvas = box.querySelectorAll("canvas")[0];
     newPoseFrameMaker.setInstance(newCanvas);
 
-});
+    }).then(() => {
 
-const newGraphFrameMaker = new PoseFrameMaker.CustomGraphFrameMaker();
+        const newGraphFrameMaker = new PoseFrameMaker.CustomGraphFrameMaker();
 
-addToolDefault("/vision/template/graph.html", newGraphFrameMaker, (box) => {
+        addToolDefault("/vision/template/graph.html",
+            newGraphFrameMaker,
+            (box) => {
+                const newCanvas = box.querySelectorAll("canvas")[0];
+                newGraphFrameMaker.setInstance(newCanvas);
+                const options = box.querySelectorAll("select")[0];
 
-    const newCanvas = box.querySelectorAll("canvas")[0];
-    newGraphFrameMaker.setInstance(newCanvas);
-    const options = box.querySelectorAll("select")[0];
+                options.addEventListener("change", () => {
+                    newGraphFrameMaker.changeAnalysisTool(
+                        analysisTool[options.value]);
+                    newGraphFrameMaker.drawImageAt(nowIdx());
+                });
 
-    options.addEventListener("change", () => {
-        newGraphFrameMaker.changeAnalysisTool(analysisTool[options.value]);
-        newGraphFrameMaker.drawImageAt(nowIdx());
+                newGraphFrameMaker.changeAnalysisTool(
+                    analysisTool[options.value]);
+
+            });
+
     });
-
-    newGraphFrameMaker.changeAnalysisTool(analysisTool[options.value]);
-
-});
 
 export { setData }

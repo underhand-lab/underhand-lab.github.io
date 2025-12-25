@@ -28,12 +28,12 @@ class ToggleBox {
 
                 if (this.toggled) {
                     this.toggled = false;
-                    this.target.dataset.toggle = "min";
+                    this.target.dataset.state = "min";
                     toggleBtn.innerHTML = '⛶';
                     return;
                 }
                 this.toggled = true;
-                this.target.dataset.toggle = "max";
+                this.target.dataset.state = "max";
                 toggleBtn.innerHTML = '⧉';
 
             });
@@ -43,11 +43,11 @@ class ToggleBox {
     }
 
     open() {
-        this.target.style.display = "block";
+        this.target.dataset.state = this.toggled ? "max" : "min";
     }
 
     close() {
-        this.target.style.display = "none";
+        this.target.dataset.state = "close";
     }
 
     addCloseEvent(event) {

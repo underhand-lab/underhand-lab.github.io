@@ -114,7 +114,8 @@
         </div>
 
     </div>
-    <div id="line-up-input" class="panel frostedglassmorphism" style="/*display:none;*/">
+    <div id="line-up-input" class="panel frostedglassmorphism"
+        data-state="max">
         <div class="toggle container neumorphism">
             <h1>타선</h1>
             <button class="close-btn">✕</button>
@@ -132,7 +133,8 @@
             <hr>
         </div>
     </div>
-    <div id="batter-list-input" class="panel frostedglassmorphism" style="/*display:none;*/">
+    <div id="batter-list-input" class="panel frostedglassmorphism" 
+        data-state="max">
         <div class="toggle container neumorphism" >
             <div>
                 <h1>타자 능력 관리</h1>
@@ -153,15 +155,16 @@
                 <hr>
                 <div id="boxes" class="scrolled-content">
                 </div>
-                <hr>
-                <div>
+                <div style="margin-top:auto;"> 
+                    <hr>
                     <button id="add-batter-btn">타자 추가</button>
                 </div>
             </div>
             <hr>
         </div>
     </div>
-    <div id="runner-league-input" class="panel frostedglassmorphism" style="display:none;">
+    <div id="runner-league-input" class="panel frostedglassmorphism" 
+        data-state="close">
         <div class="toggle container neumorphism">
             <h1>주자 정보</h1>
             <button class="toggle-btn">-</button>
@@ -177,7 +180,8 @@
         </div>
     </div>
 
-    <div id="batter-input" class="panel frostedglassmorphism" style="display:none;">
+    <div id="batter-input" class="panel frostedglassmorphism" 
+        data-state="close">
         <div class="toggle container neumorphism">
             <h1>타자 정보 편집</h1>
             <button id="open-batter-input" style="display:none;">닫기</button>
@@ -203,7 +207,8 @@
         </div>
     </div>
 
-    <div id="guide" class="panel frostedglassmorphism" style="display:none;">
+    <div id="guide" class="panel frostedglassmorphism" 
+        data-state="close">
         <div class="pop-up container neumorphism">
             <h1>도움말</h1>
             <hr>
@@ -216,7 +221,8 @@
             <button id="close-guide-button">닫기</button>
         </div>
     </div>
-    <div id="model-state" class="panel frostedglassmorphism" style="display:none;">
+    <div id="model-state" class="panel frostedglassmorphism" 
+        data-state="close">
         <div class="pop-up container neumorphism">
             <h1>주자, 아웃카운트 전이 모델 시나리오</h1>
             <hr>
@@ -226,7 +232,8 @@
             <button id="close-model-state-button">닫기</button>
         </div>
     </div>
-    <div id="model-run" class="panel frostedglassmorphism" style="display:none;">
+    <div id="model-run" class="panel frostedglassmorphism" 
+        data-state="close">
         <div class="pop-up container neumorphism">
             <h1>득점 전이 모델 시나리오</h1>
             <hr>
@@ -236,7 +243,8 @@
             <button id="close-model-run-button">닫기</button>
         </div>
     </div>
-    <div id="model-not" class="panel frostedglassmorphism" style="display:none;">
+    <div id="model-not" class="panel frostedglassmorphism" 
+        data-state="close">
         <div class="pop-up container neumorphism">
             <h1>미반영 시나리오</h1>
             <hr>

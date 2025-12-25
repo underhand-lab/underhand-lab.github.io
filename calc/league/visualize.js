@@ -1,4 +1,5 @@
 import { BatterInput } from "/src/re/input/batter-input.js";
+import * as Calc from "./re-league.js";
 
 function visualizeRE(RE) {
     if (!RE) {
@@ -102,85 +103,74 @@ function visualize9RE(RE) {
 
 }
 
-function calculateWeightedRunValue(reValues) {
-    
-    const avgOutRE = (reValues['so'].value + reValues['go'].value + reValues['fo'].value) / 3;
-
-    return {
-        bb: (reValues['bb'].value - avgOutRE),
-        s1b: (reValues['1B'].value - avgOutRE),
-        s2b: (reValues['2B'].value - avgOutRE),
-        s3b: (reValues['3B'].value - avgOutRE),
-        hr: (reValues['hr'].value - avgOutRE)
-    };
-
-}
-
-function calculateCustomWOBA(weights, batterStats) {
-
-    // 3. 분자 (Weighted Runs) 계산
-    const weightedSum =
-        (batterStats['bb'] * weights.bb) +
-        (batterStats['1B'] * weights.s1b) +
-        (batterStats['2B'] * weights.s2b) +
-        (batterStats['3B'] * weights.s3b) +
-        (batterStats['hr'] * weights.hr);
-
-    // 4. 분모 (PA - Intentional BB 제외, 여기선 단순 PA 사용) 계산
-    // 공식: AB + BB - IBB + SF + HBP
-    const ab = batterStats['1B'] + batterStats['2B'] + batterStats['3B'] +
-        batterStats['hr'] + batterStats['so'] + batterStats['go'] + batterStats['fo'];
-
-    const pa = ab + batterStats['bb'] + batterStats['sf'];
-
-    if (pa === 0) return 0;
-
-    const wOBA = weightedSum / pa;
-
-    return wOBA.toFixed(3);
-}
-
-
-const batterInput = new BatterInput();
-
-function visualizeWOBA(runValue, leagueAbillity) {
-
-    const weights = calculateWeightedRunValue(runValue);
-
-    const wOBA = calculateCustomWOBA(
-        weights, batterInput.getAbilityRaw());
-
-    const wOBALeague = calculateCustomWOBA(
-        weights, leagueAbillity);
-
-    return `가중 출루율(wOBA): ${((wOBA / wOBALeague) * 0.33).toFixed(3)}`
-}
-
-
 let ret_RE;
 let ret_runValue;
-let ret_leagueAbility;
 
-export function visualize(RE, runValue, leagueAbility) {
+let leagueBatterInput;
+const batterInput = new BatterInput();
 
-    ret_RE = RE;
-    ret_runValue = runValue;
-    ret_leagueAbility = leagueAbility;
+function visualizePersonal(batterAbility, leagueAbillity) {
 
-    document.getElementById('result').innerHTML =
-        visualizeRE(RE);
+    const weights = Calc.calculateWeightedRunValue(ret_runValue);
+    
+    const playerWoba = Calc.calculateCustomWOBA(
+        weights, batterAbility);
 
-    document.getElementById('value').innerHTML =
-        visualizeRunValue(runValue);
+    const lgWoba = Calc.calculateCustomWOBA(
+        weights, leagueAbillity);
 
-    document.getElementById('result-9re').innerHTML =
-        visualize9RE(RE);
+    const wOBAScale = 0.33 / lgWoba;
+        
+    const runPerPa = Calc.calculateLeagueRunPerPA(
+        ret_RE.RE_data[0][0], leagueAbillity);
+    const wrcPlus = Calc.calculateWRCPlus(
+        playerWoba, lgWoba, runPerPa, wOBAScale);
 
     document.getElementById('personal-woba').innerHTML
-        = visualizeWOBA(ret_runValue, ret_leagueAbility);
+        =`가중 출루율(wOBA):
+            ${(playerWoba * wOBAScale).toFixed(3)
+            
+            }`;
+
+    document.getElementById('personal-wrcplus').innerHTML
+        =`wRC+(파크팩터 미반영): ${wrcPlus.toFixed(2)}`;
+
+}
+
+export function visualize(ret, leagueBatter, runnerAbility,
+    transitionEngine) {
+    
+    ret_RE = ret;
+    leagueBatterInput = leagueBatter;
+
+    const labels = ['볼넷', '1루타', '2루타', '3루타', '홈런', '삼진', '뜬공', '땅볼'];
+    const actions = ['bb', '1B', '2B', '3B', 'hr', 'so', 'fo', 'go'];
+
+    ret_runValue = actions.reduce((acc, action, index) => {
+        const value = Calc.getRunValue(action, runnerAbility, transitionEngine, ret.RE_data, ret.N_data);
+
+        acc[action] = {
+            name: labels[index],
+            value: value
+        };
+
+        return acc;
+    }, {});
+
+    document.getElementById('result').innerHTML =
+        visualizeRE(ret_RE.RE_data);
+
+    document.getElementById('value').innerHTML =
+        visualizeRunValue(ret_runValue);
+
+    document.getElementById('result-9re').innerHTML =
+        visualize9RE(ret_RE.RE_data);
+
+    visualizePersonal(batterInput.getAbilityRaw(),
+        leagueBatterInput.getAbilityRaw());
 }
 
 batterInput.setDiv(document.getElementById('batter-personal'), () => {
-    document.getElementById('personal-woba').innerHTML
-        = visualizeWOBA(ret_runValue, ret_leagueAbility);
+    visualizePersonal(batterInput.getAbilityRaw(),
+        leagueBatterInput.getAbilityRaw());
 });

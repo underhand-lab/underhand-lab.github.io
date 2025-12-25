@@ -106,25 +106,25 @@ function visualize9RE(RE) {
 let ret_RE;
 let ret_runValue;
 
-let leagueBatterInput;
+let lgWoba;
+let wOBAScale;
+let runPerPa;
+let weights;
+
 const batterInput = new BatterInput();
 
-function visualizePersonal(batterAbility, leagueAbillity) {
+function visualizePersonal(batterAbility) {
 
-    const weights = Calc.calculateWeightedRunValue(ret_runValue);
-    
     const playerWoba = Calc.calculateCustomWOBA(
         weights, batterAbility);
 
-    const lgWoba = Calc.calculateCustomWOBA(
-        weights, leagueAbillity);
-
-    const wOBAScale = 0.33 / lgWoba;
-        
-    const runPerPa = Calc.calculateLeagueRunPerPA(
-        ret_RE.RE_data[0][0], leagueAbillity);
     const wrcPlus = Calc.calculateWRCPlus(
         playerWoba, lgWoba, runPerPa, wOBAScale);
+
+    document.getElementById('league-woba-scale').innerHTML
+        = `wOBA Scale: ${wOBAScale.toFixed(3)}`;
+    document.getElementById('league-p-pa').innerHTML
+        = `R/PA: ${runPerPa.toFixed(2)}`;
 
     document.getElementById('personal-woba').innerHTML
         =`가중 출루율(wOBA):
@@ -140,8 +140,7 @@ function visualizePersonal(batterAbility, leagueAbillity) {
 export function visualize(ret, leagueBatter, runnerAbility,
     transitionEngine) {
     
-    ret_RE = ret;
-    leagueBatterInput = leagueBatter;
+    ret_RE = ret
 
     const labels = ['볼넷', '1루타', '2루타', '3루타', '홈런', '삼진', '뜬공', '땅볼'];
     const actions = ['bb', '1B', '2B', '3B', 'hr', 'so', 'fo', 'go'];
@@ -157,6 +156,13 @@ export function visualize(ret, leagueBatter, runnerAbility,
         return acc;
     }, {});
 
+    weights = Calc.calculateWeightedRunValue(ret_runValue);
+    lgWoba = Calc.calculateCustomWOBA(
+        weights, leagueBatter.getAbilityRaw());
+    wOBAScale = 0.33 / lgWoba;
+    runPerPa = Calc.calculateLeagueRunPerPA(
+        ret_RE.RE_data[0][0], leagueBatter.getAbilityRaw());
+
     document.getElementById('result').innerHTML =
         visualizeRE(ret_RE.RE_data);
 
@@ -166,11 +172,9 @@ export function visualize(ret, leagueBatter, runnerAbility,
     document.getElementById('result-9re').innerHTML =
         visualize9RE(ret_RE.RE_data);
 
-    visualizePersonal(batterInput.getAbilityRaw(),
-        leagueBatterInput.getAbilityRaw());
+    visualizePersonal(batterInput.getAbilityRaw());
 }
 
 batterInput.setDiv(document.getElementById('batter-personal'), () => {
-    visualizePersonal(batterInput.getAbilityRaw(),
-        leagueBatterInput.getAbilityRaw());
+    visualizePersonal(batterInput.getAbilityRaw());
 });

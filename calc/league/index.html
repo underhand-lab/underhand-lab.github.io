@@ -75,7 +75,9 @@
                 <h1 id="league-woba-scale"></h1>
                 <h1 id="league-p-pa"></h1>
                 <p style="font-size: 0.9em; color: #666;">
-                    ※ wOBA Scale은 리그 평균 wOBA를 0.330으로 계산되도록 조정합니다.
+                    ※ wOBA Scale은 리그 평균 wOBA를 0.330으로 계산되도록 조정하는 값입니다.
+                    <br>
+                    ※ R/PA는 리그 전체 득점을 리그 전체 타석수로 나눈 값입니다. 계산에 사용된 리그 득점은 RE24 기반 추정값입니다.
                 </p>
             </div>
             <hr>
@@ -83,7 +85,13 @@
                 <button id="open-batter-personal">개인 타격 기록 설정</button>
                 <hr>
                 <h1 id="personal-woba">가중 출루율</h1>
-                <h1 id="personal-wrcplus">가중 출루율</h1>
+                <h1 id="personal-wrcplus">wRC+</h1>
+                <h1 id="personal-wrcplus-custom">wRC+(커스텀)</h1>
+                <p style="font-size: 0.9em; color: #666;">
+                    ※ wRC+, wRC+(커스텀)은 파크팩터를 반영하지 않은 값입니다.
+                    <br>
+                    ※ wRC+는 모델 기반의 wOBA(아웃 대비 기대 득점)를 바탕으로, wRC+(커스텀)은 모델 기반 기대 득점 변화를 바탕으로 계산하여 약간의 오차가 있습니다.
+                </p>
             </div>
 
         </div>

@@ -106,7 +106,7 @@ function visualize9RE(RE) {
 let ret_RE;
 let ret_runValue;
 
-let lgWoba;
+let lgWobaRaw;
 let wOBAScale;
 let runPerPa;
 let weights;
@@ -115,11 +115,14 @@ const batterInput = new BatterInput();
 
 function visualizePersonal(batterAbility) {
 
-    const playerWoba = Calc.calculateCustomWOBA(
+    const playerWobaRaw = Calc.calculateCustomWOBA(
         weights, batterAbility);
 
     const wrcPlus = Calc.calculateWRCPlus(
-        playerWoba, lgWoba, runPerPa, wOBAScale);
+        playerWobaRaw, lgWobaRaw, runPerPa, 1);
+    
+    const wrcPlusCustom = Calc.calculateCustomWRCPlus(
+        batterInput.getAbilityRaw(), ret_runValue, runPerPa);
 
     document.getElementById('league-woba-scale').innerHTML
         = `wOBA Scale: ${wOBAScale.toFixed(3)}`;
@@ -128,12 +131,12 @@ function visualizePersonal(batterAbility) {
 
     document.getElementById('personal-woba').innerHTML
         =`가중 출루율(wOBA):
-            ${(playerWoba * wOBAScale).toFixed(3)
-            
-            }`;
+            ${(playerWobaRaw * wOBAScale).toFixed(3)}`;
 
     document.getElementById('personal-wrcplus').innerHTML
-        =`wRC+(파크팩터 미반영): ${wrcPlus.toFixed(2)}`;
+        =`wRC+: ${wrcPlus.toFixed(2)}`;
+    document.getElementById('personal-wrcplus-custom').innerHTML
+        =`wRC+(커스텀): ${wrcPlusCustom.toFixed(2)}`;
 
 }
 
@@ -156,10 +159,11 @@ export function visualize(ret, leagueBatter, runnerAbility,
         return acc;
     }, {});
 
-    weights = Calc.calculateWeightedRunValue(ret_runValue);
-    lgWoba = Calc.calculateCustomWOBA(
+    weights = Calc.calculateWeightedRunValue(
+        leagueBatter.getAbilityRaw(), ret_runValue);
+    lgWobaRaw = Calc.calculateCustomWOBA(
         weights, leagueBatter.getAbilityRaw());
-    wOBAScale = 0.33 / lgWoba;
+    wOBAScale = 0.33 / lgWobaRaw;
     runPerPa = Calc.calculateLeagueRunPerPA(
         ret_RE.RE_data[0][0], leagueBatter.getAbilityRaw());
 

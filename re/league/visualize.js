@@ -1,5 +1,4 @@
-import { BatterInput } from "/src/re/input/batter-input.js";
-import * as Calc from "./re-league.js";
+import * as Calc from "/src/sabermetrics/calc.js";
 
 function visualizeRE(RE) {
     if (!RE) {
@@ -111,32 +110,54 @@ let wOBAScale;
 let runPerPa;
 let weights;
 
-const batterInput = new BatterInput();
+let batterInput;
+
+function round(value, cnt) {
+    let c = 1
+
+    for (let i = 0; i < cnt; i++) { c *= 10;}
+    
+    return Math.round(value * c) / c;
+}
 
 function visualizePersonal(batterAbility) {
 
     const playerWobaRaw = Calc.calculateCustomWOBA(
         weights, batterAbility);
 
-    const wrcPlus = Calc.calculateWRCPlus(
-        playerWobaRaw, lgWobaRaw, runPerPa, 1);
+    const playerPA = batterAbility['pa'];
     
-    const wrcPlusCustom = Calc.calculateCustomWRCPlus(
-        batterInput.getAbilityRaw(), ret_runValue, runPerPa);
+    const playerWRAAFromWoba = Calc.calculateWRAAPlusFromWoba(
+        playerWobaRaw, lgWobaRaw, 1, playerPA);
+    
+    const playerCustomWRAA = Calc.calculateCustomWRAAPlus(
+        batterAbility, ret_runValue);
 
+    const wrcPlus = Calc.calculateWRCPlus(
+        playerWRAAFromWoba / playerPA, runPerPa
+    );
+
+    const wrcPlusCustom = Calc.calculateWRCPlus(
+        playerCustomWRAA / playerPA, runPerPa
+    );
+    
     document.getElementById('league-woba-scale').innerHTML
         = `wOBA Scale: ${wOBAScale.toFixed(3)}`;
     document.getElementById('league-p-pa').innerHTML
         = `R/PA: ${runPerPa.toFixed(2)}`;
 
     document.getElementById('personal-woba').innerHTML
-        =`가중 출루율(wOBA):
-            ${(playerWobaRaw * wOBAScale).toFixed(3)}`;
+        =`가중 출루율(wOBA): ${(playerWobaRaw * wOBAScale).toFixed(3)}`;
+
+    document.getElementById('personal-wraa').innerHTML
+        =`wRAA: ${round(playerWRAAFromWoba, 2).toFixed(2)}`;
+    document.getElementById('personal-wraa-custom').innerHTML
+        =`wRAA(커스텀): ${round(playerCustomWRAA, 2).toFixed(2)}`;
 
     document.getElementById('personal-wrcplus').innerHTML
-        =`wRC+: ${wrcPlus.toFixed(2)}`;
+        =`wRC+: ${round(wrcPlus, 2).toFixed(2)}`;
     document.getElementById('personal-wrcplus-custom').innerHTML
-        =`wRC+(커스텀): ${wrcPlusCustom.toFixed(2)}`;
+        =`wRC+(커스텀): ${round(wrcPlusCustom, 2).toFixed(2)}`;
 
 }
 
@@ -179,6 +200,11 @@ export function visualize(ret, leagueBatter, runnerAbility,
     visualizePersonal(batterInput.getAbilityRaw());
 }
 
-batterInput.setDiv(document.getElementById('batter-personal'), () => {
-    visualizePersonal(batterInput.getAbilityRaw());
-});
+export function setPersonalBatterInput(personalBatterInput) {
+
+    batterInput = personalBatterInput;
+    batterInput.setDiv(document.getElementById('batter-personal'), () => {
+        visualizePersonal(batterInput.getAbilityRaw());
+    });
+
+}

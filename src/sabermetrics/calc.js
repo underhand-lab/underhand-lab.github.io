@@ -1,6 +1,3 @@
-import { calculate_markov_core } from "/src/re/RE.js";
-
-
 const stateManager = {
     getIndex(abilities_len, b_idx, out, b3, b2, b1) {
         if (out >= 3) return abilities_len * 24; // 흡수 상태 (이닝 종료)
@@ -19,14 +16,6 @@ const stateManager = {
         return [b_idx, out, b3, b2, b1];
     }
 };
-
-export function calculateRE(
-    batterAbility, runnerAbility, transitionEngine) {
-
-    return calculate_markov_core([batterAbility], runnerAbility,
-        stateManager, transitionEngine);
-
-}
 
 function getSituationWeights(N_data, L) {
     // 1번 타자(0), 0아웃, 무주자 상태에서 시작하는 행을 찾습니다.
@@ -117,7 +106,7 @@ export function calculateCustomWOBA(weights, batterStats) {
     return wOBA;
 }
 
-export function calculateWRAAPlus(batterStats, runValue) {
+export function calculateCustomWRAAPlus(batterStats, runValue) {
 
     let weightedSum = 0;
 
@@ -125,13 +114,14 @@ export function calculateWRAAPlus(batterStats, runValue) {
         weightedSum += batterStats[i] * runValue[i].value;
     }
 
-    // 4. 분모 (PA - Intentional BB 제외, 여기선 단순 PA 사용) 계산
-    // 공식: AB + BB - IBB + SF + HBP
-    const pa = batterStats['pa'];
+    return weightedSum;
+}
 
-    if (pa === 0) return 0;
-
-    return weightedSum / pa;
+export function calculateWRAAPlusFromWoba(
+    playerWoba, leagueWoba, wobaScale, pa) {
+    
+    return ((playerWoba - leagueWoba) / wobaScale) * pa;
+    
 }
 
 export function calculateLeagueRunPerPA(startRE, leagueStats) {
@@ -153,24 +143,12 @@ export function calculateLeagueRunPerPA(startRE, leagueStats) {
 
 export function calculateCustomWRCPlus(batterStats, runValue, runPerPa) {
     
-    return (calculateWRAAPlus(batterStats, runValue) /
+    return (calculateCustomWRAAPlus(batterStats, runValue) /
         runPerPa + 1) * 100;
 }
 
-/**
- * 2. 최종 wRC+ 계산
- * @param {number} playerWoba - 타자의 wOBA (Unscaled)
- * @param {number} leagueWoba - 리그 평균 wOBA (Unscaled)
- * @param {number} runPerPa - 위에서 구한 리그 평균 타석당 득점
- */
-export function calculateWRCPlus(playerWoba, leagueWoba, runPerPa, wobaScale) {
-    // 1. wOBA Scale을 적용하지 않은 상태이므로 스케일 상수는 1.0으로 간주
-    // 2. wRAA (평균 대비 득점 생산력) 계산
-    const wraaPerPa = (playerWoba - leagueWoba) / wobaScale;
+export function calculateWRCPlus(wraaPerPa, runPerPa) {
 
-    // 3. 증폭 로직 적용 (wRC+ 공식)
-    // ((초과생산 / 평균생산) + 1) * 100
-    const wrcPlus = ((wraaPerPa / runPerPa) + 1) * 100;
+    return ((wraaPerPa / runPerPa) + 1) * 100;
 
-    return wrcPlus;
 }

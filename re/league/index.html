@@ -39,15 +39,15 @@
     <div class="nav">
         <div>
             <div style="flex-grow: 1">
-                <h1><a href="/">언더핸드 연구소</a> : <a href="/calc/">🧮</a></h1>
+                <h1><a href="/">언더핸드 연구소</a> : <a href="/re/">🧮</a></h1>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="flex-grow: 1">
                 <ul>
                     <li>
-                        <a href="/calc/league/" select="true">리그</a>
+                        <a href="/re/league/" select="true">리그</a>
                     </li>
                     <li>
-                        <a href="/calc/line-up/">타선 기반</a>
+                        <a href="/re/line-up/">타선 기반</a>
                     </li>
                 </ul>
             </div>
@@ -69,7 +69,7 @@
             </p>
         </div>
         <div class="container neumorphism">
-            <h1>✨ 확장 가치 계산기</h1>
+            <h1>✨ 리그 확장 가치</h1>
             <hr>
             <div>
                 <h1 id="league-woba-scale"></h1>
@@ -80,17 +80,27 @@
                     ※ R/PA는 리그 전체 득점을 리그 전체 타석수로 나눈 값입니다. 계산에 사용된 리그 득점은 RE24 기반 추정값입니다.
                 </p>
             </div>
+        </div>
+        <div class="container neumorphism">
+            <h1>✨ 개인 확장 가치</h1>
             <hr>
             <div>
                 <button id="open-batter-personal">개인 타격 기록 설정</button>
                 <hr>
                 <h1 id="personal-woba">가중 출루율</h1>
+                <hr>
+                <h1 id="personal-wraa">wraa</h1>
+                <h1 id="personal-wraa-custom">wraa(커스텀)</h1>
+                <p style="font-size: 0.9em; color: #666;">
+                    ※ wRAA는 모델 기반의 wOBA(아웃 대비 기대 득점)를 바탕으로, wRAA(커스텀)은 모델 기반 기대 득점 변화를 바탕으로 계산하여 약간의 오차가 있습니다.
+                </p>
+                <hr>
                 <h1 id="personal-wrcplus">wRC+</h1>
                 <h1 id="personal-wrcplus-custom">wRC+(커스텀)</h1>
                 <p style="font-size: 0.9em; color: #666;">
                     ※ wRC+, wRC+(커스텀)은 파크팩터를 반영하지 않은 값입니다.
                     <br>
-                    ※ wRC+는 모델 기반의 wOBA(아웃 대비 기대 득점)를 바탕으로, wRC+(커스텀)은 모델 기반 기대 득점 변화를 바탕으로 계산하여 약간의 오차가 있습니다.
+                    ※ wRC+는 wRAA를 기반으로, wRC+(커스텀)은 wRAA(커스텀)을 기반으로 계산하여 약간의 오차가 있습니다.
                 </p>
             </div>
 
@@ -125,7 +135,7 @@
 
                 </div>
                 <hr>
-                <div class="html-container scrolled-content" data-src="/calc/template/batter-input.html">
+                <div class="html-container scrolled-content" data-src="/re/template/batter-input.html">
                 </div>
             </div>
             <hr>
@@ -147,7 +157,7 @@
 
                 </div>
                 <hr>
-                <div class="html-container scrolled-content" data-src="/calc/template/batter-input.html">
+                <div class="html-container scrolled-content" data-src="/re/template/batter-input.html">
                 </div>
             </div>
             <hr>
@@ -161,7 +171,7 @@
             <button class="toggle-btn">-</button>
             <hr>
             <div class="content" style="text-align: center;">
-                <div class="html-container scrolled-content" data-src="/calc/template/runner-input.html">
+                <div class="html-container scrolled-content" data-src="/re/template/runner-input.html">
                     <!--p style="font-size: 0.8em; color: #666;">※ 나머지 확률은 주자가 머무르거나 일반 아웃으로 처리됩니다.</p>
                     <hr style="wclassth: 100%; border-top: 1px da1Bed #ccc; margin: 5px 0;"-->
                 </div>

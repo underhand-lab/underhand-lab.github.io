@@ -3,7 +3,7 @@ import { BatterInput } from "/src/re/input/batter-input.js";
 import { RunnerInput } from "/src/re/input/runner-input.js";
 
 import { calculateRE } from "./re-league.js";
-import { visualize } from "./visualize.js";
+import { setPersonalBatterInput, visualize } from "./visualize.js";
 
 const batterInput = new BatterInput();
 const runnerInput = new RunnerInput();
@@ -24,5 +24,8 @@ function execute() {
 
 batterInput.setDiv(document.getElementById('batter-league'), execute);
 runnerInput.setDiv(document, execute);
+
+const personalBatterInput = new BatterInput();
+setPersonalBatterInput(personalBatterInput);
 
 execute();

@@ -1,4 +1,16 @@
 <div>
+    <h3>폭투</h3>
+    <div class="input-form">
+        <div class="input-group">
+            <label for="input_runner_passedball">
+                발생률
+            </label>
+            <input type="number" class="input_runner_passedball" value="0.03" step="0.01" min="0" max="1">
+        </div>
+    </div>
+</div>
+<hr>
+<div>
     <h3>1루 주자 2루 도루</h3>
     <div class="input-form">
         <div class="input-group">
@@ -15,6 +27,26 @@
             <input type="number" class="input_runner_s_r1_r2_out" value="0.03" step="0.01" min="0" max="1">
         </div>
         <b class="input_runner_s_r1_r1_safe" style="display:none;"></b>
+    </div>
+</div>
+<hr>
+<div>
+    <h3>2루 주자 3루 도루</h3>
+    <div class="input-form">
+        <div class="input-group">
+            <label for="input_runner_s_r2_r3_safe">
+                성공률
+            </label>
+            <input type="number" class="input_runner_s_r2_r3_safe" value="0.004" step="0.001" min="0" max="1">
+        </div>
+
+        <div class="input-group">
+            <label for="input_runner_s_r2_r3_out">
+                실패율
+            </label>
+            <input type="number" class="input_runner_s_r2_r3_out" value="0.001" step="0.001" min="0" max="1">
+        </div>
+        <b class="input_runner_s_r2_r2_safe" style="display:none;"></b>
     </div>
 </div>
 <hr>

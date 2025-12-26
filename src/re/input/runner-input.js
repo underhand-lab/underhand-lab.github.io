@@ -9,6 +9,13 @@ class RunnerInput {
                 'input_runner_s_r1_r2_safe')[0],
             's_r1_r2_out': div.getElementsByClassName(
                 'input_runner_s_r1_r2_out')[0],
+            'passedball': div.getElementsByClassName(
+                'input_runner_passedball')[0],
+
+            's_r2_r3_safe': div.getElementsByClassName(
+                'input_runner_s_r2_r3_safe')[0],
+            's_r2_r3_out': div.getElementsByClassName(
+                'input_runner_s_r2_r3_out')[0],
 
             '1B_r2_home_safe':  div.getElementsByClassName(
                 'input_runner_1B_r2_home_safe')[0],
@@ -40,6 +47,7 @@ class RunnerInput {
 
         this.derivedElements = {
             's_r1_r1_safe':    div.getElementsByClassName('input_runner_s_r1_r1_safe')[0],
+            's_r2_r2_safe':    div.getElementsByClassName('input_runner_s_r1_r1_safe')[0],
             '1B_r2_r3_safe':    div.getElementsByClassName('input_runner_1B_r2_r3_safe')[0],
             '2B_r1_r3_safe':    div.getElementsByClassName('input_runner_2B_r1_r3_safe')[0],
             '1B_r1_r2_safe':    div.getElementsByClassName('input_runner_1B_r1_r2_safe')[0],
@@ -84,8 +92,8 @@ class RunnerInput {
             this.inputs[key].value = val.toString();
         }
         
-        // [뜬공] fo_r3_home_safe/out 제외 -> 3루 잔루(fo_r3_r3_safe)
         this._calculateRemaining(this.inputs, params, 's_r1_r1_safe', ['s_r1_r2_safe', 's_r1_r2_out']);
+        this._calculateRemaining(this.inputs, params, 's_r2_r2_safe', ['s_r2_r3_safe', 's_r2_r3_out']);
         
         // [뜬공] fo_r3_home_safe/out 제외 -> 3루 잔루(fo_r3_r3_safe)
         this._calculateRemaining(this.inputs, params, 'fo_r3_r3_safe', ['fo_r3_home_safe', 'fo_r3_home_out']);
@@ -105,7 +113,7 @@ class RunnerInput {
         for (let key in params) {
             params[key] = parseFloat(params[key]);
         }
-
+        
         return params;
     }
 }

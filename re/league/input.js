@@ -1,12 +1,11 @@
 import * as TransitionEngine from "/src/re/transition-engine/index.js";
-import { BatterInput } from "/src/re/input/batter-input.js";
-import { RunnerInput } from "/src/re/input/runner-input.js";
-
+import { RunnerInput } from "/src/re/input/runner-input.js"
 import { calculateRE } from "./re-league.js";
 import { setPersonalBatterInput, visualize } from "./visualize.js";
 
-const batterInput = new BatterInput();
-const runnerInput = new RunnerInput();
+const batterInput = document.getElementById('batter-league');
+const runnerInput = document.getElementById('runner-league');
+const personalBatterInput = document.getElementById('batter-personal');
 
 const transitionEngine = new TransitionEngine.Standard();
 
@@ -22,10 +21,9 @@ function execute() {
     
 }
 
-batterInput.setDiv(document.getElementById('batter-league'), execute);
-runnerInput.setDiv(document, execute);
+batterInput.setEvent(execute);
+runnerInput.setEvent(execute);
 
-const personalBatterInput = new BatterInput();
 setPersonalBatterInput(personalBatterInput);
 
 execute();

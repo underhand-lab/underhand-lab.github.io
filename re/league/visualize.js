@@ -203,7 +203,7 @@ export function visualize(ret, leagueBatter, runnerAbility,
 export function setPersonalBatterInput(personalBatterInput) {
 
     batterInput = personalBatterInput;
-    batterInput.setDiv(document.getElementById('batter-personal'), () => {
+    batterInput.setEvent(() => {
         visualizePersonal(batterInput.getAbilityRaw());
     });
 

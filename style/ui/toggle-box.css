@@ -46,14 +46,6 @@
     height: 100vh;
 }
 
-*:has(.toggle) {
-    display:block;
-}
-
-*[data-state="close"]:has(.toggle) {
-    display:none;
-}
-
 *[data-state="min"] .toggle-content,
 *[data-state="min"] .toggle .content,
 *[data-state="min"] .toggle-content-a {

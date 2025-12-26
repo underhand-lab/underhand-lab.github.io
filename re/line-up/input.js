@@ -1,12 +1,8 @@
 import { BoxList } from "/src/ui/box-list.js";
 import { calculateLineupRE } from "./re-line-up.js"
-import { BatterInput } from "/src/re/input/batter-input.js"
-import { RunnerInput } from "/src/re/input/runner-input.js"
 import { downloadCSV, readCSV } from "/src/csv/download.js"
 import { PlayerList } from "./line-up.js"
 import { visualizeRE, visualizeLeadoff, get9RE } from "./visualize.js";
-
-import * as _ from "/src/module/import-html.js";
 
 const boxList = new BoxList(document.getElementById("boxes"));
 const playerList = new PlayerList();
@@ -43,8 +39,8 @@ export function setLineup() {
     }
 }
 
-const batter = new BatterInput();
-const runner = new RunnerInput();
+const batter = document.getElementById('batter-input');
+const runner = document.getElementById('runner-input');
 
 let target;
 let targetName;
@@ -64,10 +60,14 @@ function batterAbilityChanged() {
 
 }
 
-batter.setDiv(document, batterAbilityChanged);
-runner.setDiv(document, execute);
+batter.setEvent(batterAbilityChanged);
+runner.setEvent(execute);
 
 const batterEditDiv = document.getElementById('batter-pop-up');
+batterEditDiv.addCloseEvent(() => {
+    setLineup();
+    execute();
+});
 const devaultBatterAbility = batter.getAbilityRaw();
 
 const startNumSelector = document.getElementById("start-num");
@@ -134,7 +134,7 @@ function addBatter(refAbility) {
                 target = newPlayer;
                 targetName = playerName;
                 batter.readJson(newPlayer);
-                batterEditDiv.style.display = 'block';
+                batterEditDiv.setAttribute('open', 'open');
 
             });
             

@@ -1,5 +1,5 @@
-import { TrackProcessor } from '/src/track/processor.js';
-import * as BallDetector from '/src/track/ball-detector/index.js';
+import { TrackProcessor } from '/src/vision/track/processor.js';
+import * as BallDetector from '/src/vision/track/ball-detector/index.js';
 import { PopUp } from "/src/ui/pop-up.js"
 import * as AnalysisBox from "./analysis-box.js"
 
@@ -11,15 +11,15 @@ fileInput.addEventListener('change', () => {
 const detectorSelect = document.getElementById("model");
 const detectors = {
     "yolo11x": new BallDetector.YOLOBallDetector(
-        "/external/yolo11x_web_model/model.json"),
+        "/external/models/yolo11/yolo11x_web_model/model.json"),
     "yolo11l": new BallDetector.YOLOBallDetector(
-        "/external/yolo11l_web_model/model.json"),
+        "/external/models/yolo11/yolo11l_web_model/model.json"),
     "yolo11m": new BallDetector.YOLOBallDetector(
-        "/external/yolo11m_web_model/model.json"),
+        "/external/models/yolo11/yolo11m_web_model/model.json"),
     "yolo11s": new BallDetector.YOLOBallDetector(
-        "/external/yolo11s_web_model/model.json"),
+        "/external/models/yolo11/yolo11s_web_model/model.json"),
     "yolo11n": new BallDetector.YOLOBallDetector(
-        "/external/yolo11n_web_model/model.json")
+        "/external/models/yolo11/yolo11n_web_model/model.json")
 }
 
 const processButton = document.getElementById('process-button');

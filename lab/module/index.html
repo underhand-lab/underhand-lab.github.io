@@ -11,16 +11,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/14.8.1/math.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/decimal.js/10.4.3/decimal.js"></script>
-    <script src="/src/re/input/batter-input-component.js"
-        type="module"></script>
-    <script src="/src/re/input/runner-input-component.js"
-        type="module"></script>
-    <script src="/src/easy-h/module/import-html.js"
-        type="module"></script>
-    <script src="/src/easy-h/ui/bottom-sheet.js"
-        type="module"></script>
-    <script src="/src/markdown.js"></script>
-    <script src="./input.js" type="module" defer></script>
+    <script src="/src/easy-h/module/import-html.js" type="module"></script>
+    <script src="/src/easy-h/module/import-markdown.js" type="module"></script>
+    <script src="/src/easy-h/lang/lang.js" type="module"></script>
+    <!--script src="/re/league/control.js" type="module"></script-->
+    <script src="/src/easy-h/ui/pop-up.js" type="module"></script>
+    <script src="/src/easy-h/ui/bottom-sheet.js" type="module"></script>
     <style>
         .input-form {
             display: flex;
@@ -42,7 +38,6 @@
 </head>
 
 <body>
-
     <div class="nav">
         <div>
             <div style="flex-grow: 1">
@@ -51,9 +46,10 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="flex-grow: 1">
                 <ul>
                     <li>
-                        <a href="/re/league/" select="true">리그</a>
+                        <a href="/re/league/" select="true"><lang-sys key="league"></lang-sys></a>
                     </li>
                     <li>
+
                         <a href="/re/line-up/">타선 기반</a>
                     </li>
                 </ul>
@@ -68,6 +64,7 @@
         </div>
     </div>
     <div id="wrapper" style="padding-bottom: 80px;">
+        <lang-sys tag="h1" key="helloworld"></lang-sys>
         <div class="container neumorphism">
             <div id="result-9re">
             </div>
@@ -127,17 +124,33 @@
     </div>
 
     </div>
-    <bottom-sheet data-state="close"
-        background-class="panel frostedglassmorphism"
-        window-class="toggle container neumorphism"
-        trigger-id="open-batter-personal">
+    <pop-up id="batter-personal" class="panel frostedglassmorphism" window-class="pop-up container neumorphism"
+        data-state="open">
         <h1>개인 타격 기록</h1>
         <hr>
-        <button class="close-btn">✕</button>
         <button class="toggle-btn">-</button>
         <div class="content">
-            <batter-input id="batter-personal" class="scrolled-content"
-                src="/re/template/batter-input.html">
+            <div>
+                <button class="save-csv">저장</button>
+                <input class='read-csv-file' type="file" accept=".csv" style="display:none;">
+                <button class="read-csv">불러오기</button>
+
+            </div>
+            <hr>
+            <import-html class="scrolled-content" src="/re/template/batter-input.html">
+            </import-html>
+        </div>
+        <hr>
+        <button class="close-btn">✕</button>
+    </pop-up>
+
+    <bottom-sheet id="batter-league" background-class="panel frostedglassmorphism"
+        data-state="max" window-class="toggle container neumorphism">
+            <h1>리그 타격 기록</h1>
+            <hr>
+            <button class="close-btn">✕</button>
+            <button class="toggle-btn">-</button>
+            <div class="content">
                 <div>
                     <button class="save-csv">저장</button>
                     <input class='read-csv-file' type="file" accept=".csv" style="display:none;">
@@ -145,87 +158,22 @@
 
                 </div>
                 <hr>
-            </batter-input>
-        </div>
-        <hr>
+                <import-html class="scrolled-content" src="/re/template/batter-input.html">
+                </import-html>
+            </div>
+            <hr>
     </bottom-sheet>
-
-    <bottom-sheet data-state="max"
-        background-class="panel frostedglassmorphism"
-        window-class="toggle container neumorphism"
-        trigger-id="open-batter-league" open="open">
-        <h1>리그 타격 기록</h1>
-        <hr>
-        <button class="close-btn">✕</button>
-        <button class="toggle-btn">-</button>
-        <div class="content">
-            <batter-input  id="batter-league" class="scrolled-content"
-                src="/re/template/batter-input.html">
-                <div>
-                    <button class="save-csv">저장</button>
-                    <input class='read-csv-file' type="file" accept=".csv" style="display:none;">
-                    <button class="read-csv">불러오기</button>
-
-                </div>
+    <div id="runner-league" class="panel frostedglassmorphism" data-state="close">
+        <div class="toggle container neumorphism">
+            <h1>리그 주자 능력</h1>
+            <button class="close-btn">✕</button>
+            <button class="toggle-btn">-</button>
             <hr>
-            </batter-input>
-        </div>
-        <hr>
-    </bottom-sheet>
-    <bottom-sheet data-state="close"
-        background-class="panel frostedglassmorphism"
-        window-class="toggle container neumorphism"
-        trigger-id="open-runner-league">
-        <h1>리그 주자 능력</h1>
-        <button class="close-btn">✕</button>
-        <button class="toggle-btn">-</button>
-        <hr>
-        <div class="content" style="text-align: center;">
-            <runner-input id="runner-league" class="scrolled-content"
-                src="/re/template/runner-input.html">
-            </runner-input>
-        </div>
-        <hr>
-        </div>
-    </bottom-sheet>
-    <div id="guide" class="panel frostedglassmorphism" data-state="close">
-        <div class="pop-up container neumorphism">
-            <h1>도움말</h1>
-            <hr>
-            <div class="markdown-container content" data-markdown-file="../guide.md">
+            <div class="content" style="text-align: center;">
+                <import-html class="scrolled-content" src="/re/template/runner-input.html">
+                </import-html>
             </div>
             <hr>
-            <button class="close-btn">닫기</button>
-        </div>
-    </div>
-    <div id="model-state" class="panel frostedglassmorphism" data-state="close">
-        <div class="pop-up container neumorphism">
-            <h1>주자, 아웃카운트 전이 모델 시나리오</h1>
-            <hr>
-            <div class="markdown-container content" data-markdown-file="../model/model-state.md">
-            </div>
-            <hr>
-            <button class="close-btn">닫기</button>
-        </div>
-    </div>
-    <div id="model-run" class="panel frostedglassmorphism" data-state="close">
-        <div class="pop-up container neumorphism">
-            <h1>득점 전이 모델 시나리오</h1>
-            <hr>
-            <div class="markdown-container content" data-markdown-file="../model/model-run.md">
-            </div>
-            <hr>
-            <button class="close-btn">닫기</button>
-        </div>
-    </div>
-    <div id="model-not" class="panel frostedglassmorphism" data-state="close">
-        <div class="pop-up container neumorphism">
-            <h1>미반영 시나리오</h1>
-            <hr>
-            <div class="markdown-container content" data-markdown-file="../model/model-not.md">
-            </div>
-            <hr>
-            <button class="close-btn">닫기</button>
         </div>
     </div>
 </body>

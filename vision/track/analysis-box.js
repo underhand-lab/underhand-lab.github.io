@@ -1,5 +1,5 @@
-import * as FrameMaker from '/src/track/frame-maker/index.js';
-import * as Analysis from "/src/track/calc/analysis.js";
+import * as FrameMaker from '/src/vision/track/frame-maker/index.js';
+import * as Analysis from "/src/vision/track/calc/analysis.js";
 import { BoxList } from "/src/ui/box-list.js";
 import { PopUp } from "/src/ui/pop-up.js";
 

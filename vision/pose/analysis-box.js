@@ -1,5 +1,5 @@
-import * as PoseAnalysis from "/src/pose/analysis-tool/index.js";
-import * as PoseFrameMaker from '/src/pose/frame-maker/index.js';
+import * as PoseAnalysis from "/src/vision/pose/analysis-tool/index.js";
+import * as PoseFrameMaker from '/src/vision/pose/frame-maker/index.js';
 import { BoxList } from "/src/ui/box-list.js"
 import { PopUp } from "/src/ui/pop-up.js"
 

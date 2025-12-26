@@ -12,8 +12,3 @@ new PopUp(document.getElementById('line-up-input'),
 
 new PopUp(document.getElementById('batter-list-input'),
     document.getElementById('open-batter-list-input'));
-
-batter.addCloseEvent(() => {
-    input.setLineup();
-    input.execute();
-});

@@ -1,5 +1,5 @@
-import * as PoseDetector from '/src/pose/pose-detector/index.js';
-import { PoseProcessor } from '/src/pose/processor.js';
+import * as PoseDetector from '/src/vision/pose/pose-detector/index.js';
+import { PoseProcessor } from '/src/vision/pose/processor.js';
 import * as AnalysisBox from './analysis-box.js';
 import { PopUp } from "/src/ui/pop-up.js"
 
@@ -11,9 +11,9 @@ fileInput.addEventListener('change', () => {
 const detectorSelect = document.getElementById("model");
 const detectors = {
     "mediapipe_heavy": new PoseDetector.MediaPipePoseDetector(
-        "/external/models/pose_landmarker_heavy.task"),
+        "/external/models/mediapipe/pose_landmarker_heavy.task"),
     "mediapipe_full": new PoseDetector.MediaPipePoseDetector(
-        "/external/models/pose_landmarker_full.task"),
+        "/external/models/mediapipe/pose_landmarker_full.task"),
 }
 
 const processButton = document.getElementById('process-button');

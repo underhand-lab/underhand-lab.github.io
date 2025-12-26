@@ -11,9 +11,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/14.8.1/math.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/decimal.js/10.4.3/decimal.js"></script>
-    <script src="/src/module/import-html.js" type="module"></script>
+    <script src="/src/easy-h/module/import-html.js" type="module"></script>
+    <script src="/src/easy-h/ui/bottom-sheet.js" type="module"></script>
+    <script src="/src/re/input/batter-input-component.js"
+        type="module"></script>
+    <script src="/src/re/input/runner-input-component.js"
+        type="module"></script>
     <script src="/src/markdown.js"></script>
-    <script src="./control-3.js" type="module" defer></script>
+    <script src="./input.js" type="module" defer></script>
     <style>
         .input-form {
             display: flex;
@@ -45,8 +50,6 @@
             padding: 5px 10px;
             margin: 5px;
         }
-
-        
     </style>
 
 </head>
@@ -114,83 +117,87 @@
         </div>
 
     </div>
-    <div id="line-up-input" class="panel frostedglassmorphism"
-        data-state="max">
-        <div class="toggle container neumorphism">
-            <h1>타선</h1>
-            <button class="close-btn">✕</button>
-            <button class="toggle-btn">-</button>
-            <hr>
-            <div class="content">
-                <div class="scrolled-content" style="padding: 10px 0px;">
-                    <div id="line-up" style="
+    <bottom-sheet id="line-up-input" data-state="close"
+        background-class="panel frostedglassmorphism"
+        window-class="toggle container neumorphism"
+        trigger-id="open-line-up-input" open="open">
+        <h1>타선</h1>
+        <button class="close-btn">✕</button>
+        <button class="toggle-btn">-</button>
+        <hr>
+        <div class="content">
+            <div class="scrolled-content" style="padding: 10px 0px;">
+                <div id="line-up" style="
                         display: flex;
                         flex-flow: column;
                         gap: 15px;">
-                    </div>
                 </div>
             </div>
-            <hr>
         </div>
-    </div>
-    <div id="batter-list-input" class="panel frostedglassmorphism" 
-        data-state="max">
-        <div class="toggle container neumorphism" >
+        <hr>
+    </bottom-sheet>
+
+    <bottom-sheet id="batter-list-input" data-state="close" background-class="panel frostedglassmorphism"
+        window-class="toggle container neumorphism"
+        trigger-id="open-batter-list-input" open="open">
+        <div>
+            <h1>타자 능력 관리</h1>
+            <button class="toggle-btn">-</button>
+            <button class="close-btn">✕</button>
+        </div>
+        <hr>
+        <div class="content">
             <div>
-                <h1>타자 능력 관리</h1>
-                <button class="toggle-btn">-</button>
-                <button class="close-btn">✕</button>
-            </div>
-            <hr>
-            <div class="content">
-                <div>
-                    <button id="save-csv">
-                        타자 리스트 저장
-                    </button>
-                    <input type="file" id="read-batter-csv" accept=".csv">
-                    <label id="input-file" for="read-batter-csv">
-                        타자 리스트 불러오기
+                <button id="save-csv">
+                    타자 리스트 저장
+                </button>
+                <input type="file" id="read-batter-csv" accept=".csv">
+                <label id="input-file" for="read-batter-csv">
+                    타자 리스트 불러오기
                     </calcel>
-                </div>
+            </div>
+            <hr>
+            <div id="boxes" class="scrolled-content">
+            </div>
+            <div style="margin-top:auto;">
                 <hr>
-                <div id="boxes" class="scrolled-content">
-                </div>
-                <div style="margin-top:auto;"> 
-                    <hr>
-                    <button id="add-batter-btn">타자 추가</button>
-                </div>
+                <button id="add-batter-btn">타자 추가</button>
             </div>
-            <hr>
         </div>
-    </div>
-    <div id="runner-league-input" class="panel frostedglassmorphism" 
-        data-state="close">
-        <div class="toggle container neumorphism">
-            <h1>주자 정보</h1>
-            <button class="toggle-btn">-</button>
-            <button class="close-btn">✕</button>
-            <hr>
+        <hr>
+    </bottom-sheet>
 
-            <div class="content" style="text-align: center;">
-                <div class="html-container scrolled-content"
-                    data-src="/re/template/runner-input.html">
-                </div>
-            </div>
-            <hr>
+    <bottom-sheet data-state="close" 
+        background-class="panel frostedglassmorphism"
+        window-class="toggle container neumorphism"
+        trigger-id="open-runner-league-input">
+        <h1>주자 정보</h1>
+        <button class="toggle-btn">-</button>
+        <button class="close-btn">✕</button>
+        <hr>
+
+        <div class="content" style="text-align: center;">
+            <runner-input id="runner-input"
+                class="scrolled-content"
+                src="/re/template/runner-input.html">
+            </runner-input>
         </div>
-    </div>
+        </div>
+        <hr>
+    </bottom-sheet>
 
-    <div id="batter-input" class="panel frostedglassmorphism" 
-        data-state="close">
-        <div class="toggle container neumorphism">
-            <h1>타자 정보 편집</h1>
-            <button id="open-batter-input" style="display:none;">닫기</button>
-            <button class="toggle-btn">-</button>
-            <button class="close-btn">✕</button>
+    <bottom-sheet id="batter-pop-up" data-state="close"
+        background-class="panel frostedglassmorphism"
+        window-class="toggle container neumorphism">
+        <h1>타자 정보 편집</h1>
+        <button class="toggle-btn">-</button>
+        <button class="close-btn">✕</button>
+        
+        <hr>
 
-            <hr>
-
-            <div class="content" style="text-align: center;">
+        <div class="content">
+            <batter-input id="batter-input" class="scrolled-content"
+                src="/re/template/batter-input.html">
                 <div>
                     <input class="player-name" type="text" value="batter" />
                     <button class="save-csv">저장</button>
@@ -199,30 +206,24 @@
 
                 </div>
                 <hr>
-                <div class="html-container scrolled-content"
-                    data-src="/re/template/batter-input.html">
-                </div>
-            </div>
-            <hr>
+            </batter-input>
         </div>
-    </div>
+        <hr>
+    </bottom-sheet>
 
-    <div id="guide" class="panel frostedglassmorphism" 
-        data-state="close">
+    <div id="guide" class="panel frostedglassmorphism" data-state="close">
         <div class="pop-up container neumorphism">
             <h1>도움말</h1>
             <hr>
             <div class="content">
-                <div class="markdown-container scrolled-content" 
-                    data-markdown-file="../guide.md">
+                <div class="markdown-container scrolled-content" data-markdown-file="../guide.md">
                 </div>
             </div>
             <hr>
             <button id="close-guide-button">닫기</button>
         </div>
     </div>
-    <div id="model-state" class="panel frostedglassmorphism" 
-        data-state="close">
+    <div id="model-state" class="panel frostedglassmorphism" data-state="close">
         <div class="pop-up container neumorphism">
             <h1>주자, 아웃카운트 전이 모델 시나리오</h1>
             <hr>
@@ -232,8 +233,7 @@
             <button id="close-model-state-button">닫기</button>
         </div>
     </div>
-    <div id="model-run" class="panel frostedglassmorphism" 
-        data-state="close">
+    <div id="model-run" class="panel frostedglassmorphism" data-state="close">
         <div class="pop-up container neumorphism">
             <h1>득점 전이 모델 시나리오</h1>
             <hr>
@@ -243,8 +243,7 @@
             <button id="close-model-run-button">닫기</button>
         </div>
     </div>
-    <div id="model-not" class="panel frostedglassmorphism" 
-        data-state="close">
+    <div id="model-not" class="panel frostedglassmorphism" data-state="close">
         <div class="pop-up container neumorphism">
             <h1>미반영 시나리오</h1>
             <hr>

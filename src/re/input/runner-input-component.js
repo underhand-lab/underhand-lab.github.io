@@ -3,6 +3,7 @@ import { loadFile } from "/src/easy-h/module/load-file.js"
 class RunnerInput extends HTMLElement {
     constructor() {
         super();
+        this.binded = false;
     }
 
     static get observedAttributes() {
@@ -14,7 +15,9 @@ class RunnerInput extends HTMLElement {
     }
 
     func() {
-        if (this.event) this.event();
+        if (!this.event) return;
+        if (!this.binded) return;
+        this.event();
     }
 
     static get observedAttributes() {
@@ -24,8 +27,14 @@ class RunnerInput extends HTMLElement {
     attributeChangedCallback(attrName, oldVal, newVal) {
         if (attrName == "src") {
             loadFile(newVal).then((html) => {
-                this.innerHTML += html;
-                this.bindInput();
+                this.insertAdjacentHTML('beforeend', html);
+
+                // 2. 브라우저가 새로운 DOM 요소를 인지하고 렌더링 트리에 올릴 때까지 대기
+                requestAnimationFrame(() => {
+                    this.bindInput(); // 이제 getElementsByClassName이 요소를 찾아냅니다.
+                    this.func();
+                });
+
             }).catch(error => {
                 console.error(error);
                 this.innerHTML += `<p style="color:red;">로딩 실패</p>`;
@@ -95,6 +104,10 @@ class RunnerInput extends HTMLElement {
         for (let key in this.inputs) {
             this.inputs[key].addEventListener('change', () => this.func());
         }
+
+        this.binded = true;
+        this.getAbility();
+
     }
 
     _calculateRemaining(inputs, values, target, list) {
@@ -117,6 +130,7 @@ class RunnerInput extends HTMLElement {
     }
 
     getAbility() {
+        if (!this.binded) return;
         const params = {};
 
         // 1. 기본 입력값 수집

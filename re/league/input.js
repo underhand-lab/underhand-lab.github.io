@@ -1,5 +1,5 @@
 import * as TransitionEngine from "/src/re/transition-engine/index.js";
-import { RunnerInput } from "/src/re/input/runner-input.js"
+
 import { calculateRE } from "./re-league.js";
 import { setPersonalBatterInput, visualize } from "./visualize.js";
 
@@ -12,7 +12,12 @@ const transitionEngine = new TransitionEngine.Standard();
 function execute() {
 
     const batterAbility = batterInput.getAbility();
+
+    if (!batterAbility) return;
+
     const runnerAbility = runnerInput.getAbility();
+
+    if (!runnerAbility) return;
 
     const ret = calculateRE(
         batterAbility, runnerAbility, transitionEngine);
@@ -25,5 +30,3 @@ batterInput.setEvent(execute);
 runnerInput.setEvent(execute);
 
 setPersonalBatterInput(personalBatterInput);
-
-execute();

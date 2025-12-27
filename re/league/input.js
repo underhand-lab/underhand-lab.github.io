@@ -12,12 +12,7 @@ const transitionEngine = new TransitionEngine.Standard();
 function execute() {
 
     const batterAbility = batterInput.getAbility();
-
-    if (!batterAbility) return;
-
     const runnerAbility = runnerInput.getAbility();
-
-    if (!runnerAbility) return;
 
     const ret = calculateRE(
         batterAbility, runnerAbility, transitionEngine);
@@ -26,7 +21,12 @@ function execute() {
     
 }
 
-batterInput.setEvent(execute);
-runnerInput.setEvent(execute);
+batterInput.setAfterBindInput(() => {
+    batterInput.setEvent(execute);
+    runnerInput.setAfterBindInput(() => {
+        runnerInput.setEvent(execute);
+        execute();
+    });
+});
 
 setPersonalBatterInput(personalBatterInput);

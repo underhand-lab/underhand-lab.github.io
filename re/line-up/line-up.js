@@ -1,38 +1,46 @@
-import { downloadCSV, readCSV } from "../../src/csv/download.js"
+let playerList;
 
-class PlayerList {
-    constructor() {
-        this.players = [];
-    }
-    addPlayer(player, event) {
-        let nextIdx = 0;
-        let name = `${player['name']}`;
+export function setLineup(element, players, event) {
 
-        while (this.players.some(p => p['name'] === name)) {
-            name = `${player['name']} ${nextIdx}`;
-            nextIdx++;
-        }
-        player['name'] = name;
-        this.players.push(player);
-        event();
-    }
-    removePlayer(player) {
-        if (this.players.length < 2) {
-            throw new Error(`선수가 1명 이상 필요합니다.`)
-        }
-        this.players = this.players.filter(p => p != player);
+    let str = ''
+    const defaultBatters = element.getElementsByTagName('select');
+    playerList = players;
 
-    }
-    getAllPlayers() {
-        return this.players;
-    }
-    getLineup(lineUp) {
-        let ret = [];
-        for (let i = 0; i < lineUp.length; i++) {
-            ret.push(this.players[lineUp[i]]);
+    for (let i = 0; i < 9; i++) {
+        str += `<div><label>${i + 1}번타자</label>: `
+        str += `<select>`;
+        for (let j = 0; j < playerList.length; j++) {
+            str += `<option value="${j}"`
+            if (defaultBatters.length > i &&
+                defaultBatters[i].value == j) {
+                str += ` selected`;
+            }
+            str += `>${playerList[j]['name']}</option>`
         }
-        return ret;
+        str += `</select></div>`;
+    }
+
+    element.innerHTML = str;
+
+    const batters = element.getElementsByTagName('select');
+
+    for (let i = 0; i < batters.length; i++) {
+        batters[i].addEventListener('change', () => {
+            event();
+        });
     }
 }
 
-export { PlayerList }
+export function getLineup(element, func) {
+
+    const batters = element.getElementsByTagName('select');
+    let inputLineup = [];
+
+    for (let i = 0; i < 9; i++) {
+        const value = parseInt(batters[i].value);
+        inputLineup.push(playerList[value]);
+    }
+
+    return inputLineup.map(ability => func(ability));
+
+}

@@ -46,7 +46,7 @@ function visualizeRE(RE_results, idx) {
     return html;
 }
 
-function visualizeLeadoff(leadoff_vector, idx) {
+function visualizeLeadoff(leadoffProbVector, idx) {
 
     // --- 리드오프 등장 확률 섹션 추가 ---
     let html = `
@@ -68,8 +68,8 @@ function visualizeLeadoff(leadoff_vector, idx) {
         html += `
             <tr ${isSelected}>
                 <td>${i + 1}번 타자</td>
-                <td>${((leadoff_vector[i] / 9) * 100).toFixed(2)}%</td>
-                <td>${leadoff_vector[i].toFixed(3)}회</td>
+                <td>${((leadoffProbVector[i] / 9) * 100).toFixed(2)}%</td>
+                <td>${leadoffProbVector[i].toFixed(3)}회</td>
             </tr>
         `;
     }

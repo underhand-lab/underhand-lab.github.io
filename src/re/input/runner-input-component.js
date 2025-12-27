@@ -14,7 +14,7 @@ class RunnerInput extends HTMLElement {
         this.event = event;
     }
 
-    func() {
+    valueChanged() {
         if (!this.event) return;
         if (!this.binded) return;
         this.event();
@@ -22,6 +22,14 @@ class RunnerInput extends HTMLElement {
 
     static get observedAttributes() {
         return ['src'];
+    }
+
+    setAfterBindInput(event) {
+        if (this.binded) {
+            event();
+            return;
+        }
+        this.afterBindEvent = event;
     }
 
     attributeChangedCallback(attrName, oldVal, newVal) {
@@ -32,7 +40,8 @@ class RunnerInput extends HTMLElement {
                 // 2. 브라우저가 새로운 DOM 요소를 인지하고 렌더링 트리에 올릴 때까지 대기
                 requestAnimationFrame(() => {
                     this.bindInput(); // 이제 getElementsByClassName이 요소를 찾아냅니다.
-                    this.func();
+                    if (this.afterBindEvent)
+                        this.afterBindEvent();
                 });
 
             }).catch(error => {
@@ -102,12 +111,12 @@ class RunnerInput extends HTMLElement {
         };
 
         for (let key in this.inputs) {
-            this.inputs[key].addEventListener('change', () => this.func());
+            this.inputs[key].addEventListener('change', () => this.valueChanged());
         }
 
         this.binded = true;
         this.getAbility();
-
+        
     }
 
     _calculateRemaining(inputs, values, target, list) {

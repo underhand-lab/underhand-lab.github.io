@@ -13,10 +13,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/decimal.js/10.4.3/decimal.js"></script>
     <script src="/src/easy-h/module/import-html.js" type="module"></script>
     <script src="/src/easy-h/ui/bottom-sheet.js" type="module"></script>
-    <script src="/src/re/input/batter-input-component.js"
-        type="module"></script>
-    <script src="/src/re/input/runner-input-component.js"
-        type="module"></script>
+    <script src="/src/re/input/batter-input-component.js" type="module"></script>
+    <script src="/src/re/input/runner-input-component.js" type="module"></script>
     <script src="/src/markdown.js"></script>
     <script src="./input.js" type="module" defer></script>
     <style>
@@ -117,10 +115,8 @@
         </div>
 
     </div>
-    <bottom-sheet id="line-up-input" data-state="close"
-        background-class="panel frostedglassmorphism"
-        window-class="toggle container neumorphism"
-        trigger-id="open-line-up-input" open="open">
+    <bottom-sheet id="line-up-input" data-state="close" background-class="panel frostedglassmorphism"
+        window-class="toggle container neumorphism" trigger-id="open-line-up-input" open="open">
         <h1>타선</h1>
         <button class="close-btn">✕</button>
         <button class="toggle-btn">-</button>
@@ -138,8 +134,7 @@
     </bottom-sheet>
 
     <bottom-sheet id="batter-list-input" data-state="close" background-class="panel frostedglassmorphism"
-        window-class="toggle container neumorphism"
-        trigger-id="open-batter-list-input" open="open">
+        window-class="toggle container neumorphism" trigger-id="open-batter-list-input" open="open">
         <div>
             <h1>타자 능력 관리</h1>
             <button class="toggle-btn">-</button>
@@ -167,47 +162,39 @@
         <hr>
     </bottom-sheet>
 
-    <bottom-sheet data-state="close" 
-        background-class="panel frostedglassmorphism"
-        window-class="toggle container neumorphism"
-        trigger-id="open-runner-league-input">
+    <bottom-sheet data-state="close" background-class="panel frostedglassmorphism"
+        window-class="toggle container neumorphism" trigger-id="open-runner-league-input">
         <h1>주자 정보</h1>
         <button class="toggle-btn">-</button>
         <button class="close-btn">✕</button>
         <hr>
 
         <div class="content" style="text-align: center;">
-            <runner-input id="runner-input"
-                class="scrolled-content"
-                src="/re/template/runner-input.html">
+            <runner-input id="runner-input" class="scrolled-content" src="/re/template/runner-input.html">
             </runner-input>
         </div>
         </div>
         <hr>
     </bottom-sheet>
 
-    <bottom-sheet id="batter-pop-up" data-state="close"
-        background-class="panel frostedglassmorphism"
+    <bottom-sheet id="batter-pop-up" data-state="close" background-class="panel frostedglassmorphism"
         window-class="toggle container neumorphism">
         <h1>타자 정보 편집</h1>
         <button class="toggle-btn">-</button>
         <button class="close-btn">✕</button>
-        
+
         <hr>
 
-        <div class="content">
-            <batter-input id="batter-input" class="scrolled-content"
-                src="/re/template/batter-input.html">
-                <div>
-                    <input class="player-name" type="text" value="batter" />
-                    <button class="save-csv">저장</button>
-                    <input class='read-csv-file' type="file" accept=".csv" style="display:none;">
-                    <button class="read-csv">불러오기</button>
-
-                </div>
-                <hr>
-            </batter-input>
-        </div>
+        <batter-input id="batter-input" class="content" inner-class="scrolled-content"
+            src="/re/template/batter-input.html">
+            <div>
+                <input class="player-name" type="text" value="batter" />
+                <button class="save-csv">저장</button>
+                <input class='read-csv-file' type="file" accept=".csv" style="display:none;">
+                <button class="read-csv">불러오기</button>
+            </div>
+            <hr>
+        </batter-input>
         <hr>
     </bottom-sheet>
 

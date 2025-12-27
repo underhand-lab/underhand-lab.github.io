@@ -1,38 +1,96 @@
 import { loadFile } from "/src/easy-h/module/load-file.js"
+import { downloadCSV, readCSV } from "/src/csv/download.js"
 
-class BatterInput extends HTMLElement {
+export class BatterInput extends HTMLElement {
     constructor() {
         super();
         this.binded = false;
-    }
-
-    static get observedAttributes() {
-        return [];
+        this.window = document.createElement('div');
     }
 
     setEvent(event) {
-        this.event = event;
+        this.onValueChanged = event;
     }
 
-    func() {
-        if (!this.event) return;
+    updateUI() {
+        
+        const batterAbilityRaw = this.getAbilityRaw();
+
+        const pa = batterAbilityRaw['pa'];
+        const hit = batterAbilityRaw["1B"]
+            + batterAbilityRaw["2B"]
+            + batterAbilityRaw["3B"]
+            + batterAbilityRaw["hr"];
+
+        const ob = hit + batterAbilityRaw["bb"];
+
+        const tb = batterAbilityRaw["1B"]
+            + batterAbilityRaw["2B"] * 2
+            + batterAbilityRaw["3B"] * 3
+            + batterAbilityRaw["hr"] * 4;
+
+        this.sac.max = Math.min(batterAbilityRaw["go"]);
+        this.sf.max = Math.min(pa - ob, batterAbilityRaw["fo"]);
+
+        this.sac.value = Math.min(this.sac.max, this.sac.value);
+        this.sf.value = Math.min(this.sf.max, this.sf.value);
+
+        const ab = pa - batterAbilityRaw["bb"]
+            - parseInt(this.sac.value) - parseInt(this.sf.value);
+
+        this.derived['pa'].innerHTML = pa;
+        this.derived['ab'].innerHTML = ab;
+        this.derived['hit'].innerHTML = hit;
+        this.derived['ob'].innerHTML = ob;
+        this.derived['tb'].innerHTML = tb;
+
+        const oba = (ob / (pa - this.sac.value));
+        const slg = (tb / ab);
+
+        this.derived['ba'].innerHTML = (hit / ab).toFixed(3);
+        this.derived['oba'].innerHTML = oba.toFixed(3);
+        this.derived['slg'].innerHTML = slg.toFixed(3);
+        this.derived['ops'].innerHTML = (oba + slg).toFixed(3);
+    }
+
+    valueChanged() {
+        
         if (!this.binded) return;
-        this.event();
+
+        this.updateUI();
+
+        if (!this.onValueChanged) return;
+        this.onValueChanged();
     }
 
     static get observedAttributes() {
-        return ['src'];
+        return ['src', 'inner-class'];
+    }
+
+    setAfterBindInput(event) {
+        if (this.binded) {
+            event();
+            return;
+        }
+        this.afterBindEvent = event;
+    }
+
+    connectedCallback() {
+        this.appendChild(this.window);
     }
 
     attributeChangedCallback(attrName, oldVal, newVal) {
         if (attrName == "src") {
             loadFile(newVal).then((html) => {
-                this.insertAdjacentHTML('beforeend', html);
+                this.window.innerHTML = html;
 
                 // 2. 브라우저가 새로운 DOM 요소를 인지하고 렌더링 트리에 올릴 때까지 대기
                 requestAnimationFrame(() => {
-                    this.bindInput(); // 이제 getElementsByClassName이 요소를 찾아냅니다.
-                    this.func();
+                    this.bindInput();
+                    this.updateUI();
+                    if (!this.afterBindEvent) return;
+                    this.afterBindEvent();
+                    this.afterBindEvent = null;
                 });
 
             }).catch(error => {
@@ -41,12 +99,12 @@ class BatterInput extends HTMLElement {
             });
             return;
         }
+        if (attrName == "inner-class") {
+            this.window.className = newVal;
+
+        }
     }
-
-    connectedCallback() {
-
-    }
-
+    
     bindInput() {
 
         this.input = {
@@ -82,18 +140,18 @@ class BatterInput extends HTMLElement {
         for (let key in this.input) {
             (this.input[key]).addEventListener('change', () => {
                 if (this.load) return;
-                this.func();
+                this.valueChanged();
             });
         }
 
         this.sf.addEventListener('change', () => {
             if (this.load) return;
-            this.func();
+            this.valueChanged();
         });
 
         this.sac.addEventListener('change', () => {
             if (this.load) return;
-            this.func();
+            this.valueChanged();
         });
 
         this.nameInput = this.getElementsByClassName('player-name')[0];
@@ -102,7 +160,7 @@ class BatterInput extends HTMLElement {
             this.nameInput.addEventListener('change', () => {
                 this.setName(this.nameInput.value);
                 if (this.load) return;
-                this.func();
+                this.valueChanged();
             });
         }
 
@@ -110,18 +168,18 @@ class BatterInput extends HTMLElement {
         const readBtnFile = this.getElementsByClassName('read-csv-file')[0];
         const readBtn = this.getElementsByClassName('read-csv')[0];
 
-        saveBtn.addEventListener('click', () => {
+        saveBtn?.addEventListener('click', () => {
             downloadCSV([this.getAbilityRaw()], this.getName());
         });
 
-        readBtn.addEventListener('click', () => {
+        readBtn?.addEventListener('click', () => {
             readBtnFile.click();
         })
-        readBtnFile.addEventListener('change', () => {
+        readBtnFile?.addEventListener('change', () => {
             readBtnFile.files[0].text().then((csv) => {
                 this.readJson(readCSV(csv)[0]);
                 readBtnFile.value = "";
-                this.func();
+                this.valueChanged();
             });
         });
         this.binded = true;
@@ -175,15 +233,11 @@ class BatterInput extends HTMLElement {
         else {
             this.name = json['name'];
         }
-        this.getAbility();
+        this.updateUI();
         this.load = false;
     }
-
-    getAbility() {
-
-        if (!this.binded) return;
-
-        const batterAbilityRaw = this.getAbilityRaw();
+    
+    static convertToRatio(batterAbilityRaw) {
 
         const pa = new Decimal(batterAbilityRaw['pa']);
 
@@ -200,46 +254,18 @@ class BatterInput extends HTMLElement {
             'hr': new Decimal(batterAbilityRaw["hr"]).div(pa),
         }
 
-        const hit = batterAbilityRaw["1B"]
-            + batterAbilityRaw["2B"]
-            + batterAbilityRaw["3B"]
-            + batterAbilityRaw["hr"];
-
-        const ob = hit + batterAbilityRaw["bb"];
-
-        const tb = batterAbilityRaw["1B"]
-            + batterAbilityRaw["2B"] * 2
-            + batterAbilityRaw["3B"] * 3
-            + batterAbilityRaw["hr"] * 4;
-
-        this.sac.max = Math.min(batterAbilityRaw["go"]);
-        this.sf.max = Math.min(pa - ob, batterAbilityRaw["fo"]);
-
-        this.sac.value = Math.min(this.sac.max, this.sac.value);
-        this.sf.value = Math.min(this.sf.max, this.sf.value);
-
-        const ab = pa - batterAbilityRaw["bb"]
-            - parseInt(this.sac.value) - parseInt(this.sf.value);
-
-        this.derived['pa'].innerHTML = pa;
-        this.derived['ab'].innerHTML = ab;
-        this.derived['hit'].innerHTML = hit;
-        this.derived['ob'].innerHTML = ob;
-        this.derived['tb'].innerHTML = tb;
-
-        const oba = (ob / (pa - this.sac.value));
-        const slg = (tb / ab);
-
-        this.derived['ba'].innerHTML = (hit / ab).toFixed(3);
-        this.derived['oba'].innerHTML = oba.toFixed(3);
-        this.derived['slg'].innerHTML = slg.toFixed(3);
-        this.derived['ops'].innerHTML =
-            (oba + slg).toFixed(3);
 
         for (let key in batter_ability) {
             batter_ability[key] = parseFloat(batter_ability[key]);
         }
         return batter_ability;
+    }
+
+    getAbility() {
+
+        if (!this.binded) return;
+
+        return BatterInput.convertToRatio(this.getAbilityRaw());
 
     }
 

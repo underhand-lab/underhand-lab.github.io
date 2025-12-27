@@ -11,14 +11,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/14.8.1/math.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/decimal.js/10.4.3/decimal.js"></script>
-    <script src="/src/re/input/batter-input-component.js"
-        type="module"></script>
-    <script src="/src/re/input/runner-input-component.js"
-        type="module"></script>
-    <script src="/src/easy-h/module/import-html.js"
-        type="module"></script>
-    <script src="/src/easy-h/ui/bottom-sheet.js"
-        type="module"></script>
+    <script src="/src/re/input/batter-input-component.js" type="module"></script>
+    <script src="/src/re/input/runner-input-component.js" type="module"></script>
+    <script src="/src/easy-h/module/import-html.js" type="module"></script>
+    <script src="/src/easy-h/ui/bottom-sheet.js" type="module"></script>
     <script src="/src/markdown.js"></script>
     <script src="./input.js" type="module" defer></script>
     <style>
@@ -127,62 +123,51 @@
     </div>
 
     </div>
-    <bottom-sheet data-state="close"
-        background-class="panel frostedglassmorphism"
-        window-class="toggle container neumorphism"
-        trigger-id="open-batter-personal">
+    <bottom-sheet data-state="close" background-class="panel frostedglassmorphism"
+        window-class="toggle container neumorphism" trigger-id="open-batter-personal">
         <h1>개인 타격 기록</h1>
         <hr>
         <button class="close-btn">✕</button>
         <button class="toggle-btn">-</button>
-        <div class="content">
-            <batter-input id="batter-personal" class="scrolled-content"
-                src="/re/template/batter-input.html">
-                <div>
-                    <button class="save-csv">저장</button>
-                    <input class='read-csv-file' type="file" accept=".csv" style="display:none;">
-                    <button class="read-csv">불러오기</button>
+        <batter-input id="batter-personal" class="content" inner-class="scrolled-content"
+            src="/re/template/batter-input.html">
+            <div>
+                <button class="save-csv">저장</button>
+                <input class='read-csv-file' type="file" accept=".csv" style="display:none;">
+                <button class="read-csv">불러오기</button>
 
-                </div>
-                <hr>
-            </batter-input>
-        </div>
+            </div>
+            <hr>
+        </batter-input>
         <hr>
     </bottom-sheet>
 
-    <bottom-sheet data-state="max"
-        background-class="panel frostedglassmorphism"
-        window-class="toggle container neumorphism"
-        trigger-id="open-batter-league" open="open">
+    <bottom-sheet data-state="max" background-class="panel frostedglassmorphism"
+        window-class="toggle container neumorphism" trigger-id="open-batter-league" open="open">
         <h1>리그 타격 기록</h1>
         <hr>
         <button class="close-btn">✕</button>
         <button class="toggle-btn">-</button>
-        <div class="content">
-            <batter-input  id="batter-league" class="scrolled-content"
-                src="/re/template/batter-input.html">
-                <div>
-                    <button class="save-csv">저장</button>
-                    <input class='read-csv-file' type="file" accept=".csv" style="display:none;">
-                    <button class="read-csv">불러오기</button>
+        <batter-input id="batter-league" class="content" inner-class="scrolled-content"
+            src="/re/template/batter-input.html">
+            <div>
+                <button class="save-csv">저장</button>
+                <input class='read-csv-file' type="file" accept=".csv" style="display:none;">
+                <button class="read-csv">불러오기</button>
 
-                </div>
+            </div>
             <hr>
-            </batter-input>
-        </div>
+        </batter-input>
         <hr>
     </bottom-sheet>
-    <bottom-sheet data-state="close"
-        background-class="panel frostedglassmorphism"
-        window-class="toggle container neumorphism"
-        trigger-id="open-runner-league">
+    <bottom-sheet data-state="close" background-class="panel frostedglassmorphism"
+        window-class="toggle container neumorphism" trigger-id="open-runner-league">
         <h1>리그 주자 능력</h1>
         <button class="close-btn">✕</button>
         <button class="toggle-btn">-</button>
         <hr>
         <div class="content" style="text-align: center;">
-            <runner-input id="runner-league" class="scrolled-content"
-                src="/re/template/runner-input.html">
+            <runner-input id="runner-league" class="scrolled-content" src="/re/template/runner-input.html">
             </runner-input>
         </div>
         <hr>

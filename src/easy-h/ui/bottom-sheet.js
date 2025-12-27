@@ -2,6 +2,7 @@ class BottomSheet extends HTMLElement {
     constructor() {
         super();
         this.closeAction();
+        this.window = document.createElement('div');
     }
 
     static get observedAttributes() {
@@ -10,7 +11,6 @@ class BottomSheet extends HTMLElement {
     }
 
     connectedCallback() {
-        this.window = document.createElement('div');
         this.toggled = true;
 
         this.window.innerHTML = this.innerHTML;

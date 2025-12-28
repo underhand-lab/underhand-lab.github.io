@@ -1,5 +1,5 @@
-.nav {
-    position: fixed;
+nav, .nav {
+    position: sticky;
     top: 0;
     left: 0;
     right: 0;
@@ -8,9 +8,15 @@
     font-size: 15px;
     margin: 0;
     z-index: 20;
+    width: 100%;
+    transition: transform 0.25s ease;
 }
 
-.nav > div {
+nav.hidden, .nav.hidden {
+    transform: translateY(-100%);
+}
+
+nav > div, .nav > div {
     display:flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -45,28 +51,28 @@
 
 }
 
-.nav h1 {
+nav h1, .nav h1 {
     font-weight: normal;
     font-size: 15px;
     margin: 15px 15px 7px;
 }
 
-.nav ul {
+nav ul, .nav ul {
     margin: 15px 0 2px;
 }
 
-.nav h1 a {
+nav h1 a, .nav h1 a {
     display: inline-block;
 }
 
-.nav li {
+nav li, .nav li {
     display: inline-block;
     margin: 0 20px;
     min-width: 40px;
     padding: 0;
 }
 
-.nav a::after {
+nav a::after, .nav a::after {
     content: " ";
     display: block;
     width: 0px;
@@ -78,10 +84,10 @@
     
 }
 
-.nav a:hover::after {
+nav a:hover::after, .nav a:hover::after {
     width: min(100%, 30px);
 }
 
-.nav a[select="true"] {
+nav a[select="true"], .nav a[select="true"] {
     color: var(--primary-color);
 }

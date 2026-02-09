@@ -2,7 +2,8 @@
 ---
 ### [CV-Val](/cv-val/)
 - [🏃 자세 분석](/cv-val/pose/): 자세 분석 및 관절 정보 추출
-- [💫 추적](/cv-val/track/): 공 추적 및 정보 추출
+- [💫 추적](/cv-val/track-ball/): 공 추적 및 정보 추출
+- [💫 추적](/cv-val/track-bat/): 배트 궤적 시각화
 ---
 ### [Sit-Val](/sit-val/)
 - [🏆 리그](/sit-val/league/): 리그 평균 타격 능력에 따른 기대 득점 계산

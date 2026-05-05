@@ -2,9 +2,9 @@
 <nav id="navbar" class="navbar navbar-fixed-top modern-nav">
   <div class="container" style="display: flex; flex-direction: row; flex-wrap: nowrap;">
     <div class="navbar-header page-scroll" style="flex: 1">
-      <a class="navbar-brand-modern" href="{{ site.url }}">
+      <a class="navbar-brand-modern" href="{{ site.baseurl }}">
         <div id="nav-icon-box">
-          <img id="nav-icon-img" src="{{ site.url }}/img/myicon.png" alt="profile-pic" />
+          <img id="nav-icon-img" src="{{ site.baseurl }}/img/myicon.png" alt="profile-pic" />
         </div>
         <span class="brand-name">{{ site.title }}</span>
       </a>
@@ -15,7 +15,7 @@
         {% assign nav_items = page.navigation | default: site.data.navigation %}
         {% for item in nav_items %}
         <li class="page-scroll">
-          <a href="{{ item.link }}" class="nav-link-modern" {% if page.url == item.link %} select="true" {% endif %}>
+          <a href="{{ site.baseurl }}/{{ item.link }}" class="nav-link-modern" {% if page.url == item.link %} select="true" {% endif %}>
             {{ item.name }}
           </a>
         </li>

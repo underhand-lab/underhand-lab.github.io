@@ -4,7 +4,7 @@ layout: default
 <section class="portfolio">
   <div class="container">
     <ul class="text-center">
-      {% for tag in page.tags %}
+      {% for tag in page.tag %}
       <li class="blog-tag">{{ tag }}</li>
       {% endfor %}
     </ul>
@@ -41,7 +41,7 @@ layout: default
   <div class="container text-center">
     <ul class="list-inline item-details">
       <li>
-        <a href="/#portfolio" class="btn-social btn-outline" title="Home">
+        <a href="{{ site.baseurl }}/#portfolio" class="btn-social btn-outline" title="Home">
           <i class="fa-solid fa-house"></i>
           Home
         </a>

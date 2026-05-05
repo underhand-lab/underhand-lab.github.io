@@ -2,6 +2,7 @@
 title: EasyH
 email: skysea001010@gmail.com
 url: https://easy-h.github.io
+baseurl: 
 description: "게임 프로그래머 이지헌의 기술 블로그 및 포트폴리오입니다. Unity, C++, Firebase 등 다양한 기술적 도전과 경험을 공유합니다."
 keywords: "Game Programmer"
 locale: ko_KR

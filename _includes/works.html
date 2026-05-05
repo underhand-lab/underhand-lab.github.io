@@ -15,7 +15,7 @@
     {% endif %}
 
     <div class="portfolio-flex-item portfolio-item">
-      <a href="{{ post.url }}" title="{{ post.summary }}" class="portfolio-link">
+      <a href="{{ post.url | relative_url }}" title="{{ post.summary }}" class="portfolio-link">
         <div class="portfolio-inner">
           <div class="box-modal">
             <div class="caption">
@@ -23,7 +23,7 @@
                 <i class="fa fa-search-plus fa-1.5x"></i>
               </div>
             </div>
-            <img src="{{ site.url }}/img/portfolio/{{ post.thumbnail }}" class="img-modal" alt="{{ post.title }}">
+            <img src="{{ site.baseurl }}/img/portfolio/{{ post.thumbnail }}" class="img-modal" alt="{{ post.title }}">
           </div>
         </div>
         <p class="portfolio-txt">{{ post.title }}</p>

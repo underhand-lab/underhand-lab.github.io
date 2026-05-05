@@ -1,0 +1,75 @@
+---
+layout: default
+---
+<section class="portfolio">
+  <div class="container">
+    <ul class="text-center">
+      {% for tag in page.tags %}
+      <li class="blog-tag">{{ tag }}</li>
+      {% endfor %}
+    </ul>
+    <h1>{{ page.title }}</h1>
+    <div class="portfolio">
+      <div markdown="1" class="right text-left">
+        {% capture content %}{{ page.content | markdownify }}{% endcapture %}
+        {% assign cards = content | split: '<!-- card:' %}
+        
+        <div id="carousel" class="splide">
+          <div class="splide__track">
+            <ul class="splide__list">
+              {% for card in cards offset:1 %}
+              {% assign parts = card | split: '-->' %}
+              <li class="splide__slide">
+                <div class="card">
+                  <h2>{{ parts[0] | strip }}</h2>
+                  <div class="card-content">
+                    {{ parts[1] }}
+                  </div>
+                </div>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div markdown="1" class="left text-left">
+        {{ page.preview }}
+      </div>
+    </div>
+  </div>
+  <div class="container text-center">
+    <ul class="list-inline item-details">
+      <li>
+        <a href="/#portfolio" class="btn-social btn-outline" title="Home">
+          <i class="fa-solid fa-house"></i>
+          Home
+        </a>
+      </li>
+      {% for network in page.social %}
+      <li>
+        <a href="{{ network.url }}" class="btn-social btn-outline" title="{{ network.info }}" target="_blank">
+          <i class="fa-brands fa-fw fa-{{ network.title }}"></i>
+          {{ network.info }}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    new Splide('#carousel', {
+      type: 'slide',
+      perPage: 1,
+      arrows: true,
+      pagination: true,
+      gap: '1rem',
+      breakpoints: {
+        768: {
+          perPage: 1,
+        },
+      },
+    }).mount();
+  });
+</script>

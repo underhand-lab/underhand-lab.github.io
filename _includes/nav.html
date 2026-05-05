@@ -1,0 +1,26 @@
+<!-- Navigation -->
+<nav id="navbar" class="navbar navbar-fixed-top modern-nav">
+  <div class="container" style="display: flex; flex-direction: row; flex-wrap: nowrap;">
+    <div class="navbar-header page-scroll" style="flex: 1">
+      <a class="navbar-brand-modern" href="{{ site.url }}">
+        <div id="nav-icon-box">
+          <img id="nav-icon-img" src="{{ site.url }}/img/myicon.png" alt="profile-pic" />
+        </div>
+        <span class="brand-name">{{ site.title }}</span>
+      </a>
+    </div>
+
+    <div class="navbar-menu-visible" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+        {% assign nav_items = page.navigation | default: site.data.navigation %}
+        {% for item in nav_items %}
+        <li class="page-scroll">
+          <a href="{{ item.link }}" class="nav-link-modern" {% if page.url == item.link %} select="true" {% endif %}>
+            {{ item.name }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</nav>

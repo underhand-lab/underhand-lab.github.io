@@ -1,0 +1,199 @@
+.portfolio-grid .portfolio-item {
+    right: 0;
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 15px;
+    margin-bottom: 60px;
+}
+
+.portfolio-grid .portfolio-item .portfolio-link {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+}
+
+.portfolio-grid .portfolio-item .portfolio-link .caption {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    -webkit-transition: all ease .5s;
+    -moz-transition: all ease .5s;
+    transition: all ease .5s;
+    background-color: var(--primary-color);
+}
+
+.portfolio-grid .portfolio-item:hover .portfolio-link .caption {
+    opacity: .8;
+}
+
+.portfolio-grid .portfolio-item .portfolio-link .caption .caption-content {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 20px;
+    margin-top: -12px;
+    text-align: center;
+    font-size: 20px;
+    color: #fff;
+}
+
+.portfolio-grid .portfolio-item .portfolio-link .caption .caption-content i {
+    margin-top: -12px;
+}
+
+.portfolio-grid .portfolio-item .portfolio-link .caption .caption-content h3,
+.portfolio-grid .portfolio-item .portfolio-link .caption .caption-content h4 {
+    margin: 0;
+}
+
+.portfolio-grid * {
+    z-index: 2;
+}
+
+.portfolio-flex-row {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.portfolio-inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.portfolio-txt {
+    position: absolute;
+    width: 100%;
+    top: 100px;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.box-modal {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.box-modal:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(103, 153, 250, 0.15);
+    border-color: var(--primary-color);
+}
+
+.img-modal {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+li.blog-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    margin: 0 6px 6px 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+    border-radius: 50px;
+    background: var(--secondary-color);
+    transition: all 0.2s ease;
+    cursor: default;
+}
+
+li.blog-tag:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+
+.blog-home-row {
+    padding: 10px;
+    max-width: 400px;
+    margin: auto;
+    border-bottom: 4px dotted var(--secondary-color);
+}
+
+
+.post .left,
+.portfolio .left {
+    float: left;
+    padding: 0 25px;
+    width: calc(50% - 50px);
+    margin: 0 auto;
+}
+
+.post .right,
+.portfolio .right {
+    float: right;
+    padding: 0 25px;
+    padding-bottom: 75px;
+    width: calc(50% - 50px);
+    margin: 0 auto;
+}
+
+.btn-social {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 45px;
+    width: fit-content;
+    padding: 0 12px;
+    box-sizing: border-box;
+    height: 45px;
+    border-radius: 25px;
+    color: var(--secondary-color);
+    border: 1.5px solid var(--secondary-color);
+    font-size: 1.2rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.btn-social:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #fff;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Modern Flex Grid Overrides */
+/*
+.portfolio-flex-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+.portfolio-item {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: var(--transition-smooth);
+  backdrop-filter: blur(10px);
+}
+
+.portfolio-item:hover {
+  transform: translateY(-10px);
+  border-color: var(--accent-color);
+  box-shadow: var(--shadow-lg);
+}
+
+.portfolio-txt {
+  padding: 1.5rem;
+  font-weight: 600;
+}*/

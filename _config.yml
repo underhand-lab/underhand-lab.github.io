@@ -1,0 +1,68 @@
+# Site settings
+title: EasyH
+email: skysea001010@gmail.com
+url: https://easy-h.github.io
+description: "게임 프로그래머 이지헌의 기술 블로그 및 포트폴리오입니다. Unity, C++, Firebase 등 다양한 기술적 도전과 경험을 공유합니다."
+keywords: "Game Programmer"
+locale: ko_KR
+meta_author: Lee Ji-Heon
+
+# Google webmaster tools
+google_verify:
+
+# https://ssl.bing.com/webmaster/configure/verify/ownership Option 2 content= goes here
+bing_verify:
+
+# Contact form:
+# - static : pass through formspree.io to validate email sending
+# - disqus : replace contact form by disqus thread
+# - comment the line below if you want to stick with the default PHP contact form
+contact: static
+
+# If you use disqus you need disqus shortname
+# https://help.disqus.com/customer/portal/articles/466208
+disqus_shortname: myshortname
+
+# Color settings (hex-codes without the leading hash-tag)
+color:
+  primary: 6799fa # User Identity Color
+  primary-rgb: "103, 153, 250"
+  secondary: 1e293b # Slate 800
+  secondary-dark: 0f172a # Slate 900
+
+# Footer settings
+footer:
+  copyright: 이지헌 (EasyH)
+  location: Location
+  social: Around the Web
+  credits: Credits
+
+# Postal address (add as many lines as necessary)
+address:
+  - line: 3481 Melrose Place
+  - line: Beverly Hills, CA 90210
+
+# Credits content
+credits: 'Freelancer is a free to use, open source Bootstrap theme created by <a href="http://startbootstrap.com">Start Bootstrap</a>.'
+
+# Build settings
+markdown: kramdown
+permalink: /:categories/:title
+
+#for posts
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+      values:
+      permalink: ""
+
+# Plugins
+plugins:
+  - jekyll-seo-tag
+  - jekyll-feed
+  - jekyll-sitemap
+
+collections:
+  about:
+    output: false

@@ -1,0 +1,16 @@
+
+
+.blog-home-row h3 {
+    margin: 15px 0px;
+
+}
+
+.blog-home-row h3:before {
+    display: none;
+
+}
+
+.blog-home-row h3:after {
+    display: none;
+
+}

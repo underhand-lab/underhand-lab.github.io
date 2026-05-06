@@ -1,18 +1,28 @@
-<h2 class="section-title">소개</h2>
-<div class="about-wrapper">
-  <!-- 왼쪽: 프로필 사진 섹션 -->
-  <div class="about-profile-side">
-      <img src="{{ site.baseurl }}/img/myicon.png" alt="Profile" class="profile-img">
-  </div>
+{% assign target_title = include.title | default: "소개" %}
+{% assign about_doc = site.about | where: "title", target_title | first %}
 
-  <!-- 오른쪽: 텍스트 및 정보 섹션 -->
-  <div class="about-text-side">
-    
+{% if about_doc %}
+  {% assign image_pos = include.image_pos | default: "left" %}
+  {% assign has_image = false %}
+  {% if about_doc.image and about_doc.image != "" %}
+    {% assign has_image = true %}
+  {% endif %}
+
+<h2 class="section-title">{{ about_doc.title | default: "About Me" }}</h2>
+<div class="about-wrapper" {% if has_image and image_pos == "right" %}style="display: flex; flex-direction: row-reverse;"{% endif %}>
+  
+  {% if has_image %}
+    <!-- 프로필 사진 섹션 -->
+    <div class="about-profile-side">
+      <img src="{{ site.baseurl }}/img/{{ about_doc.image }}" alt="Profile" class="profile-img">
+    </div>
+  {% endif %}
+
+  <!-- 텍스트 및 정보 섹션 -->
+  <div class="about-text-side" {% unless has_image %}style="width: 100%; flex: 1;"{% endunless %}>
     <div class="about-description">
-      {% assign about_doc = site.about | where: "title", "about_main" | first %}
-      {% if about_doc %}
-        {{ about_doc.content | markdownify }}
-      {% endif %}
+      {{ about_doc.content | markdownify }}
     </div>
   </div>
 </div>
+{% endif %}

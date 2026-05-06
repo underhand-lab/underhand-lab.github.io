@@ -32,6 +32,12 @@ navigation:
   </div>
 </section>
 
+<section id="about-cv" class="section">
+  <div class="container">
+    {% include about.html title="CV-Val" image_pos="right" %}
+  </div>
+</section>
+
 <!-- 프로젝트 섹션 (데이터 기반 자동 생성) -->
 {% assign main_tags = site.data.portfolio | map: "tag" %}
 

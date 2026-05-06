@@ -3,7 +3,9 @@ title: CV-Val
 image: portfolio/cv-val.png
 ---
 
-**CV-Val**은 컴퓨터 비전 기술을 활용하여 야구 경기 및 훈련 영상에서 가치 있는 데이터를 추출하는 분석 도구입니다. 일반적인 카메라로 촬영된 영상에서도 전문 장비 없이 유의미한 야구 정보를 얻는 것을 목표로 합니다.
+**CV-Val**은 컴퓨터 비전 기술을 활용하여 야구 경기 및 훈련 영상에서 가치 있는 데이터를 추출하는 분석 도구입니다.
+
+일반적인 카메라로 촬영된 영상에서도 전문 장비 없이 유의미한 야구 정보를 얻는 것을 목표로 합니다.
 
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)

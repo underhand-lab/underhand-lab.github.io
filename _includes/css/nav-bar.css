@@ -14,6 +14,18 @@
     object-fit: cover;
 }
 
+.navbar-header {
+    z-index: 10; /* 메뉴보다 위에 오도록 설정 */
+    padding-right: 50px; /* 그라데이션이 적용될 여유 공간 */
+    background-color: var(--glass-bg) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); /* Safari 지원 */
+    
+    /* 그라데이션 마스크: 오른쪽 끝 50px 구간에서 배경과 블러가 부드럽게 사라짐 */
+    -webkit-mask-image: linear-gradient(to right, black calc(100% - 50px), transparent 100%);
+    mask-image: linear-gradient(to right, black calc(100% - 50px), transparent 100%);
+}
+
 .navbar {
     background-color: rgba(30, 41, 59, 0.95) !important;
     backdrop-filter: blur(10px);
@@ -113,7 +125,6 @@
   background: transparent !important;
 }
 
-.nav-link-modern:hover,
 .nav-link-modern[select="true"],
 .navbar-nav > .active > a {
   color: var(--accent-color) !important;
@@ -140,6 +151,15 @@
 
 .navbar-menu-visible {
     align-items: center;
+    overflow-x: auto;
+    margin-left: -50px; /* 헤더의 마스크 영역과 겹치도록 왼쪽으로 당김 */
+    display: flex;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.navbar-menu-visible::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
 }
 
 .nav {
@@ -149,6 +169,13 @@
     display: flex;
     flex-direction: row;
     justify-content: right;
+    overflow-x: auto;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.nav::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
 }
 
 .nav>li {
@@ -457,7 +484,8 @@
 .container>.navbar-collapse,
 .container-fluid>.navbar-collapse {
     margin-right: -15px;
-    margin-left: -15px
+    margin-left: -15px;
+    
 }
 
 @media (min-width:768px) {

@@ -11,11 +11,27 @@
     </div>
 
     <div class="navbar-menu-visible" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav navbar-right" style="flex: 1; padding-left: 50px">
         {% assign nav_items = page.navigation | default: site.data.navigation %}
         {% for item in nav_items %}
-        <li class="page-scroll">
-          <a href="{{ site.baseurl }}/{{ item.link }}" class="nav-link-modern" {% if page.url == item.link %} select="true" {% endif %}>
+        {% comment %} 현재 페이지가 홈페이지인지, 링크가 내부 앵커인지 판별 {% endcomment %}
+        {% assign is_home = false %}
+        {% if page.url == '/' or page.url == '/index.html' %}{% assign is_home = true %}{% endif %}
+        {% assign is_anchor = false %}
+        {% if item.link contains '#' %}{% assign is_anchor = true %}{% endif %}
+
+        <li>
+          {% if is_anchor and is_home %}
+            {% assign nav_url = item.link | split: '#' | last | prepend: '#' %}
+          {% else %}
+            {% assign nav_url = item.link | relative_url %}
+          {% endif %}
+          
+          {% comment %} URL 정규화: index.html 제거, baseurl 포함, 마지막 슬래시 통일 {% endcomment %}
+          {% assign current_path = page.url | relative_url | replace: 'index.html', '' | append: '/' | replace: '//', '/' %}
+          {% assign target_path = nav_url | replace: 'index.html', '' | append: '/' | replace: '//', '/' %}
+          
+          <a href="{{ nav_url }}" class="nav-link-modern {% if current_path == target_path %}active{% endif %}" {% if current_path == target_path %} select="true" {% endif %}>
             {{ item.name }}
           </a>
         </li>

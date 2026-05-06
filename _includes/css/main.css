@@ -325,7 +325,7 @@ section {
 
 .about-profile-side {
     flex: 0 0 280px;
-    align-content: center;
+    align-content: flex-start;
     position: sticky;
     top: 100px;
 }

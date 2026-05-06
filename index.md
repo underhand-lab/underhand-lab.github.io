@@ -3,10 +3,10 @@ layout: default
 navigation:
   - name: "소개"
     link: "#about"
-  - name: "작업물"
-    link: "#portfolio"
-  - name: "활동"
-    link: "#activities"
+  - name: "CV-Val"
+    link: "#about-cv"
+  - name: "Sit-Val"
+    link: "#about-sit"
   - name: "연락"
     link: "#contact"
 ---
@@ -38,6 +38,13 @@ navigation:
   </div>
 </section>
 
+
+<section id="about-sit" class="section">
+  <div class="container">
+    {% include about.html title="Sit-Val" %}
+  </div>
+</section>
+
 <!-- 프로젝트 섹션 (데이터 기반 자동 생성) -->
 {% assign main_tags = site.data.portfolio | map: "tag" %}
 
@@ -50,14 +57,7 @@ navigation:
 </section>
 {% endfor %}
 
-<!-- 기타 작업물 섹션 (위에서 정의된 태그들을 제외한 나머지) -->
-<section class="section portfolio-grid">
-  <div class="container">
-    <h2 class="section-title">기타 작업물</h2>
-    {% include works.html exclude_tags=main_tags %}
-  </div>
-</section>
-
+<!--
 <section id="activities" class="section">
   <div class="container">
     {% for section in site.data.activities %}
@@ -69,6 +69,5 @@ navigation:
   </div>
 </section>
 
+script src="script.js"></script-->
 {% include contact.html %}
-
-<!--script src="script.js"></script-->

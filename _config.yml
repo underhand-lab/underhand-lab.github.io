@@ -1,10 +1,10 @@
 # Site settings
-title: EasyH
+title: underhand-lab
 email: skysea001010@gmail.com
-url: https://easy-h.github.io
+url: https://underhand-lab.github.io
 baseurl: 
-description: "개발자용 깃허브 블로그 테마"
-keywords: "Game Programmer"
+description: "컴퓨터 기술을 이용한 야구 이해"
+keywords: "Baseball"
 locale: ko_KR
 meta_author: Lee Ji-Heon
 
